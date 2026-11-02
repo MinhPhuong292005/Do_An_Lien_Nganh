@@ -69,7 +69,13 @@ if ($filterDiet === 'eatclean') {
     $params[] = '%Chay%';
 }
 
-$buildFilterUrl = function (array $overrides) use ($searchQuery, $selectedCategory, $sortBy, $filterTime, $filterCal, $filterDiet): string {
+$isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime === '' && $filterCal === '' && $filterDiet === '');
+$page = max(1, (int) ($_GET['page'] ?? 1));
+$perPage = 24;
+$totalRecipes = 0;
+$totalPages = 1;
+
+$buildFilterUrl = function (array $overrides) use ($searchQuery, $selectedCategory, $sortBy, $filterTime, $filterCal, $filterDiet, $page): string {
     $state = [
         'q' => $searchQuery,
         'cat' => $selectedCategory,
@@ -77,6 +83,7 @@ $buildFilterUrl = function (array $overrides) use ($searchQuery, $selectedCatego
         'time' => $filterTime,
         'cal' => $filterCal,
         'diet' => $filterDiet,
+        'page' => $page > 1 ? $page : '',
     ];
     $merged = array_merge($state, $overrides);
     $clean = array_filter($merged, fn($v) => $v !== null && $v !== '');
@@ -89,17 +96,45 @@ $orderBy = match ($sortBy) {
     default     => 'r.created_at DESC',
 };
 
-$sql = "SELECT r.*, u.username AS author_name, 
-        COALESCE((SELECT ROUND(AVG(c.rating), 1) FROM comments c WHERE c.recipe_id = r.id), 5.0) AS avg_rating,
-        (SELECT COUNT(*) FROM comments c WHERE c.recipe_id = r.id) AS review_count
-        FROM recipes r
-        JOIN users u ON u.id = r.author_id
-        WHERE " . implode(' AND ', $where) . "
-        ORDER BY " . $orderBy;
+if ($isDefaultHome) {
+    // Only 10 dishes needed for homepage
+    $totalRecipes = (int) db()->query("SELECT COUNT(*) FROM recipes WHERE status = 'approved'")->fetchColumn();
+    $sql = "SELECT r.*, u.username AS author_name, 
+            COALESCE((SELECT ROUND(AVG(c.rating), 1) FROM comments c WHERE c.recipe_id = r.id), 5.0) AS avg_rating,
+            (SELECT COUNT(*) FROM comments c WHERE c.recipe_id = r.id) AS review_count
+            FROM recipes r
+            JOIN users u ON u.id = r.author_id
+            WHERE r.status = 'approved'
+            ORDER BY r.created_at DESC
+            LIMIT 10";
+    $recipes = db()->query($sql)->fetchAll();
+} else {
+    // 1. Fast indexed count
+    $countSql = "SELECT COUNT(*) FROM recipes r WHERE " . implode(' AND ', $where);
+    $countStmt = db()->prepare($countSql);
+    $countStmt->execute($params);
+    $totalRecipes = (int) $countStmt->fetchColumn();
 
-$stmt = db()->prepare($sql);
-$stmt->execute($params);
-$recipes = $stmt->fetchAll();
+    $totalPages = max(1, (int) ceil($totalRecipes / $perPage));
+    if ($page > $totalPages) {
+        $page = $totalPages;
+    }
+    $offset = ($page - 1) * $perPage;
+
+    // 2. Fast paginated data
+    $sql = "SELECT r.*, u.username AS author_name, 
+            COALESCE((SELECT ROUND(AVG(c.rating), 1) FROM comments c WHERE c.recipe_id = r.id), 5.0) AS avg_rating,
+            (SELECT COUNT(*) FROM comments c WHERE c.recipe_id = r.id) AS review_count
+            FROM recipes r
+            JOIN users u ON u.id = r.author_id
+            WHERE " . implode(' AND ', $where) . "
+            ORDER BY " . $orderBy . "
+            LIMIT " . (int) $perPage . " OFFSET " . (int) $offset;
+
+    $stmt = db()->prepare($sql);
+    $stmt->execute($params);
+    $recipes = $stmt->fetchAll();
+}
 
 // Saved recipes ids
 $userSavedIds = [];
@@ -115,6 +150,7 @@ $stmtBannerRecipes = db()->query("
     FROM recipes 
     WHERE status = 'approved' AND image_url IS NOT NULL AND image_url != ''
     ORDER BY id ASC
+    LIMIT 20
 ");
 $bannerRecipes = $stmtBannerRecipes ? $stmtBannerRecipes->fetchAll() : [];
 
@@ -636,9 +672,10 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
                         <?php endforeach; ?>
                     </div>
                     <div class="sidebar-more-footer">
-                        <button type="button" onclick="openAllRecipesMenuModal()" class="btn-sidebar-view-all" style="width: 100%; border: none; cursor: pointer; background: transparent; font-family: inherit; font-size: inherit; font-weight: inherit; color: inherit; display: flex; align-items: center; justify-content: center; gap: 0.35rem;">
-                            Xem tất cả công thức món ăn &rarr;
-                        </button>
+                        <a href="<?= BASE_URL ?>/index.php?cat=all" class="btn-sidebar-view-all" style="width: 100%; text-decoration: none; color: #ffffff !important; display: flex; align-items: center; justify-content: center; gap: 0.35rem; font-weight: 700; font-size: 0.9rem; padding: 0.75rem 1rem;">
+                            <span>Xem tất cả công thức món ăn</span>
+                            <span style="font-size: 1.1rem; line-height: 1;">&rarr;</span>
+                        </a>
                     </div>
                 </div>
             </aside>
@@ -653,7 +690,7 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
                     Kết quả tìm kiếm
                     <?php if ($selectedCategory !== ''): ?> &bull; Danh mục "<em><?= e($selectedCategory) ?></em>"<?php endif; ?>
                     <?php if ($searchQuery !== ''): ?> &bull; Từ khóa "<em><?= e($searchQuery) ?></em>"<?php endif; ?> 
-                    <span style="font-size: 1.1rem; color: #6b7280; font-weight: 600;">(<?= count($recipes) ?> món)</span>
+                    <span style="font-size: 1.1rem; color: #6b7280; font-weight: 600;">(<?= number_format($totalRecipes) ?> món)</span>
                 </h2>
                 <a href="<?= BASE_URL ?>/index.php" class="link-button" style="display:inline-block; margin-top:0.25rem; color: #ea580c; font-weight: 700;">&times; Xóa toàn bộ bộ lọc</a>
             </div>
@@ -669,7 +706,7 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
                 ];
                 foreach ($sortOptions as $sKey => $sLabel):
                     $isSortActive = ($sortBy === $sKey);
-                    $sUrl = $buildFilterUrl(['sort' => ($sKey !== 'newest' ? $sKey : '')]);
+                    $sUrl = $buildFilterUrl(['sort' => ($sKey !== 'newest' ? $sKey : ''), 'page' => '']);
                 ?>
                     <a href="<?= $sUrl ?>" 
                         style="font-size:0.84rem; font-weight:700; text-decoration:none; padding:0.35rem 0.75rem; border-radius:9999px; transition:all 0.15s; <?= $isSortActive ? 'background:#ea580c; color:#fff;' : 'color:#3e1f17;' ?>">
@@ -685,7 +722,7 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
                 <?php foreach ($categoryList as $catVal => $label): ?>
                     <?php
                     $isActive = ($selectedCategory === $catVal);
-                    $catUrl = $buildFilterUrl(['cat' => $catVal]);
+                    $catUrl = $buildFilterUrl(['cat' => $catVal, 'page' => '']);
                     ?>
                     <a href="<?= $catUrl ?>" class="category-pill <?= $isActive ? 'active' : '' ?>">
                         <?= e($label) ?>
@@ -736,6 +773,42 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
                 </article>
             <?php endforeach; ?>
         </div>
+
+        <?php if ($totalPages > 1): ?>
+            <!-- Smart Pagination for Category & Search Results -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid #fed7aa; flex-wrap: wrap; gap: 1rem;">
+                <div style="font-size: 0.92rem; color: #64748b; font-weight: 600;">
+                    Đang hiển thị trang <strong style="color: #ea580c;"><?= $page ?></strong> trên tổng số <strong><?= $totalPages ?></strong> trang (<?= number_format($totalRecipes) ?> món)
+                </div>
+                <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                    <?php if ($page > 1): ?>
+                        <a href="<?= $buildFilterUrl(['page' => 1]) ?>" style="padding: 0.45rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: #334155; font-weight: 700; font-size: 0.88rem; background: #fff;" title="Trang đầu">&laquo; Đầu</a>
+                        <a href="<?= $buildFilterUrl(['page' => $page - 1]) ?>" style="padding: 0.45rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: #334155; font-weight: 700; font-size: 0.88rem; background: #fff;" title="Trang trước">&lsaquo; Trước</a>
+                    <?php endif; ?>
+
+                    <?php
+                    $pages = build_pagination_pages($page, $totalPages);
+                    $prevP = 0;
+                    foreach ($pages as $p):
+                        if ($prevP > 0 && $p - $prevP > 1) {
+                            echo '<span style="padding: 0 4px; color: #94a3b8; font-weight: 800;">...</span>';
+                        }
+                        $prevP = $p;
+                        $isActive = ($p === $page);
+                    ?>
+                        <a href="<?= $buildFilterUrl(['page' => $p]) ?>" 
+                           style="padding: 0.45rem 0.85rem; border: 1.5px solid <?= $isActive ? '#ea580c' : '#cbd5e1' ?>; border-radius: 8px; text-decoration: none; color: <?= $isActive ? '#ffffff' : '#334155' ?>; font-weight: 800; font-size: 0.88rem; background: <?= $isActive ? '#ea580c' : '#ffffff' ?>; min-width: 38px; text-align: center;">
+                            <?= $p ?>
+                        </a>
+                    <?php endforeach; ?>
+
+                    <?php if ($page < $totalPages): ?>
+                        <a href="<?= $buildFilterUrl(['page' => $page + 1]) ?>" style="padding: 0.45rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: #334155; font-weight: 700; font-size: 0.88rem; background: #fff;" title="Trang sau">Sau &rsaquo;</a>
+                        <a href="<?= $buildFilterUrl(['page' => $totalPages]) ?>" style="padding: 0.45rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: #334155; font-weight: 700; font-size: 0.88rem; background: #fff;" title="Trang cuối">Cuối &raquo;</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endif; ?>
     </section>
 <?php endif; ?>
 
@@ -745,6 +818,5 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
 </button>
 
 <?php 
-require_once __DIR__ . '/includes/modal-all-recipes.php';
 require __DIR__ . '/includes/footer.php'; 
 ?>

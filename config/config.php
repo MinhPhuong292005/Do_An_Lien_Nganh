@@ -2,18 +2,33 @@
 
 declare(strict_types=1);
 
+if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
+    session_start();
+}
+
 if (!defined('BASE_URL')) {
-    if (PHP_SAPI === 'cli-server') {
+    $envBase = getenv('BASE_URL');
+    if ($envBase !== false) {
+        define('BASE_URL', $envBase);
+    } elseif (PHP_SAPI === 'cli-server') {
         define('BASE_URL', '');
     } else {
         define('BASE_URL', '/cooking-website');
     }
 }
 
-const DB_HOST = '127.0.0.1;port=3307';
-const DB_NAME = 'cookio_db';
-const DB_USER = 'root';
-const DB_PASS = '';
+if (!defined('DB_HOST')) {
+    define('DB_HOST', getenv('DB_HOST') ?: '127.0.0.1;port=3307');
+}
+if (!defined('DB_NAME')) {
+    define('DB_NAME', getenv('DB_NAME') ?: 'cookio_db');
+}
+if (!defined('DB_USER')) {
+    define('DB_USER', getenv('DB_USER') ?: 'root');
+}
+if (!defined('DB_PASS')) {
+    define('DB_PASS', getenv('DB_PASS') !== false ? getenv('DB_PASS') : '');
+}
 const UPLOAD_DIR = __DIR__ . '/../uploads/recipes/';
 const MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -34,11 +49,17 @@ function redirect(string $path): never
 
 function is_admin(): bool
 {
+    if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
+        session_start();
+    }
     return isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
 }
 
 function is_logged_in(): bool
 {
+    if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
+        session_start();
+    }
     return isset($_SESSION['user_id']);
 }
 
@@ -58,43 +79,61 @@ function verify_csrf_token(?string $token): bool
     if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
         session_start();
     }
-    $sessionToken = $_SESSION['csrf_token'] ?? '';
-    if (!is_string($token) || $token === '' || !is_string($sessionToken) || $sessionToken === '') {
+    if (empty($token) || empty($_SESSION['csrf_token'])) {
         return false;
     }
-    return hash_equals($sessionToken, $token);
+    return hash_equals($_SESSION['csrf_token'], $token);
 }
 
-function get_chef_badges(int $authorId): array
+function sanitize_text(string $input): string
 {
-    static $cache = [];
-    if (isset($cache[$authorId])) {
-        return $cache[$authorId];
-    }
-    if (!function_exists('db')) {
-        return [];
-    }
-    $badges = [];
-    try {
-        $recipesCount = (int) db()->query("SELECT COUNT(*) FROM recipes WHERE author_id = {$authorId} AND status = 'approved'")->fetchColumn();
-        $cooksnapCount = (int) db()->query("SELECT COUNT(*) FROM comments WHERE user_id = {$authorId} AND image_url IS NOT NULL AND image_url != ''")->fetchColumn();
-        $followersCount = (int) db()->query("SELECT COUNT(*) FROM follows WHERE author_id = {$authorId}")->fetchColumn();
-
-        if ($recipesCount >= 3) {
-            $badges[] = ['label' => 'Bếp Trưởng Vàng', 'icon' => '🥇', 'class' => 'badge-gold'];
-        } elseif ($recipesCount >= 1) {
-            $badges[] = ['label' => 'Đầu Bếp Triển Vọng', 'icon' => '👨‍🍳', 'class' => 'badge-rising'];
-        }
-        if ($cooksnapCount >= 1) {
-            $badges[] = ['label' => 'Bậc Thầy Cooksnap', 'icon' => '📸', 'class' => 'badge-cooksnap'];
-        }
-        if ($followersCount >= 1) {
-            $badges[] = ['label' => 'Được Yêu Thích', 'icon' => '🔥', 'class' => 'badge-popular'];
-        }
-    } catch (Throwable) {
-    }
-
-    $cache[$authorId] = $badges;
-    return $badges;
+    return trim(strip_tags($input));
 }
+
+function get_chef_badges(int $userId): array
+{
+    require_once __DIR__ . '/../includes/badges.php';
+    $data = check_and_get_user_badges($userId);
+    $result = [];
+    foreach ($data['displayed'] as $b) {
+        $result[] = [
+            'label' => $b['name'],
+            'class' => $b['key'],
+            'icon'  => $b['icon'],
+            'style' => $b['badge_style']
+        ];
+    }
+    return $result;
+}
+
+function build_pagination_pages(int $page, int $totalPages): array
+{
+    if ($totalPages <= 8) {
+        return range(1, $totalPages);
+    }
+    $pageMap = [1 => 1, 2 => 2, $totalPages - 1 => $totalPages - 1, $totalPages => $totalPages];
+    for ($i = max(1, $page - 1); $i <= min($totalPages, $page + 1); $i++) {
+        $pageMap[$i] = $i;
+    }
+    if ($page <= 3) {
+        $pageMap[3] = 3;
+    }
+    if ($page >= $totalPages - 2) {
+        $pageMap[$totalPages - 2] = $totalPages - 2;
+    }
+    ksort($pageMap);
+    $items = [];
+    $prev = 0;
+    foreach ($pageMap as $p) {
+        if ($prev > 0 && $p - $prev > 1) {
+            $items[] = '...';
+        }
+        $items[] = $p;
+        $prev = $p;
+    }
+    return $items;
+}
+
+require_once __DIR__ . '/../includes/search_helper.php';
+require_once __DIR__ . '/../includes/community_standards.php';
 

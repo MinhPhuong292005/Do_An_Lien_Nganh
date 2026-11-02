@@ -96,23 +96,23 @@
     background: var(--primary-light);
 }
 
-/* 2. Category Filter Pills */
+/* 2. Category Filter Pills: Tự động xuống dòng gọn gàng, không bị khuyết và không cần thanh vuốt kéo */
 .category-pills-container {
-    margin: 0 auto 2.5rem;
-    overflow-x: auto;
-    padding: 0.5rem 0;
-    -webkit-overflow-scrolling: touch;
+    margin: 0 auto 1.75rem;
+    overflow: visible;
+    padding: 0.25rem 0;
 }
 
 .category-pills {
     display: flex;
-    gap: 0.6rem;
+    flex-wrap: wrap;
+    gap: 0.55rem;
     justify-content: flex-start;
     padding-bottom: 0.25rem;
 }
 
 @media (min-width: 768px) {
-    .category-pills { justify-content: center; }
+    .category-pills { justify-content: flex-start; }
 }
 
 .category-pill {

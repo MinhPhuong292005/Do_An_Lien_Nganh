@@ -10,6 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initDarkMode();
     initLiveSearch();
     initAjaxLikes();
+    initAjaxFollow();
+    initAjaxSaveRecipe();
+    initServingsScaler();
+    initGroceryQuickModal();
     initMealDecider();
     initNotifications();
 });
@@ -191,6 +195,233 @@ function initAjaxLikes() {
 /* ==========================================================================
    3. "HÔM NAY ĂN GÌ?" (MEAL DECIDER & RANDOMIZER MODAL)
    ========================================================================== */
+function initAjaxFollow() {
+    document.addEventListener('submit', async (e) => {
+        const form = e.target.closest('.js-follow-form');
+        if (!form) return;
+
+        e.preventDefault();
+        const submitBtn = form.querySelector('.js-follow-btn');
+        const formData = new FormData(form);
+        formData.append('ajax', '1');
+
+        if (submitBtn) submitBtn.disabled = true;
+
+        try {
+            const baseUrl = window.BASE_URL || '';
+            const res = await fetch(form.action || `${baseUrl}/actions/follow_action.php`, {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+
+            if (res.status === 401) {
+                if (typeof openModal === 'function') openModal('loginModal');
+                else {
+                    const lm = document.getElementById('loginModal');
+                    if (lm) lm.style.display = 'flex';
+                }
+                if (typeof showToast === 'function') showToast('Vui lòng đăng nhập để theo dõi đầu bếp!', 'warning');
+                return;
+            }
+
+            const data = await res.json();
+            if (data.success) {
+                if (submitBtn) {
+                    if (data.followed) {
+                        submitBtn.classList.remove('button-outline');
+                        submitBtn.classList.add('button-saved', 'is-following');
+                        submitBtn.textContent = '✓ Đang theo dõi';
+                    } else {
+                        submitBtn.classList.remove('button-saved', 'is-following');
+                        submitBtn.classList.add('button-outline');
+                        submitBtn.textContent = '+ Theo dõi';
+                    }
+                }
+                if (typeof showToast === 'function') {
+                    showToast(data.message, data.followed ? 'success' : 'info');
+                }
+            } else {
+                if (typeof showToast === 'function') showToast(data.message || 'Thao tác không thành công', 'warning');
+            }
+        } catch (err) {
+            console.error('Follow error:', err);
+        } finally {
+            if (submitBtn) submitBtn.disabled = false;
+        }
+    });
+}
+
+function initAjaxSaveRecipe() {
+    document.addEventListener('submit', async (e) => {
+        const form = e.target.closest('.js-save-form');
+        if (!form) return;
+
+        e.preventDefault();
+        const submitBtn = form.querySelector('.js-save-btn');
+        const formData = new FormData(form);
+        formData.append('ajax', '1');
+
+        if (submitBtn) submitBtn.disabled = true;
+
+        try {
+            const baseUrl = window.BASE_URL || '';
+            const res = await fetch(form.action || `${baseUrl}/actions/saved_action.php`, {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+
+            if (res.status === 401) {
+                if (typeof openModal === 'function') openModal('loginModal');
+                else {
+                    const lm = document.getElementById('loginModal');
+                    if (lm) lm.style.display = 'flex';
+                }
+                if (typeof showToast === 'function') showToast('Vui lòng đăng nhập để lưu món!', 'warning');
+                return;
+            }
+
+            const data = await res.json();
+            if (data.success) {
+                const isSaved = (data.status === 'saved' || data.saved);
+                if (submitBtn) {
+                    if (isSaved) {
+                        submitBtn.classList.remove('button-outline');
+                        submitBtn.classList.add('button-saved');
+                        submitBtn.textContent = '🔖 Đã lưu';
+                    } else {
+                        submitBtn.classList.remove('button-saved');
+                        submitBtn.classList.add('button-outline');
+                        submitBtn.textContent = '🔖 Lưu món';
+                    }
+                }
+                if (typeof showToast === 'function') {
+                    showToast(data.message, isSaved ? 'success' : 'info');
+                }
+            } else {
+                if (typeof showToast === 'function') showToast(data.message || 'Thao tác không thành công', 'warning');
+            }
+        } catch (err) {
+            console.error('Save recipe error:', err);
+        } finally {
+            if (submitBtn) submitBtn.disabled = false;
+        }
+    });
+}
+
+/* ==========================================================================
+   2c. DYNAMIC SERVINGS SCALER (Khẩu phần +/-)
+   ========================================================================== */
+function initServingsScaler() {
+    const decBtn = document.getElementById('btnDecServing');
+    const incBtn = document.getElementById('btnIncServing');
+    const display = document.getElementById('servingsDisplay');
+    if (!decBtn || !incBtn || !display) return;
+
+    const baseServings = parseInt(display.dataset.base, 10) || 2;
+    let currentServings = baseServings;
+
+    const updateQuantities = () => {
+        display.textContent = `${currentServings} người`;
+        const ratio = currentServings / baseServings;
+
+        const rows = document.querySelectorAll('.ingredient-row');
+        rows.forEach(row => {
+            const amountEl = row.querySelector('.ingredient-item-amount');
+            if (!amountEl) return;
+
+            const baseQtyStr = amountEl.dataset.baseQty;
+            const unit = amountEl.dataset.unit || '';
+            if (!baseQtyStr || baseQtyStr === '') return;
+
+            const baseQty = parseFloat(baseQtyStr);
+            if (isNaN(baseQty) || baseQty <= 0) return;
+
+            const newQty = baseQty * ratio;
+            let formattedQty;
+
+            if (newQty >= 10) {
+                formattedQty = Math.round(newQty);
+            } else if (newQty >= 1) {
+                formattedQty = Math.round(newQty * 10) / 10;
+                if (formattedQty === Math.floor(formattedQty)) {
+                    formattedQty = Math.floor(formattedQty);
+                }
+            } else {
+                if (Math.abs(newQty - 0.5) < 0.1) formattedQty = '1/2';
+                else if (Math.abs(newQty - 0.25) < 0.08) formattedQty = '1/4';
+                else if (Math.abs(newQty - 0.75) < 0.08) formattedQty = '3/4';
+                else if (Math.abs(newQty - 0.33) < 0.08) formattedQty = '1/3';
+                else formattedQty = Math.round(newQty * 10) / 10;
+            }
+
+            const qtyEl = amountEl.querySelector('.ingredient-qty');
+            if (qtyEl) {
+                qtyEl.textContent = formattedQty;
+            } else {
+                amountEl.innerHTML = `<strong class="ingredient-qty">${formattedQty}</strong>${unit ? ' ' + escapeHtml(unit) : ''}`;
+            }
+
+            amountEl.classList.remove('qty-scaled');
+            void amountEl.offsetWidth;
+            amountEl.classList.add('qty-scaled');
+        });
+    };
+
+    decBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (currentServings > 1) {
+            currentServings--;
+            updateQuantities();
+        }
+    });
+
+    incBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (currentServings < 50) {
+            currentServings++;
+            updateQuantities();
+        }
+    });
+}
+
+/* ==========================================================================
+   2d. QUICK GROCERY LIST MODAL DELEGATION
+   ========================================================================== */
+function initGroceryQuickModal() {
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.js-open-grocery-modal');
+        if (!btn) return;
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        const title = btn.dataset.title || 'Danh Sách Đi Chợ';
+        let ingredients = btn.dataset.ingredients || '';
+
+        // If on recipe detail page, grab the live scaled ingredients list
+        const detailRows = document.querySelectorAll('.ingredients-dotted-table .ingredient-row');
+        if (detailRows.length > 0 && (btn.closest('.recipe-actions-bar') || !ingredients)) {
+            const lines = [];
+            detailRows.forEach(r => {
+                const name = r.querySelector('.ingredient-item-name')?.textContent?.trim() || '';
+                const amt = r.querySelector('.ingredient-item-amount')?.textContent?.trim() || '';
+                if (name) {
+                    lines.push(amt && amt !== 'vừa đủ' ? `${amt} ${name}` : name);
+                }
+            });
+            if (lines.length > 0) {
+                ingredients = lines.join('\n');
+            }
+        }
+
+        if (typeof window.openGroceryModal === 'function') {
+            window.openGroceryModal(ingredients, title);
+        }
+    });
+}
+
 function initMealDecider() {
     // Inject modal if not present
     if (!document.getElementById('mealDeciderModal')) {
@@ -595,15 +826,29 @@ async function loadNotifications(filterType = window.currentNotifFilter || 'all'
 
                 let html = '';
                 data.notifications.forEach(n => {
-                    html += `
-                        <a href="${n.target_url}" class="notification-item ${!n.is_read ? 'is-unread' : ''}" onclick="markNotificationRead(${n.id})">
-                            <span class="notif-icon">${n.icon}</span>
-                            <div class="notif-body">
-                                <strong>${escapeHtml(n.actor_name)}</strong> ${escapeHtml(n.content)}
-                                <span class="notif-time">🕒 ${escapeHtml(n.created_at)}</span>
-                            </div>
-                        </a>
-                    `;
+                    if (n.is_rejected) {
+                        const escapedTitle = (n.reject_title || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        const escapedMsg = (n.reject_message || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        html += `
+                            <a href="javascript:void(0)" class="notification-item ${!n.is_read ? 'is-unread' : ''}" onclick="handleRejectionNotificationClick(${n.id}, '${escapedTitle}', '${escapedMsg}')">
+                                <span class="notif-icon">${n.icon}</span>
+                                <div class="notif-body">
+                                    <strong>${escapeHtml(n.actor_name)}</strong> ${escapeHtml(n.content)}
+                                    <span class="notif-time">🕒 ${escapeHtml(n.created_at)}</span>
+                                </div>
+                            </a>
+                        `;
+                    } else {
+                        html += `
+                            <a href="${n.target_url}" class="notification-item ${!n.is_read ? 'is-unread' : ''}" onclick="markNotificationRead(${n.id})">
+                                <span class="notif-icon">${n.icon}</span>
+                                <div class="notif-body">
+                                    <strong>${escapeHtml(n.actor_name)}</strong> ${escapeHtml(n.content)}
+                                    <span class="notif-time">🕒 ${escapeHtml(n.created_at)}</span>
+                                </div>
+                            </a>
+                        `;
+                    }
                 });
                 notifList.innerHTML = html;
             }
@@ -612,6 +857,18 @@ async function loadNotifications(filterType = window.currentNotifFilter || 'all'
         console.error('Notification load error:', err);
     }
 }
+
+window.handleRejectionNotificationClick = function(notifId, title, message) {
+    if (typeof markNotificationRead === 'function') {
+        markNotificationRead(notifId);
+    }
+    const notifDropdown = document.getElementById('notificationDropdown');
+    if (notifDropdown) notifDropdown.style.display = 'none';
+
+    if (typeof showRejectionNoticeModal === 'function') {
+        showRejectionNoticeModal(title, message);
+    }
+};
 
 window.filterNotifications = function(type, btnEl) {
     document.querySelectorAll('.notif-tab').forEach(el => el.classList.remove('is-active'));
@@ -1363,6 +1620,7 @@ window.setCookingTimer = function(minutes) {
         clearInterval(kitchenTimerInterval);
         kitchenTimerInterval = null;
     }
+    minutes = Math.max(1, Math.min(360, Math.round(Number(minutes) || 15)));
     kitchenTimerSeconds = minutes * 60;
     kitchenTimerInitialSeconds = kitchenTimerSeconds;
     updateKitchenTimerDisplay();
@@ -1376,11 +1634,63 @@ window.setCookingTimer = function(minutes) {
     if (btnPause) btnPause.style.display = 'none';
 
     if (typeof showToast === 'function') {
-        showToast(`Đã hẹn giờ bếp: ${minutes} phút`);
+        showToast(`Đã đặt hẹn giờ bếp: ${minutes} phút`, 'info');
+    }
+    const customInput = document.getElementById('inputCustomTimerMinutes');
+    if (customInput && document.activeElement !== customInput) {
+        customInput.value = minutes;
     }
 };
 
+window.applyCustomCookingTimer = function() {
+    const input = document.getElementById('inputCustomTimerMinutes');
+    if (!input) return;
+    const val = parseInt(input.value, 10);
+    if (isNaN(val) || val <= 0) {
+        if (typeof showToast === 'function') {
+            showToast('Vui lòng nhập số phút hợp lệ (từ 1 đến 360 phút)!', 'warning');
+        }
+        return;
+    }
+    if (val > 360) {
+        if (typeof showToast === 'function') {
+            showToast('Thời gian hẹn giờ tối đa là 360 phút (6 tiếng)!', 'warning');
+        }
+        return;
+    }
+    window.setCookingTimer(val);
+};
+
+let kitchenAudioCtx = null;
+
+function getOrInitKitchenAudio() {
+    try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return null;
+        if (!kitchenAudioCtx) {
+            kitchenAudioCtx = new AudioContext();
+        }
+        if (kitchenAudioCtx.state === 'suspended') {
+            kitchenAudioCtx.resume();
+        }
+        return kitchenAudioCtx;
+    } catch (e) {
+        return null;
+    }
+}
+
 window.startCookingTimer = function() {
+    getOrInitKitchenAudio(); // Unlock audio context on user click
+
+    const customInput = document.getElementById('inputCustomTimerMinutes');
+    if (customInput) {
+        const val = parseInt(customInput.value, 10);
+        if (!isNaN(val) && val > 0 && val * 60 !== kitchenTimerInitialSeconds && kitchenTimerSeconds === kitchenTimerInitialSeconds) {
+            kitchenTimerSeconds = val * 60;
+            kitchenTimerInitialSeconds = kitchenTimerSeconds;
+            updateKitchenTimerDisplay();
+        }
+    }
     if (kitchenTimerSeconds <= 0) {
         kitchenTimerSeconds = kitchenTimerInitialSeconds || 15 * 60;
     }
@@ -1426,6 +1736,10 @@ window.resetCookingTimer = function() {
         kitchenTimerInterval = null;
     }
     kitchenTimerSeconds = kitchenTimerInitialSeconds;
+    const customInput = document.getElementById('inputCustomTimerMinutes');
+    if (customInput && document.activeElement !== customInput) {
+        customInput.value = Math.round(kitchenTimerInitialSeconds / 60);
+    }
     updateKitchenTimerDisplay();
 
     const banner = document.getElementById('timerAlarmBanner');
@@ -1439,27 +1753,38 @@ window.resetCookingTimer = function() {
 
 function playKitchenTimerAlarm() {
     try {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContext) return;
-        const ctx = new AudioContext();
-        
-        // 4 chime notes: 880Hz, 1046Hz, 1318Hz, 1760Hz
-        const notes = [880, 1046.5, 1318.5, 1760];
-        notes.forEach((freq, idx) => {
-            const delay = idx * 0.22;
+        const ctx = getOrInitKitchenAudio();
+        if (!ctx) return;
+
+        // Chuỗi âm thanh bíp bíp đặc trưng của đồng hồ hẹn giờ nhà bếp (3 đợt bíp kép)
+        // Đợt 1: 0.00s & 0.16s | Đợt 2: 0.50s & 0.66s | Đợt 3: 1.00s & 1.16s
+        const beepTimes = [
+            0.00, 0.16,
+            0.50, 0.66,
+            1.00, 1.16
+        ];
+
+        const now = ctx.currentTime;
+        beepTimes.forEach((startOffset) => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
-            gain.gain.setValueAtTime(0.25, ctx.currentTime + delay);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 0.3);
+
+            // Sóng tam giác âm vang ấm và rõ như chuông điện tử
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(1175, now + startOffset); // Âm D6 cao, sắc nét
+
+            gain.gain.setValueAtTime(0.0, now + startOffset);
+            gain.gain.linearRampToValueAtTime(0.35, now + startOffset + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + startOffset + 0.12);
+
             osc.connect(gain);
             gain.connect(ctx.destination);
-            osc.start(ctx.currentTime + delay);
-            osc.stop(ctx.currentTime + delay + 0.35);
+
+            osc.start(now + startOffset);
+            osc.stop(now + startOffset + 0.13);
         });
     } catch (e) {
-        console.warn('AudioContext alarm error:', e);
+        console.warn('Kitchen timer beep audio error:', e);
     }
 }
 

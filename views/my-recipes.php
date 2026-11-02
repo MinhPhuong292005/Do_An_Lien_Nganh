@@ -204,8 +204,8 @@ $myRecipes = $stmt->fetchAll();
                             ✏️ Sửa
                         </a>
 
-                        <form method="post" action="<?= BASE_URL ?>/actions/recipe_action.php" style="display:inline"
-                            onsubmit="return confirm('Bạn có chắc muốn xóa công thức «<?= e(addslashes($recipe['title'])) ?>» vĩnh viễn?')">
+                        <form method="post" action="<?= BASE_URL ?>/actions/recipe_action.php" style="display:inline">
+
                             <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
                             <input type="hidden" name="action" value="delete_own">
                             <input type="hidden" name="recipe_id" value="<?= (int) $recipe['id'] ?>">

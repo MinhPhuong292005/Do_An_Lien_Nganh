@@ -25,8 +25,8 @@ if (!$author) {
 // Fetch approved recipes by this author
 $stmtRecipes = db()->prepare(
     "SELECT r.*, u.username AS author_name,
-     COALESCE((SELECT ROUND(AVG(c.rating), 1) FROM comments c WHERE c.recipe_id = r.id), 5.0) AS avg_rating,
-     (SELECT COUNT(*) FROM comments c WHERE c.recipe_id = r.id) AS review_count
+     COALESCE((SELECT ROUND(AVG(c.rating), 1) FROM comments c WHERE c.recipe_id = r.id AND c.rating > 0 AND (c.is_hidden = 0 OR c.is_hidden IS NULL)), 0.0) AS avg_rating,
+     (SELECT COUNT(*) FROM comments c WHERE c.recipe_id = r.id AND c.rating > 0 AND (c.is_hidden = 0 OR c.is_hidden IS NULL)) AS review_count
      FROM recipes r
      INNER JOIN users u ON u.id = r.author_id
      WHERE r.author_id = ? AND r.status = 'approved'
@@ -37,8 +37,24 @@ $authorRecipes = $stmtRecipes->fetchAll();
 
 // Author stats
 $totalRecipes = count($authorRecipes);
-$totalViews = array_sum(array_column($authorRecipes, 'views_count'));
-$avgRating = $totalRecipes > 0 ? round(array_sum(array_column($authorRecipes, 'avg_rating')) / $totalRecipes, 1) : 5.0;
+$totalViews = (int) array_sum(array_column($authorRecipes, 'views_count'));
+
+// Accurate rating across author's recipes (0/5 if unrated)
+$stmtAuthorRating = db()->prepare("
+    SELECT AVG(rating) AS avg_val, COUNT(*) AS cnt 
+    FROM comments 
+    WHERE recipe_id IN (SELECT id FROM recipes WHERE author_id = ?) AND rating > 0 AND (is_hidden = 0 OR is_hidden IS NULL)
+");
+$stmtAuthorRating->execute([$authorId]);
+$authorRatingData = $stmtAuthorRating->fetch();
+$authorRatingCount = (int) ($authorRatingData['cnt'] ?? 0);
+if ($authorRatingCount > 0 && $authorRatingData['avg_val'] !== null) {
+    $avgRating = round((float) $authorRatingData['avg_val'], 1);
+    $avgRatingText = $avgRating . '/5';
+} else {
+    $avgRating = 0.0;
+    $avgRatingText = '0/5';
+}
 
 // Followers count & state
 $followerCount = (int) db()->query("SELECT COUNT(*) FROM follows WHERE author_id = $authorId")->fetchColumn();
@@ -89,10 +105,11 @@ require __DIR__ . '/../includes/header.php';
             <div style="flex: 1; min-width: 240px;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
                     <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text-main); margin: 0;"><?= e($author['username']) ?></h1>
-                    <span style="display: inline-block; font-size: 0.8rem; font-weight: 700; padding: 0.2rem 0.75rem; border-radius: 99px;
-                        <?= $author['role'] === 'admin' ? 'background:#fef3c7; color:#d97706;' : 'background:var(--primary-light); color:var(--primary);' ?>">
-                        <?= $author['role'] === 'admin' ? '👑 Quản trị viên' : '🍳 Đầu bếp Cookio' ?>
-                    </span>
+                    <?php if ($author['role'] === 'admin'): ?>
+                        <span style="display: inline-block; font-size: 0.8rem; font-weight: 700; padding: 0.2rem 0.75rem; border-radius: 99px; background:#fee2e2; color:#b91c1c; border: 1px solid #fecaca;">
+                            🛡️ Quản trị viên
+                        </span>
+                    <?php endif; ?>
 
                     <?php if (is_logged_in() && (int) $_SESSION['user_id'] !== $authorId): ?>
                         <form method="post" action="<?= BASE_URL ?>/actions/follow_action.php" style="display:inline;">
@@ -114,10 +131,10 @@ require __DIR__ . '/../includes/header.php';
                 $chefBadges = get_chef_badges((int)$authorId);
                 if (!empty($chefBadges)):
                 ?>
-                    <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.65rem;">
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.65rem;">
                         <?php foreach ($chefBadges as $cb): ?>
-                            <span class="chef-badge <?= $cb['class'] ?>" style="font-size: 0.8rem; padding: 0.2rem 0.65rem;">
-                                <?= $cb['icon'] ?> <?= $cb['label'] ?>
+                            <span style="<?= $cb['style'] ?> font-size: 0.8rem; font-weight: 700; padding: 0.2rem 0.75rem; border-radius: 99px; display: inline-flex; align-items: center; gap: 0.35rem;">
+                                <?= $cb['icon'] ?> <?= e($cb['label']) ?>
                             </span>
                         <?php endforeach; ?>
                     </div>
@@ -137,19 +154,22 @@ require __DIR__ . '/../includes/header.php';
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem; margin-top: 1.75rem; padding-top: 1.5rem; border-top: 1px solid #f1ede8;">
             <div style="text-align: center;">
                 <strong style="display: block; font-size: 1.75rem; font-weight: 800; color: var(--primary);"><?= $totalRecipes ?></strong>
-                <span style="font-size: 0.82rem; color: var(--text-muted);">Công thức món</span>
+                <span style="font-size: 0.82rem; font-weight: 400; color: var(--text-muted);">công thức món</span>
             </div>
             <div style="text-align: center;">
                 <strong style="display: block; font-size: 1.75rem; font-weight: 800; color: #16a34a;"><?= number_format($totalViews) ?></strong>
-                <span style="font-size: 0.82rem; color: var(--text-muted);">Tổng lượt xem</span>
+                <span style="font-size: 0.82rem; font-weight: 400; color: var(--text-muted);">tổng lượt xem</span>
             </div>
             <div style="text-align: center;">
                 <strong style="display: block; font-size: 1.75rem; font-weight: 800; color: #7c3aed;"><?= $followerCount ?></strong>
-                <span style="font-size: 0.82rem; color: var(--text-muted);">Người theo dõi</span>
+                <span style="font-size: 0.82rem; font-weight: 400; color: var(--text-muted);">theo dõi</span>
             </div>
             <div style="text-align: center;">
-                <strong style="display: block; font-size: 1.75rem; font-weight: 800; color: #f59e0b;">⭐ <?= $avgRating ?></strong>
-                <span style="font-size: 0.82rem; color: var(--text-muted);">Điểm đánh giá</span>
+                <strong style="display: inline-flex; align-items: center; justify-content: center; gap: 0.25rem; font-size: 1.5rem; font-weight: 800; color: #f59e0b; white-space: nowrap;">
+                    <span><?= $avgRatingText ?></span>
+                    <span style="font-size: 1.15rem; line-height: 1;">⭐</span>
+                </strong>
+                <span style="display: block; font-size: 0.82rem; font-weight: 400; color: var(--text-muted); white-space: nowrap;">đánh giá <?= $authorRatingCount > 0 ? "($authorRatingCount)" : "(Chưa có)" ?></span>
             </div>
         </div>
     </div>

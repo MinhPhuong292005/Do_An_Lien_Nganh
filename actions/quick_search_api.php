@@ -16,19 +16,43 @@ if ($action === 'search') {
         exit;
     }
 
-    $term = '%' . $q . '%';
-    $stmt = db()->prepare("
-        SELECT r.id, r.title, r.category, r.cooking_time, r.servings, r.image_url, r.calories,
+    // Tách từ khóa & mở rộng từ đồng nghĩa ẩm thực (thịt heo == thịt lợn)
+    $tokens = parse_search_query_tokens($q);
+
+    $searchWhere = ["r.status = 'approved'"];
+    $searchParams = [];
+
+    if (!empty($tokens)) {
+        $subConds = [];
+        foreach ($tokens as $tk) {
+            $regex = build_synonym_regex($tk);
+            $subConds[] = "(r.title REGEXP ? OR r.ingredients REGEXP ?)";
+            $searchParams[] = $regex;
+            $searchParams[] = $regex;
+        }
+        $searchWhere[] = "(" . implode(' AND ', $subConds) . ")";
+    }
+
+    $firstRegex = !empty($tokens) ? build_synonym_regex($tokens[0]) : '';
+    $titleOrder = $firstRegex !== '' ? "CASE WHEN r.title REGEXP ? THEN 0 ELSE 1 END ASC, " : "";
+    if ($firstRegex !== '') {
+        $searchParams[] = $firstRegex;
+    }
+
+    $sql = "
+        SELECT r.id, r.title, r.category, r.cooking_time, r.servings, r.image_url, r.calories, r.views_count,
                u.username AS author_name,
-               (SELECT COUNT(*) FROM recipe_likes rl WHERE rl.recipe_id = r.id) AS likes_count
+               (SELECT COUNT(*) FROM recipe_likes rl WHERE rl.recipe_id = r.id) AS likes_count,
+               (SELECT ROUND(AVG(c.rating), 1) FROM comments c WHERE c.recipe_id = r.id AND (c.is_hidden = 0 OR c.is_hidden IS NULL)) AS avg_rating,
+               (SELECT COUNT(*) FROM comments c WHERE c.recipe_id = r.id AND (c.is_hidden = 0 OR c.is_hidden IS NULL)) AS review_count
         FROM recipes r
         JOIN users u ON u.id = r.author_id
-        WHERE r.status = 'approved'
-          AND (r.title LIKE ? OR r.ingredients LIKE ? OR r.category LIKE ?)
-        ORDER BY r.views_count DESC, r.created_at DESC
+        WHERE " . implode(' AND ', $searchWhere) . "
+        ORDER BY " . $titleOrder . "r.views_count DESC, r.created_at DESC
         LIMIT 6
-    ");
-    $stmt->execute([$term, $term, $term]);
+    ";
+    $stmt = db()->prepare($sql);
+    $stmt->execute($searchParams);
     $rows = $stmt->fetchAll();
 
     $results = [];
@@ -50,71 +74,65 @@ if ($action === 'search') {
             'cooking_time' => (string) $row['cooking_time'],
             'servings' => (string) $row['servings'],
             'calories' => $row['calories'] ? (int) $row['calories'] : null,
-            'image_url' => $imgUrl,
             'author_name' => (string) $row['author_name'],
             'likes_count' => (int) $row['likes_count'],
-            'url' => BASE_URL . '/views/recipe-detail.php?id=' . $row['id']
+            'views_count' => (int) ($row['views_count'] ?? 0),
+            'avg_rating' => $row['review_count'] > 0 ? (float) $row['avg_rating'] : null,
+            'review_count' => (int) ($row['review_count'] ?? 0),
+            'image_url' => $imgUrl,
+            'url' => BASE_URL . '/views/recipe-detail.php?id=' . (int) $row['id'],
         ];
     }
 
-    echo json_encode(['success' => true, 'results' => $results]);
+    echo json_encode(['success' => true, 'results' => $results, 'count' => count($results)]);
     exit;
 }
 
-if ($action === 'random_meal') {
-    $mood = (string) ($_GET['mood'] ?? 'any');
-    
-    $where = ["r.status = 'approved'"];
-    $params = [];
-
-    if ($mood === 'quick') {
-        $where[] = "(r.cooking_time LIKE '%15%' OR r.cooking_time LIKE '%20%' OR r.cooking_time LIKE '%25%' OR r.dietary_tags LIKE '%Nhanh%')";
-    } elseif ($mood === 'healthy') {
-        $where[] = "(r.dietary_tags LIKE '%Eat Clean%' OR r.dietary_tags LIKE '%Protein%' OR r.dietary_tags LIKE '%Ít Calo%' OR (r.calories IS NOT NULL AND r.calories <= 350))";
-    } elseif ($mood === 'comfort') {
-        $where[] = "(r.category = 'Món canh' OR r.category = 'Món lẩu' OR r.dietary_tags LIKE '%Ấm Bụng%' OR r.dietary_tags LIKE '%Truyền Thống%')";
-    }
-
+if ($action === 'popular') {
+    // Top 5 trending recipes based on views_count
     $sql = "
-        SELECT r.id, r.title, r.description, r.category, r.cooking_time, r.servings, r.image_url, r.calories, r.dietary_tags,
+        SELECT r.id, r.title, r.category, r.cooking_time, r.image_url, r.views_count,
                u.username AS author_name,
-               (SELECT COUNT(*) FROM recipe_likes rl WHERE rl.recipe_id = r.id) AS likes_count
+               (SELECT COUNT(*) FROM recipe_likes rl WHERE rl.recipe_id = r.id) AS likes_count,
+               (SELECT ROUND(AVG(c.rating), 1) FROM comments c WHERE c.recipe_id = r.id AND (c.is_hidden = 0 OR c.is_hidden IS NULL)) AS avg_rating,
+               (SELECT COUNT(*) FROM comments c WHERE c.recipe_id = r.id AND (c.is_hidden = 0 OR c.is_hidden IS NULL)) AS review_count
         FROM recipes r
         JOIN users u ON u.id = r.author_id
-        WHERE " . implode(' AND ', $where) . "
-        ORDER BY RAND()
-        LIMIT 1
+        WHERE r.status = 'approved'
+        ORDER BY r.views_count DESC, r.created_at DESC
+        LIMIT 5
     ";
+    $rows = db()->query($sql)->fetchAll();
 
-    $stmt = db()->query($sql);
-    $meal = $stmt->fetch();
+    $popular = [];
+    foreach ($rows as $row) {
+        $img = (string) ($row['image_url'] ?? '');
+        if ($img !== '') {
+            if (!str_starts_with($img, 'assets/') && !str_starts_with($img, 'uploads/')) {
+                $img = 'uploads/recipes/' . $img;
+            }
+            $imgUrl = BASE_URL . '/' . ltrim($img, '/');
+        } else {
+            $imgUrl = BASE_URL . '/assets/images/default-recipe.jpg';
+        }
 
-    if (!$meal) {
-        // Fallback: pick any approved recipe
-        $meal = db()->query("SELECT r.*, u.username AS author_name FROM recipes r JOIN users u ON u.id = r.author_id WHERE r.status = 'approved' ORDER BY RAND() LIMIT 1")->fetch();
+        $popular[] = [
+            'id' => (int) $row['id'],
+            'title' => (string) $row['title'],
+            'category' => (string) $row['category'],
+            'cooking_time' => (string) $row['cooking_time'],
+            'author_name' => (string) $row['author_name'],
+            'views_count' => (int) ($row['views_count'] ?? 0),
+            'avg_rating' => $row['review_count'] > 0 ? (float) $row['avg_rating'] : null,
+            'review_count' => (int) ($row['review_count'] ?? 0),
+            'likes_count' => (int) $row['likes_count'],
+            'image_url' => $imgUrl,
+            'url' => BASE_URL . '/views/recipe-detail.php?id=' . (int) $row['id'],
+        ];
     }
 
-    if ($meal) {
-        echo json_encode([
-            'success' => true,
-            'recipe' => [
-                'id' => (int) $meal['id'],
-                'title' => (string) $meal['title'],
-                'description' => (string) ($meal['description'] ?? ''),
-                'category' => (string) $meal['category'],
-                'cooking_time' => (string) $meal['cooking_time'],
-                'servings' => (string) $meal['servings'],
-                'calories' => $meal['calories'] ? (int) $meal['calories'] : null,
-                'dietary_tags' => (string) ($meal['dietary_tags'] ?? ''),
-                'image_url' => $meal['image_url'] ? BASE_URL . '/uploads/recipes/' . $meal['image_url'] : null,
-                'author_name' => (string) $meal['author_name'],
-                'url' => BASE_URL . '/views/recipe-detail.php?id=' . $meal['id']
-            ]
-        ]);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Chưa có món ăn nào trong hệ thống.']);
-    }
+    echo json_encode(['success' => true, 'popular' => $popular]);
     exit;
 }
 
-echo json_encode(['success' => false, 'message' => 'Action không hợp lệ']);
+echo json_encode(['success' => false, 'message' => 'Hành động không hợp lệ']);

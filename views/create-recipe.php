@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/categories_helper.php';
 
 $pageTitle = 'Chia sẻ công thức mới - Cookio';
+$categories = get_all_categories();
 require __DIR__ . '/../includes/header.php';
 ?>
 <div class="recipe-detail-container">
@@ -35,6 +37,7 @@ require __DIR__ . '/../includes/header.php';
             echo match ($_GET['error']) {
                 'csrf' => 'Yêu cầu không hợp lệ hoặc phiên làm việc đã hết hạn. Vui lòng thử lại.',
                 'missing-fields' => 'Vui lòng điền đầy đủ tên món ăn, nguyên liệu và các bước làm.',
+                'missing-image' => 'Vui lòng tải lên hình ảnh món ăn thành phẩm (bắt buộc).',
                 'invalid-image' => 'Ảnh tải lên không hợp lệ hoặc vượt quá 5MB (chấp nhận JPG, PNG, WEBP).',
                 'upload-failed' => 'Không thể lưu ảnh tải lên máy chủ. Vui lòng thử lại.',
                 'login-required' => 'Bạn cần đăng nhập để thực hiện chức năng này.',
@@ -63,17 +66,13 @@ require __DIR__ . '/../includes/header.php';
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
             <label>
-                Danh mục món ăn
-                <select name="category" style="padding: 0.75rem; border: 1.5px solid #dcd5c9; border-radius: var(--radius-sm); font-weight: 600;">
-                    <option value="Món xào">🥘 Món xào</option>
-                    <option value="Món canh">🥣 Món canh</option>
-                    <option value="Món kho">🍲 Món kho</option>
-                    <option value="Món hấp">♨️ Món hấp</option>
-                    <option value="Món chiên">🍤 Món chiên</option>
-                    <option value="Món nướng">🥩 Món nướng</option>
-                    <option value="Món chay">🥗 Món chay</option>
-                    <option value="Món tráng miệng">🍰 Món tráng miệng</option>
-                    <option value="Món chính" selected>🍳 Món chính</option>
+                Danh mục món ăn <span style="color:red">*</span>
+                <select name="category" style="padding: 0.75rem; border: 1.5px solid #dcd5c9; border-radius: var(--radius-sm); font-weight: 600; width: 100%;">
+                    <?php foreach ($categories as $cat): ?>
+                        <option value="<?= e($cat['name']) ?>" <?= $cat['name'] === 'Món xào' ? 'selected' : '' ?>>
+                            <?= e($cat['icon'] ?: '🍳') ?> <?= e($cat['name']) ?>
+                        </option>
+                    <?php endforeach; ?>
                 </select>
             </label>
 
@@ -89,9 +88,11 @@ require __DIR__ . '/../includes/header.php';
         </div>
 
         <label>
-            Hình ảnh món ăn thành phẩm
-            <input type="file" name="image" accept="image/jpeg,image/png,image/webp">
-            <span style="font-size: 0.85rem; color: #6b7280;">Ảnh chụp món ăn rõ nét, đẹp mắt sẽ giúp món ăn nhận được nhiều lượt xem và yêu thích hơn.</span>
+            Hình ảnh món ăn thành phẩm <span style="color:red">*</span>
+            <input type="file" name="image" id="recipeImageInput" required accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" onchange="validateRecipeImage(this)">
+            <span style="font-size: 0.85rem; color: #6b7280; display: block; margin-top: 0.35rem;">
+                Chỉ chấp nhận file hình ảnh hợp lệ (JPG, PNG, WEBP), tối đa 5MB. Không chọn tệp nén hoặc file khác (.zip, .bat, .exe...).
+            </span>
         </label>
 
         <h2 style="font-size: 1.25rem; font-weight: 800; border-bottom: 1.5px solid #f1ebe1; padding-bottom: 0.75rem; margin-top: 1rem;">
@@ -167,6 +168,28 @@ require __DIR__ . '/../includes/header.php';
         </div>
     </form>
 </div>
+<script>
+function validateRecipeImage(input) {
+    if (!input || !input.files || !input.files[0]) return true;
+    const file = input.files[0];
+    const allowedExts = ['jpg', 'jpeg', 'png', 'webp'];
+    const parts = file.name.split('.');
+    const ext = parts.length > 1 ? parts.pop().toLowerCase() : '';
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+    if (!allowedExts.includes(ext) || (file.type && !allowedTypes.includes(file.type))) {
+        alert('⚠️ Định dạng tệp không được hỗ trợ!\n\nVui lòng chỉ tải lên ảnh có đuôi .jpg, .jpeg, .png hoặc .webp (Tệp "' + file.name + '" không hợp lệ).');
+        input.value = '';
+        return false;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+        alert('⚠️ Dung lượng tệp vượt quá 5MB. Vui lòng tải lên ảnh có dung lượng nhỏ hơn.');
+        input.value = '';
+        return false;
+    }
+    return true;
+}
+</script>
 <?php
 require __DIR__ . '/../includes/modal-login.php';
 require __DIR__ . '/../includes/footer.php';

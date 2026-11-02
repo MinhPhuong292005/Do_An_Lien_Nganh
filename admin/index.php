@@ -30,6 +30,8 @@ $stats = db()->query(
 )->fetch();
 
 $userCount = db()->query("SELECT COUNT(*) FROM users")->fetchColumn();
+$tipCount = (int) db()->query("SELECT COUNT(*) FROM kitchen_tips")->fetchColumn();
+$flaggedCommentCount = (int) db()->query("SELECT COUNT(*) FROM comments WHERE is_flagged = 1 OR is_hidden = 1")->fetchColumn();
 $pageTitle = 'Dashboard Quản trị - Cookio';
 ?>
 <!DOCTYPE html>
@@ -71,6 +73,11 @@ $pageTitle = 'Dashboard Quản trị - Cookio';
         <div><strong><?= (int) ($stats['pending'] ?? 0) ?></strong><span>Chờ duyệt</span></div>
         <div><strong><?= (int) ($stats['approved'] ?? 0) ?></strong><span>Đã duyệt</span></div>
         <div><strong><?= (int) $userCount ?></strong><span>Thành viên</span></div>
+        <div style="cursor: pointer;" onclick="location.href='<?= BASE_URL ?>/admin/manage-tips.php'"><strong><?= $tipCount ?></strong><span>Bài kinh nghiệm &rarr;</span></div>
+        <div style="cursor: pointer;" onclick="location.href='<?= BASE_URL ?>/admin/manage-comments.php?moderation=flagged'">
+            <strong style="color: <?= $flaggedCommentCount > 0 ? '#dc2626' : '#16a34a' ?>;"><?= $flaggedCommentCount ?></strong>
+            <span style="font-weight: 700;">🛡️ Vi phạm / Đã ẩn &rarr;</span>
+        </div>
     </div>
 
     <section class="admin-table-box">
@@ -114,6 +121,6 @@ $pageTitle = 'Dashboard Quản trị - Cookio';
         </div>
     </section>
 </main>
-<script src="<?= BASE_URL ?>/assets/js/admin.js"></script>
+<script src="<?= BASE_URL ?>/assets/js/admin.js?v=<?= time() ?>"></script>
 </body>
 </html>

@@ -6,11 +6,13 @@ require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../includes/db.php';
 
 $recipes = db()->query(
-    "SELECT id, title, description, category, cooking_time, servings, ingredients, image_url 
+    "SELECT id, title, category, cooking_time, servings, ingredients, image_url 
      FROM recipes 
      WHERE status = 'approved' 
      ORDER BY created_at DESC"
-)->fetchAll();
+)->fetchAll(PDO::FETCH_ASSOC);
+
+$initialRecipes = array_slice($recipes, 0, 12);
 
 $ingredientGroups = [
     '🥩 Thịt & Thủy hải sản' => ['Thịt bò', 'Thịt gà', 'Thịt heo', 'Tôm', 'Cá'],
@@ -100,7 +102,7 @@ require __DIR__ . '/../includes/header.php';
 
     <!-- Recipe Results Grid -->
     <div class="recipe-grid" id="fridgeResults">
-        <?php foreach ($recipes as $recipe): ?>
+        <?php foreach ($initialRecipes as $recipe): ?>
             <?php 
             $imgSrc = !empty($recipe['image_url']) ? BASE_URL . '/' . e($recipe['image_url']) : BASE_URL . '/assets/images/default-recipe.jpg';
             ?>
@@ -138,6 +140,8 @@ require __DIR__ . '/../includes/header.php';
             </article>
         <?php endforeach; ?>
     </div>
+
+    <script id="smartFridgeData" type="application/json"><?= json_encode($recipes, JSON_UNESCAPED_UNICODE) ?></script>
 
     <!-- No Match State -->
     <div id="noMatchMessage" class="empty-state-box hidden" style="margin-top: 2rem; padding: 3rem 2rem;">

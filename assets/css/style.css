@@ -1164,8 +1164,8 @@ input:focus, textarea:focus, select:focus {
     position: absolute;
     top: calc(100% + 12px);
     right: 0;
-    width: 350px;
-    max-width: calc(100vw - 32px);
+    width: 375px;
+    max-width: calc(100vw - 24px);
     background: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: 1rem;
@@ -1525,6 +1525,11 @@ input:focus, textarea:focus, select:focus {
     background: #f8fafc;
     border-bottom: 1px solid #e2e8f0;
     overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.notification-tabs::-webkit-scrollbar {
+    display: none;
 }
 .notif-tab {
     background: #ffffff;
@@ -3379,28 +3384,70 @@ input:focus, textarea:focus, select:focus {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 0.75rem;
+    flex-wrap: nowrap;
+    gap: 0.65rem;
+}
+
+@media (max-width: 1160px) {
+    .yummy-nav-container {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem 0.85rem;
+        padding: 0.25rem 0.5rem;
+    }
+    .yummy-main-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.35rem;
+    }
+    .y-nav-item {
+        font-size: 0.85rem;
+        padding: 0.25rem 0.6rem;
+    }
+    .yummy-nav-actions {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.45rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .yummy-main-nav {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        max-width: 100%;
+        justify-content: flex-start;
+        padding-bottom: 0.25rem;
+        scrollbar-width: thin;
+    }
+    .yummy-nav-actions {
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.25rem;
+    }
 }
 
 .yummy-main-nav {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
-    flex-wrap: wrap;
+    gap: 0.55rem;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .y-nav-item {
-    font-size: 0.94rem;
+    font-size: 0.91rem;
     font-weight: 600;
     color: #3e1f17;
     text-decoration: none;
-    padding: 0.35rem 0.85rem;
+    padding: 0.35rem 0.75rem;
     border-radius: 9999px;
     border: 1.5px solid transparent;
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
+    white-space: nowrap;
     transition: all 0.2s ease;
 }
 
@@ -3437,21 +3484,34 @@ input:focus, textarea:focus, select:focus {
 
 .y-nav-dropdown-wrap {
     position: relative;
+    padding-bottom: 8px;
+    margin-bottom: -8px;
 }
 
 .y-dropdown-menu {
     display: none;
     position: absolute;
-    top: 100%;
+    top: calc(100% - 4px);
     left: 0;
     background: #ffffff;
     border: 1.5px solid #fed7aa;
     border-radius: 0.85rem;
-    box-shadow: 0 12px 28px rgba(62, 31, 23, 0.12);
-    min-width: 190px;
+    box-shadow: 0 12px 28px rgba(62, 31, 23, 0.14);
+    min-width: 200px;
     padding: 0.5rem;
-    z-index: 100;
-    animation: menuFadeIn 0.2s ease-out;
+    z-index: 9999;
+    animation: menuFadeIn 0.18s ease-out;
+}
+
+/* Hover bridge: keeps dropdown open when cursor moves between link and menu */
+.y-dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: -16px;
+    left: 0;
+    right: 0;
+    height: 18px;
+    background: transparent;
 }
 
 @keyframes menuFadeIn {
@@ -3459,8 +3519,9 @@ input:focus, textarea:focus, select:focus {
     to { opacity: 1; transform: translateY(0); }
 }
 
-.y-nav-dropdown-wrap:hover .y-dropdown-menu {
-    display: block;
+.y-nav-dropdown-wrap:hover .y-dropdown-menu,
+.y-dropdown-menu:hover {
+    display: block !important;
 }
 
 .y-dropdown-menu a {
@@ -3491,7 +3552,10 @@ input:focus, textarea:focus, select:focus {
 .yummy-nav-actions {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.55rem;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .y-pill-btn-gray {
@@ -4593,22 +4657,25 @@ input:focus, textarea:focus, select:focus {
 }
 
 .btn-sidebar-view-all {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
     width: 100%;
     text-align: center;
-    padding: 0.65rem 1rem;
+    padding: 0.75rem 1rem;
     background: #4a1c17;
-    color: #ffffff;
+    color: #ffffff !important;
     border-radius: 9999px;
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     text-decoration: none;
     transition: all 0.2s ease;
 }
 
 .btn-sidebar-view-all:hover {
     background: #ea580c;
-    color: #ffffff;
+    color: #ffffff !important;
 }
 
 /* ==========================================================================
@@ -4628,21 +4695,14 @@ input:focus, textarea:focus, select:focus {
     margin: 0 auto;
     padding: 0 1.5rem;
     display: grid;
-    grid-template-columns: 1.4fr 1fr 1.2fr 1fr;
-    gap: 2.5rem;
+    grid-template-columns: 1.35fr 1fr 1.15fr;
+    gap: 3.5rem;
 }
 
-@media (max-width: 992px) {
-    .yummy-footer-container {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 2rem;
-    }
-}
-
-@media (max-width: 640px) {
+@media (max-width: 860px) {
     .yummy-footer-container {
         grid-template-columns: 1fr;
-        gap: 1.75rem;
+        gap: 2rem;
     }
 }
 
@@ -5323,4 +5383,27 @@ input:focus, textarea:focus, select:focus {
 
 [data-theme="dark"] .sidebar-dish-item:hover {
     background: #334155 !important;
+}
+
+[data-theme="dark"] .profile-stat-box {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+[data-theme="dark"] .profile-tab-panel {
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .profile-tab-panel h3,
+[data-theme="dark"] .profile-tab-panel h4 {
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .favorite-tabs-nav {
+    border-bottom-color: #334155 !important;
+}
+
+[data-theme="dark"] .fav-tab-btn:not(.is-active) {
+    background: #1e293b !important;
+    color: #94a3b8 !important;
 }

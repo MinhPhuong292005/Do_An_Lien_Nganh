@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/categories_helper.php';
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
@@ -26,8 +27,8 @@ if (!$recipe || ((int) $recipe['author_id'] !== (int) $_SESSION['user_id'] && !i
     redirect('views/my-recipes.php?error=forbidden');
 }
 
-$categories = ['Món xào', 'Món canh', 'Món kho', 'Món hấp', 'Món chiên', 'Món nướng', 'Món chay', 'Món tráng miệng', 'Món chính'];
-$currentCat = $recipe['category'] ?? 'Món chính';
+$categoryList = get_all_categories();
+$currentCat = $recipe['category'] ?? 'Món xào';
 
 $pageTitle = 'Chỉnh sửa: ' . e($recipe['title']) . ' - Cookio';
 require __DIR__ . '/../includes/header.php';
@@ -102,8 +103,10 @@ require __DIR__ . '/../includes/header.php';
                     <span style="font-weight:600; font-size:0.9rem; color:var(--text-main); display:block; margin-bottom:0.4rem;">🍽️ Danh mục</span>
                     <select name="category"
                         style="width:100%; padding:0.75rem 1rem; border:1.5px solid var(--border); border-radius:0.5rem; font-size:0.95rem; background:#fff; outline:none; cursor:pointer; font-family:inherit;">
-                        <?php foreach ($categories as $cat): ?>
-                            <option value="<?= e($cat) ?>" <?= $currentCat === $cat ? 'selected' : '' ?>><?= e($cat) ?></option>
+                        <?php foreach ($categoryList as $cat): ?>
+                            <option value="<?= e($cat['name']) ?>" <?= $currentCat === $cat['name'] ? 'selected' : '' ?>>
+                                <?= e($cat['icon'] ?: '🍳') ?> <?= e($cat['name']) ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </label>
@@ -144,9 +147,9 @@ require __DIR__ . '/../includes/header.php';
                 <span style="font-weight:600; font-size:0.9rem; color:var(--text-main); display:block; margin-bottom:0.4rem;">
                     Chọn ảnh mới (nếu muốn thay đổi)
                 </span>
-                <input type="file" name="image" accept="image/jpeg,image/png,image/webp"
+                <input type="file" name="image" id="recipeEditImageInput" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" onchange="validateRecipeImage(this)"
                     style="padding:0.5rem 0; font-size:0.9rem; color:var(--text-muted);">
-                <span style="display:block; font-size:0.8rem; color:var(--text-muted); margin-top:0.35rem;">Chấp nhận JPG, PNG, WEBP — tối đa 5MB</span>
+                <span style="display:block; font-size:0.8rem; color:var(--text-muted); margin-top:0.35rem;">Chấp nhận JPG, PNG, WEBP — tối đa 5MB. Không tải lên tệp nén hoặc tệp văn bản.</span>
             </label>
         </div>
 
@@ -237,6 +240,29 @@ require __DIR__ . '/../includes/header.php';
         </div>
     </form>
 </div>
+
+<script>
+function validateRecipeImage(input) {
+    if (!input || !input.files || !input.files[0]) return true;
+    const file = input.files[0];
+    const allowedExts = ['jpg', 'jpeg', 'png', 'webp'];
+    const parts = file.name.split('.');
+    const ext = parts.length > 1 ? parts.pop().toLowerCase() : '';
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+    if (!allowedExts.includes(ext) || (file.type && !allowedTypes.includes(file.type))) {
+        alert('⚠️ Định dạng tệp không được hỗ trợ!\n\nVui lòng chỉ tải lên ảnh có đuôi .jpg, .jpeg, .png hoặc .webp (Tệp "' + file.name + '" không hợp lệ).');
+        input.value = '';
+        return false;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+        alert('⚠️ Dung lượng tệp vượt quá 5MB. Vui lòng tải lên ảnh có dung lượng nhỏ hơn.');
+        input.value = '';
+        return false;
+    }
+    return true;
+}
+</script>
 
 <?php
 require __DIR__ . '/../includes/footer.php';

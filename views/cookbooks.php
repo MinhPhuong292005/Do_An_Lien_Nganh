@@ -122,8 +122,9 @@ if ($viewCookbookId) {
                     </div>
                 <?php endif; ?>
                 <div style="margin-left: auto; display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <button type="button" class="button button-create"
-                            onclick="openGroceryModal(<?= json_encode($allCookbookIngredientsText) ?>, 'Danh Sách Đi Chợ - Thực Đơn: <?= e(addslashes($cookbook['title'])) ?>')"
+                    <button type="button" class="button button-create js-open-grocery-modal"
+                            data-title="Danh Sách Đi Chợ - Thực Đơn: <?= e($cookbook['title']) ?>"
+                            data-ingredients="<?= e($allCookbookIngredientsText) ?>"
                             style="padding: 0.55rem 1.15rem; font-size: 0.88rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.45rem;">
                         <span>📋</span> Gom nguyên liệu đi chợ cả thực đơn
                     </button>
@@ -270,7 +271,7 @@ $publicCookbooks = $stmtPublic->fetchAll();
                     <div style="font-size: 3rem; margin-bottom: 0.5rem;">📖</div>
                     <h3 style="font-weight: 700; margin-bottom: 0.5rem; color: var(--text-main);">Bạn chưa tạo sổ tay nào</h3>
                     <p class="text-muted mb-4" style="color: var(--text-muted); margin-bottom: 1.25rem;">Hãy tạo sổ tay đầu tiên để gom nhóm và lưu giữ các thực đơn tâm đắc của bạn!</p>
-                    <button type="button" class="button button-create" onclick="openCreateCookbookModal()">Tạo sổ tay ngay</button>
+                    <button type="button" class="button button-create js-open-grocery-modal" onclick="openCreateCookbookModal()">Tạo sổ tay ngay</button>
                 </div>
             <?php else: ?>
                 <div class="cookbook-grid">
@@ -291,7 +292,7 @@ $publicCookbooks = $stmtPublic->fetchAll();
                                 <p class="cookbook-card-desc"><?= e(mb_substr($cb['description'] ?? 'Chưa có mô tả.', 0, 75)) ?>...</p>
                                 <div class="cookbook-card-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; flex-wrap: wrap; gap: 0.4rem;">
                                     <?php if (!empty($allIngText)): ?>
-                                        <button type="button" class="btn-card-cookbook" onclick="openGroceryModal(<?= json_encode($allIngText) ?>, 'Đi chợ: <?= e(addslashes($cb['title'])) ?>')" style="padding: 0.3rem 0.65rem; font-size: 0.78rem;">
+                                        <button type="button" class="btn-card-cookbook js-open-grocery-modal" data-title="Đi chợ: <?= e($cb['title']) ?>" data-ingredients="<?= e($allIngText) ?>" style="padding: 0.3rem 0.65rem; font-size: 0.78rem;">
                                             📋 Đi chợ
                                         </button>
                                     <?php endif; ?>
@@ -336,7 +337,7 @@ $publicCookbooks = $stmtPublic->fetchAll();
                             </div>
                             <div style="display: flex; gap: 0.4rem; align-items: center; margin-left: auto;">
                                 <?php if (!empty($allIngText)): ?>
-                                    <button type="button" class="btn-card-cookbook" onclick="openGroceryModal(<?= json_encode($allIngText) ?>, 'Đi chợ: <?= e(addslashes($cb['title'])) ?>')" style="padding: 0.3rem 0.65rem; font-size: 0.78rem;">
+                                    <button type="button" class="btn-card-cookbook js-open-grocery-modal" data-title="Đi chợ: <?= e($cb['title']) ?>" data-ingredients="<?= e($allIngText) ?>" style="padding: 0.3rem 0.65rem; font-size: 0.78rem;">
                                         📋 Đi chợ
                                     </button>
                                 <?php endif; ?>

@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 // Fetch all approved recipes for the interactive menu modal
 $stmtAllMenu = db()->query("
-    SELECT r.id, r.title, r.category, r.cooking_time, r.image_url, r.likes_count,
-           COALESCE(ROUND(AVG(rv.rating), 1), 5.0) AS avg_rating
+    SELECT r.id, r.title, r.category, r.cooking_time, r.image_url, r.likes_count, r.views_count,
+           u.username AS author_name,
+           ROUND(AVG(rv.rating), 1) AS avg_rating,
+           COUNT(rv.id) AS review_count
     FROM recipes r
+    JOIN users u ON u.id = r.author_id
     LEFT JOIN comments rv ON rv.recipe_id = r.id
     WHERE r.status = 'approved'
     GROUP BY r.id
@@ -14,7 +17,7 @@ $stmtAllMenu = db()->query("
 ");
 $allMenuRecipes = $stmtAllMenu ? $stmtAllMenu->fetchAll() : [];
 
-$menuCategories = ['Tất cả', 'Món xào', 'Món canh', 'Món kho', 'Món hấp', 'Món chiên'];
+$menuCategories = ['Tất cả', 'Món xào', 'Món canh', 'Món kho', 'Món hấp', 'Món chiên', 'Món chay'];
 ?>
 
 <!-- All Recipes Interactive Menu Modal -->
@@ -47,7 +50,7 @@ $menuCategories = ['Tất cả', 'Món xào', 'Món canh', 'Món kho', 'Món h�
             <!-- Live Search Bar -->
             <div style="position: relative; width: 100%;">
                 <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); font-size: 1.1rem; color: #9a3412;">🔍</span>
-                <input type="text" id="menuModalSearchInput" oninput="filterMenuRecipes()" placeholder="Tìm nhanh theo tên món (VD: bò xào, cá kho, súp gà, nem rán...)" style="width: 100%; padding: 0.75rem 1rem 0.75rem 2.75rem; border-radius: 9999px; border: 1.5px solid #fed7aa; background: #ffffff; font-size: 0.92rem; outline: none; font-family: inherit; color: #1e293b; box-shadow: 0 2px 6px rgba(0,0,0,0.02); transition: border-color 0.2s;">
+                <input type="text" id="menuModalSearchInput" oninput="filterMenuRecipes()" placeholder="Tìm nhanh theo tên món (VD: bò xào, cá kho, súp gà, nem rán, canh cà chua...)" style="width: 100%; padding: 0.75rem 1rem 0.75rem 2.75rem; border-radius: 9999px; border: 1.5px solid #fed7aa; background: #ffffff; font-size: 0.92rem; outline: none; font-family: inherit; color: #1e293b; box-shadow: 0 2px 6px rgba(0,0,0,0.02); transition: border-color 0.2s;">
             </div>
 
             <!-- Categories Tabs -->
@@ -77,11 +80,16 @@ $menuCategories = ['Tất cả', 'Món xào', 'Món canh', 'Món kho', 'Món h�
                         </div>
                         <!-- Info -->
                         <div style="padding: 0.85rem; display: flex; flex-direction: column; flex: 1; justify-content: space-between;">
-                            <h4 style="margin: 0 0 0.5rem; font-size: 0.92rem; font-weight: 800; color: #1e293b; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                                <?= e($rItem['title']) ?>
-                            </h4>
+                            <div>
+                                <div style="font-size: 0.76rem; color: #ea580c; font-weight: 700; margin-bottom: 0.25rem;">
+                                    👨‍🍳 Bếp: <?= e($rItem['author_name']) ?>
+                                </div>
+                                <h4 style="margin: 0 0 0.5rem; font-size: 0.92rem; font-weight: 800; color: #1e293b; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                    <?= e($rItem['title']) ?>
+                                </h4>
+                            </div>
                             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: #94a3b8; font-weight: 600; padding-top: 0.5rem; border-top: 1px solid #f8fafc;">
-                                <span>⏱ <?= e($rItem['cooking_time']) ?></span>
+                                <span>⏱ <?= e($rItem['cooking_time']) ?> &bull; 👁️ <?= number_format((int)($rItem['views_count'] ?? 0)) ?></span>
                                 <span style="color: #ea580c; font-weight: 700;">Xem chi tiết &rarr;</span>
                             </div>
                         </div>

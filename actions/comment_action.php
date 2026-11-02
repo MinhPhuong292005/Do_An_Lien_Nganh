@@ -73,8 +73,12 @@ if ($action === 'add') {
     }
 
     $currentUserId = (int) $_SESSION['user_id'];
-    $stmt = db()->prepare('INSERT INTO comments (recipe_id, parent_id, user_id, content, rating, image_url) VALUES (?, ?, ?, ?, ?, ?)');
-    $stmt->execute([$recipeId, $parentId, $currentUserId, $content, $rating, $imageUrl]);
+    $checkTox = check_toxic_comment($content);
+    $isHidden = $checkTox['is_toxic'] ? 1 : 0;
+    $isFlagged = $checkTox['is_toxic'] ? 1 : 0;
+
+    $stmt = db()->prepare('INSERT INTO comments (recipe_id, parent_id, user_id, content, rating, image_url, is_hidden, is_flagged) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+    $stmt->execute([$recipeId, $parentId, $currentUserId, $content, $rating, $imageUrl, $isHidden, $isFlagged]);
 
     // Send notification
     if ($parentId) {
@@ -98,7 +102,19 @@ if ($action === 'add') {
         }
     }
 
+    if ($isHidden) {
+        redirect($returnUrl . (str_contains($returnUrl, '?') ? '&' : '?') . 'comment=violates-standards#comments');
+    }
     redirect($returnUrl . (str_contains($returnUrl, '?') ? '&' : '?') . 'comment=success#comments');
+}
+
+if ($action === 'toggle_hidden' && is_admin()) {
+    $commentId = filter_input(INPUT_POST, 'comment_id', FILTER_VALIDATE_INT);
+    if ($commentId) {
+        $stmt = db()->prepare('UPDATE comments SET is_hidden = 1 - is_hidden WHERE id = ?');
+        $stmt->execute([$commentId]);
+    }
+    redirect($returnUrl . (str_contains($returnUrl, '?') ? '&' : '?') . 'comment=updated#comments');
 }
 
 if ($action === 'delete') {

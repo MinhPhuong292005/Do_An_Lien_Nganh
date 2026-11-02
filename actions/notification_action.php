@@ -31,6 +31,8 @@ if ($action === 'list') {
         $whereClause .= " AND (n.type = 'comment' OR n.type = 'cooksnap')";
     } elseif ($filterType === 'follow') {
         $whereClause .= " AND n.type = 'follow'";
+    } elseif ($filterType === 'system') {
+        $whereClause .= " AND n.type = 'system'";
     }
 
     $stmt = db()->prepare("
@@ -56,11 +58,46 @@ if ($action === 'list') {
             'comment' => '💬',
             'cooksnap' => '📸',
             'follow' => '👥',
+            'system' => '🔔',
             default => '🔔'
         };
 
+        $actorName = (string) $row['actor_name'];
+        if ($type === 'system') {
+            $actorName = 'Ban quản trị Cookio';
+        }
+
         $targetUrl = '#';
-        if ($row['target_id']) {
+        $isRejected = false;
+        $rejectTitle = '';
+        $rejectMessage = '';
+
+        if ($type === 'system') {
+            $isRejectedContent = str_contains((string)$row['content'], 'từ chối') 
+                              || str_contains((string)$row['content'], 'không được duyệt') 
+                              || str_contains((string)$row['content'], 'Rất tiếc');
+
+            if ($isRejectedContent) {
+                $isRejected = true;
+                if (preg_match('/[«"“]([^»"”]+)[»"”]/u', (string)$row['content'], $matches)) {
+                    $rejectTitle = trim($matches[1]);
+                } else {
+                    $rejectTitle = 'bài đăng của bạn';
+                }
+
+                $rejectMessage = 'Rất tiếc, bài đăng «<strong>' . htmlspecialchars($rejectTitle, ENT_QUOTES, 'UTF-8') . '</strong>» không được duyệt.';
+                $targetUrl = 'javascript:void(0);';
+            } else {
+                // Đã duyệt -> chuyển tới bài đăng đó
+                if (str_contains((string)$row['content'], 'kinh nghiệm') || str_contains((string)$row['content'], 'bí quyết')) {
+                    $targetUrl = BASE_URL . '/views/kitchen-tips.php' . ($row['target_id'] ? '#tip-' . $row['target_id'] : '');
+                } elseif ($row['target_id']) {
+                    $targetUrl = BASE_URL . '/views/recipe-detail.php?id=' . $row['target_id'];
+                } else {
+                    $targetUrl = BASE_URL . '/views/my-recipes.php';
+                }
+            }
+        } elseif ($row['target_id']) {
             $targetUrl = BASE_URL . '/views/recipe-detail.php?id=' . $row['target_id'] . ($type === 'comment' || $type === 'cooksnap' ? '#comments' : '');
         } elseif ($type === 'follow') {
             $targetUrl = BASE_URL . '/views/author.php?id=' . $row['actor_id'];
@@ -83,13 +120,16 @@ if ($action === 'list') {
 
         $items[] = [
             'id' => (int) $row['id'],
-            'actor_name' => (string) $row['actor_name'],
+            'actor_name' => $actorName,
             'icon' => $icon,
             'type' => $type,
             'content' => (string) $row['content'],
             'is_read' => (int) $row['is_read'] === 1,
             'target_url' => $targetUrl,
-            'created_at' => $timeAgo
+            'created_at' => $timeAgo,
+            'is_rejected' => $isRejected,
+            'reject_title' => $rejectTitle,
+            'reject_message' => $rejectMessage
         ];
     }
 

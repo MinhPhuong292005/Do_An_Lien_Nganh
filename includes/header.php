@@ -4,16 +4,11 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../includes/db.php';
-require_once __DIR__ . '/../includes/daily_engagement.php';
-require_once __DIR__ . '/../cron/daily_community_bot.php';
+require_once __DIR__ . '/../includes/categories_helper.php';
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
-
-// Run silent daily engagement and autonomous community bot check (once every 24 hours)
-run_daily_engagement();
-runDailyCommunityBot();
 
 // Counters for Cookpad sidebar
 $sidebarTotal = (int) db()->query("SELECT COUNT(*) FROM recipes WHERE status = 'approved'")->fetchColumn();
@@ -26,13 +21,11 @@ if (isset($_SESSION['user_id'])) {
     $stmtS->execute([$uid]);
     $sidebarSaved = (int) $stmtS->fetchColumn();
 
-    $stmtM = db()->prepare("SELECT COUNT(*) FROM recipes WHERE author_id = ?");
+    $stmtM = db()->prepare("SELECT COUNT(*), COALESCE(SUM(status = 'approved'), 0) FROM recipes WHERE author_id = ?");
     $stmtM->execute([$uid]);
-    $sidebarMy = (int) $stmtM->fetchColumn();
-
-    $stmtL = db()->prepare("SELECT COUNT(*) FROM recipes WHERE author_id = ? AND status = 'approved'");
-    $stmtL->execute([$uid]);
-    $sidebarLive = (int) $stmtL->fetchColumn();
+    $rowM = $stmtM->fetch(PDO::FETCH_NUM);
+    $sidebarMy = (int) ($rowM[0] ?? 0);
+    $sidebarLive = (int) ($rowM[1] ?? 0);
 }
 ?>
 <!DOCTYPE html>
@@ -45,8 +38,9 @@ if (isset($_SESSION['user_id'])) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/user.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css?v=<?= filemtime(__DIR__ . '/../assets/css/style.css') ?>">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/user.css?v=<?= filemtime(__DIR__ . '/../assets/css/user.css') ?>">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/dark-theme.css?v=<?= filemtime(__DIR__ . '/../assets/css/dark-theme.css') ?>">
     <script>
         window.BASE_URL = '<?= BASE_URL ?>';
         window.CSRF_TOKEN = '<?= csrf_token() ?>';
@@ -135,6 +129,17 @@ if (isset($_SESSION['user_id'])) {
             </svg>
             <span>Mẹo Vặt Bếp</span>
         </a>
+
+        <?php if (is_admin()): ?>
+            <a href="<?= BASE_URL ?>/admin/index.php" class="cookpad-nav-item" style="color: #ea580c; font-weight: 800; background: rgba(234, 88, 12, 0.08); border-radius: 8px;">
+                <svg class="cookpad-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="3" y1="9" x2="21" y2="9"/>
+                    <line x1="9" y1="21" x2="9" y2="9"/>
+                </svg>
+                <span>⚡ Admin Portal (Quản trị)</span>
+            </a>
+        <?php endif; ?>
 
         <!-- 6. KHO MÓN NGON CỦA BẠN (Book section) -->
         <div class="cookpad-section-divider"></div>
@@ -271,20 +276,23 @@ if (isset($_SESSION['user_id'])) {
                     <?= $isHomeActive ? '<span class="y-dot">•</span> ' : '' ?>Trang chủ
                 </a>
 
-                <!-- 2. Món ngon (Dropdown) -->
+                <!-- 2. Món ngon (Dropdown & Click directly opens all recipes) -->
                 <div class="y-nav-dropdown-wrap">
-                    <a href="javascript:void(0)" class="y-nav-item <?= $isDishesActive ? 'is-active' : '' ?>">
+                    <a href="<?= BASE_URL ?>/index.php?cat=all" class="y-nav-item <?= $isDishesActive ? 'is-active' : '' ?>" title="Xem tất cả công thức món ngon">
                         <?= $isDishesActive ? '<span class="y-dot">•</span> ' : '' ?>Món ngon
                         <svg class="y-nav-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                     </a>
                     <div class="y-dropdown-menu">
-                        <a href="<?= BASE_URL ?>/index.php?cat=Món+xào">Món xào</a>
-                        <a href="<?= BASE_URL ?>/index.php?cat=Món+canh">Món canh</a>
-                        <a href="<?= BASE_URL ?>/index.php?cat=Món+kho">Món kho</a>
-                        <a href="<?= BASE_URL ?>/index.php?cat=Món+hấp">Món hấp</a>
-                        <a href="<?= BASE_URL ?>/index.php?cat=Món+chiên">Món chiên</a>
+                        <?php
+                        $headerCategories = get_all_categories();
+                        foreach ($headerCategories as $hCat):
+                        ?>
+                            <a href="<?= BASE_URL ?>/index.php?cat=<?= urlencode($hCat['name']) ?>">
+                                <?= e($hCat['icon'] ?: '🍳') ?> <?= e($hCat['name']) ?>
+                            </a>
+                        <?php endforeach; ?>
                     </div>
                 </div>
 
@@ -313,8 +321,8 @@ if (isset($_SESSION['user_id'])) {
 
                     <!-- Notification Bell (Khớp Ảnh 1: Hiện rõ logo hình cái chuông thông báo) -->
                     <div class="notification-wrapper">
-                        <button type="button" class="notification-btn" id="btnNotifications" title="Thông báo" aria-label="Thông báo" onclick="toggleNotificationsDropdown()">
-                            <svg class="cookio-bell-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <button type="button" class="notification-btn" id="btnNotifications" title="Thông báo" aria-label="Thông báo" onclick="toggleNotificationsDropdown()" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;">
+                            <svg class="cookio-bell-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="display: block; width: 20px; height: 20px; flex-shrink: 0;">
                                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                                 <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                             </svg>
@@ -327,6 +335,7 @@ if (isset($_SESSION['user_id'])) {
                             </div>
                             <div class="notification-tabs">
                                 <button type="button" class="notif-tab is-active" data-filter="all" onclick="filterNotifications('all', this)">Tất cả</button>
+                                <button type="button" class="notif-tab" data-filter="system" onclick="filterNotifications('system', this)">Hệ thống</button>
                                 <button type="button" class="notif-tab" data-filter="like" onclick="filterNotifications('like', this)">Yêu thích</button>
                                 <button type="button" class="notif-tab" data-filter="comment" onclick="filterNotifications('comment', this)">Bình luận</button>
                                 <button type="button" class="notif-tab" data-filter="follow" onclick="filterNotifications('follow', this)">Theo dõi</button>
@@ -337,8 +346,19 @@ if (isset($_SESSION['user_id'])) {
                         </div>
                     </div>
 
+                    <?php if (is_admin()): ?>
+                        <a href="<?= BASE_URL ?>/admin/index.php" class="admin-portal-btn" style="padding: 0.38rem 0.95rem; border-radius: 9999px; font-weight: 800; font-size: 0.82rem; background: #0f172a; color: #fed7aa; border: 1.5px solid #ea580c; display: inline-flex; align-items: center; gap: 0.35rem; box-shadow: 0 2px 8px rgba(234, 88, 12, 0.25); text-decoration: none;" title="Truy cập Bảng điều khiển Quản trị">
+                            <span style="font-size: 0.95rem;">⚡</span>
+                            <span>Admin Portal</span>
+                        </a>
+                    <?php endif; ?>
+
                     <a href="<?= BASE_URL ?>/views/profile.php" class="user-menu-chip" title="Xem hồ sơ">
-                        <span class="user-avatar-circle"><?= mb_substr((string) $_SESSION['username'], 0, 1) ?></span>
+                        <?php if (!empty($_SESSION['avatar'])): ?>
+                            <img src="<?= BASE_URL ?>/<?= e($_SESSION['avatar']) ?>" alt="Avatar" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; display: inline-block;">
+                        <?php else: ?>
+                            <span class="user-avatar-circle"><?= mb_substr((string) $_SESSION['username'], 0, 1) ?></span>
+                        <?php endif; ?>
                         <span><?= e((string) $_SESSION['username']) ?></span>
                     </a>
 
@@ -369,6 +389,39 @@ if (isset($_SESSION['user_id'])) {
                         </svg>
                     </span>
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- REJECTION NOTICE MODAL (Khung hiển thị ở giữa màn hình khi bài đăng bị từ chối) -->
+    <div id="rejectionNoticeModal" class="cookio-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 10002; backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 1.25rem; white-space: normal !important;">
+        <div style="background: #ffffff; border-radius: 1.25rem; max-width: 440px; width: 100%; padding: 2rem 1.75rem; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.35); position: relative; animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1); white-space: normal !important; box-sizing: border-box !important;">
+            
+            <button type="button" onclick="closeRejectionNoticeModal()" style="position: absolute; top: 1rem; right: 1rem; background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #64748b; cursor: pointer; transition: all 0.15s;" onmouseover="this.style.background='#e2e8f0'; this.style.color='#0f172a';" onmouseout="this.style.background='#f1f5f9'; this.style.color='#64748b';" title="Đóng">&times;</button>
+
+            <div style="width: 58px; height: 58px; border-radius: 50%; background: #fef2f2; border: 2px solid #fecaca; margin: 0 auto 1.25rem; display: flex; align-items: center; justify-content: center; color: #dc2626;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+            </div>
+
+            <h3 style="margin: 0 0 0.85rem; font-size: 1.2rem; font-weight: 800; color: #1e293b; line-height: 1.35; white-space: normal !important;">
+                Thông báo kiểm duyệt nội dung
+            </h3>
+
+            <div id="rejectionModalMessage" style="background: #fff7ed; border: 1.5px solid #fed7aa; border-radius: 12px; padding: 0.85rem 1rem; font-size: 0.95rem; font-weight: 700; color: #9a3412; margin-bottom: 1.25rem; line-height: 1.5; text-align: center; white-space: normal !important; word-break: break-word !important; overflow-wrap: break-word !important;">
+                Rất tiếc, bài đăng không được duyệt.
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+                <button type="button" onclick="closeRejectionNoticeModal()" class="button button-create" style="padding: 0.65rem 2rem; border-radius: 9999px; font-weight: 800; font-size: 0.9rem; background: #ea580c; color: #ffffff; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);">
+                    Đã hiểu
+                </button>
+                <a href="<?= BASE_URL ?>/views/profile.php" class="button button-outline" style="padding: 0.65rem 1.35rem; border-radius: 9999px; font-weight: 700; font-size: 0.9rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">
+                    Quản lý bài của tôi
+                </a>
             </div>
         </div>
     </div>
@@ -443,6 +496,22 @@ if (isset($_SESSION['user_id'])) {
     function openLoginForCreateRecipe() {
         openCookioLogin('views/create-recipe.php');
     }
+
+    window.showRejectionNoticeModal = function(title, message) {
+        const modal = document.getElementById('rejectionNoticeModal');
+        const msgEl = document.getElementById('rejectionModalMessage');
+        if (msgEl) {
+            msgEl.innerHTML = message || `Rất tiếc, bài đăng «<strong>${title || ''}</strong>» không được duyệt.`;
+        }
+        const notifDropdown = document.getElementById('notificationDropdown');
+        if (notifDropdown) notifDropdown.style.display = 'none';
+        if (modal) modal.style.display = 'flex';
+    };
+
+    window.closeRejectionNoticeModal = function() {
+        const modal = document.getElementById('rejectionNoticeModal');
+        if (modal) modal.style.display = 'none';
+    };
 
     document.addEventListener('click', function(e) {
         const btn = e.target.closest('[data-open-login]');

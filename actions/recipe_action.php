@@ -78,6 +78,15 @@ if ($action === 'edit') {
             redirect('views/edit-recipe.php?id=' . $recipeId . '&error=invalid-image');
         }
 
+        $origExt = strtolower(pathinfo($image['name'], PATHINFO_EXTENSION));
+        if (!in_array($origExt, ['jpg', 'jpeg', 'png', 'webp'], true)) {
+            redirect('views/edit-recipe.php?id=' . $recipeId . '&error=invalid-image');
+        }
+
+        if (!@getimagesize($image['tmp_name'])) {
+            redirect('views/edit-recipe.php?id=' . $recipeId . '&error=invalid-image');
+        }
+
         $mimeType = (new finfo(FILEINFO_MIME_TYPE))->file($image['tmp_name']);
         if (!in_array($mimeType, ALLOWED_IMAGE_TYPES, true)) {
             redirect('views/edit-recipe.php?id=' . $recipeId . '&error=invalid-image');
@@ -167,9 +176,22 @@ if ($title === '' || $ingredients === '' || $instructions === '') {
     redirect('views/create-recipe.php?error=missing-fields');
 }
 
+if (!isset($_FILES['image']) || $_FILES['image']['error'] === UPLOAD_ERR_NO_FILE) {
+    redirect('views/create-recipe.php?error=missing-image');
+}
+
 if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
     $image = $_FILES['image'];
     if ($image['error'] !== UPLOAD_ERR_OK || $image['size'] > MAX_UPLOAD_SIZE) {
+        redirect('views/create-recipe.php?error=invalid-image');
+    }
+
+    $origExt = strtolower(pathinfo($image['name'], PATHINFO_EXTENSION));
+    if (!in_array($origExt, ['jpg', 'jpeg', 'png', 'webp'], true)) {
+        redirect('views/create-recipe.php?error=invalid-image');
+    }
+
+    if (!@getimagesize($image['tmp_name'])) {
         redirect('views/create-recipe.php?error=invalid-image');
     }
 
