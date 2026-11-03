@@ -4,19 +4,25 @@ require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../includes/db.php';
 
 $pdo = db();
-$recipes = $pdo->query("SELECT id, title, category, image_url FROM recipes")->fetchAll();
 
 function findBestMatch(string $title, string $cat): string {
     $t = mb_strtolower($title, 'UTF-8');
     $c = mb_strtolower($cat, 'UTF-8');
 
     // 1. Specific dish titles
+    if (str_contains($t, 'cá hồi')) return 'assets/images/real_dishes/ca-hoi.jpg';
+    if (str_contains($t, 'gà nướng')) return 'assets/images/real_dishes/ga-nuong.jpg';
+    if (str_contains($t, 'heo quay') || str_contains($t, 'thịt quay') || str_contains($t, 'giòn bì')) return 'assets/images/real_dishes/thit-quay-gion-bi.jpg';
     if (str_contains($t, 'bún cá')) return 'assets/images/real_dishes/bun-ca.jpg';
     if (str_contains($t, 'bánh khọt')) return 'assets/images/real_dishes/banh-khot.jpg';
     if (str_contains($t, 'mì xào giòn')) return 'assets/images/real_dishes/mi-xao-gion.jpg';
     if (str_contains($t, 'ramen')) return 'assets/images/real_dishes/mi-ramen.jpg';
     if (str_contains($t, 'miến trộn')) return 'assets/images/real_dishes/mien-tron.jpg';
     if (str_contains($t, 'sườn cừu')) return 'assets/images/real_dishes/suon-cuu-nuong.jpg';
+    if (str_contains($t, 'sườn non kho trứng cút')) return 'assets/images/real_dishes/suon-kho-trung-cut.jpg';
+    if (str_contains($t, 'cải chua') || str_contains($t, 'lòng xào')) return 'assets/images/real_dishes/long-xao-cai-chua.jpg';
+    if (str_contains($t, 'lòng heo xào')) return 'assets/images/real_dishes/long-heo-xao-chua-ngot.jpg';
+    if (str_contains($t, 'nộm hoa chuối')) return 'assets/images/real_dishes/nom-hoa-chuoi.jpg';
     if (str_contains($t, 'nạc vai heo nướng') || (str_contains($t, 'thịt') && str_contains($t, 'nướng'))) return 'assets/images/real_dishes/thit-heo-nuong.jpg';
     if (str_contains($t, 'nghêu') || str_contains($t, 'ngao')) return 'assets/images/real_dishes/canh-ngheu.jpg';
     if (str_contains($t, 'pizza')) return 'assets/images/real_dishes/pizza-hai-san.jpg';
@@ -69,7 +75,6 @@ function findBestMatch(string $title, string $cat): string {
 
     // 4. Pork & Ribs
     if (str_contains($t, 'sườn xào chua ngọt')) return 'assets/images/real_dishes/suon-xao-chua-ngot.jpg';
-    if (str_contains($t, 'sườn kho trứng cút')) return 'assets/images/real_dishes/suon-kho-trung-cut.jpg';
     if (str_contains($t, 'sườn ram')) return 'assets/images/real_dishes/suon-ram-man-ngot.jpg';
     if (str_contains($t, 'canh bí đỏ hầm sườn')) return 'assets/images/real_dishes/canh-bi-do-ham-suon.jpg';
     if (str_contains($t, 'canh sườn')) return 'assets/images/real_dishes/canh-suon-cu-sen.jpg';
@@ -83,7 +88,6 @@ function findBestMatch(string $title, string $cat): string {
     if (str_contains($t, 'măng tươi kho thịt')) return 'assets/images/real_dishes/mang-tuoi-kho-thit.jpg';
     if (str_contains($t, 'bắp cải cuộn thịt')) return 'assets/images/real_dishes/bap-cai-cuon-thit-hap.jpg';
     if (str_contains($t, 'lòng heo xào chua ngọt')) return 'assets/images/real_dishes/long-heo-xao-chua-ngot.jpg';
-    if (str_contains($t, 'lòng xào cải chua')) return 'assets/images/real_dishes/long-xao-cai-chua.jpg';
     if (str_contains($t, 'lòng mề')) return 'assets/images/real_dishes/gia-do-xao-long-me.jpg';
 
     // 5. Fish & Seafood
@@ -143,7 +147,7 @@ function findBestMatch(string $title, string $cat): string {
     if (str_contains($t, 'chả giò') || str_contains($t, 'nem rán')) return 'assets/images/real_dishes/cha-gio-re-hai-san.jpg';
     if (str_contains($t, 'nem chay')) return 'assets/images/real_dishes/nem-chay-ran-gion.jpg';
     if (str_contains($t, 'cơm chiên')) return 'assets/images/real_dishes/com-chien-dua-bo.jpg';
-    if (str_contains($t, 'xôi')) return 'assets/images/real_dishes/xoi-vo-hat-sen.jpg';
+    if (str_contains($t, 'xôi') || str_contains($t, 'hạt sen')) return 'assets/images/real_dishes/xoi-vo-hat-sen.jpg';
     if (str_contains($t, 'salad') || str_contains($t, 'nộm') || str_contains($t, 'gỏi')) return 'assets/images/real_dishes/salad-rau-cu.jpg';
 
     // Fallbacks based on category
@@ -162,14 +166,28 @@ function findBestMatch(string $title, string $cat): string {
     return 'assets/images/real_dishes/hero-dish-1.jpg';
 }
 
+// 1. Update recipes
+$recipes = $pdo->query("SELECT id, title, category, image_url FROM recipes")->fetchAll();
 $updateStmt = $pdo->prepare("UPDATE recipes SET image_url = ? WHERE id = ?");
-$updated = 0;
+$updatedR = 0;
 foreach ($recipes as $r) {
     $correctImg = findBestMatch($r['title'], $r['category'] ?? '');
     if ($correctImg !== $r['image_url']) {
         $updateStmt->execute([$correctImg, $r['id']]);
-        $updated++;
+        $updatedR++;
     }
 }
+echo "Updated $updatedR recipes with synchronized realistic images.\n";
 
-echo "Successfully updated $updated / " . count($recipes) . " recipes with synchronized realistic images!\n";
+// 2. Update kitchen_tips
+$tips = $pdo->query("SELECT id, title, category, image_url FROM kitchen_tips")->fetchAll();
+$updateTipStmt = $pdo->prepare("UPDATE kitchen_tips SET image_url = ? WHERE id = ?");
+$updatedT = 0;
+foreach ($tips as $t) {
+    $correctImg = findBestMatch($t['title'], $t['category'] ?? '');
+    if ($correctImg !== $t['image_url']) {
+        $updateTipStmt->execute([$correctImg, $t['id']]);
+        $updatedT++;
+    }
+}
+echo "Updated $updatedT kitchen tips with synchronized realistic images.\n";

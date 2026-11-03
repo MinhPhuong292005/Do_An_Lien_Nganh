@@ -19,3 +19,13 @@ error_log
 *.bak
 *.swp
 
+# Reports & Office Documents (Strictly excluded from git)
+*.docx
+*.doc
+*.pdf
+generate_report*.py
+scripts/temp_*.php
+assets/images/phenikaa_logo.png
+
+
+
