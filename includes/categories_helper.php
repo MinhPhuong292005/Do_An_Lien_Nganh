@@ -55,18 +55,18 @@ if (!function_exists('get_all_categories')) {
 
         // Fallback default list
         return [
-            ['id' => 1, 'name' => 'Món Âu - Mỹ', 'slug' => 'mon-au-my', 'icon' => '🥩', 'display_order' => 1, 'recipe_count' => 0],
-            ['id' => 2, 'name' => 'Món bún & phở', 'slug' => 'mon-bun-pho', 'icon' => '🍜', 'display_order' => 2, 'recipe_count' => 0],
-            ['id' => 3, 'name' => 'Món hấp', 'slug' => 'mon-hap', 'icon' => '♨️', 'display_order' => 3, 'recipe_count' => 0],
-            ['id' => 4, 'name' => 'Món kho', 'slug' => 'mon-kho', 'icon' => '🍲', 'display_order' => 4, 'recipe_count' => 0],
-            ['id' => 5, 'name' => 'Món chiên', 'slug' => 'mon-chien', 'icon' => '🍤', 'display_order' => 5, 'recipe_count' => 0],
-            ['id' => 6, 'name' => 'Món xào', 'slug' => 'mon-xao', 'icon' => '🥘', 'display_order' => 6, 'recipe_count' => 0],
-            ['id' => 7, 'name' => 'Món bánh', 'slug' => 'mon-banh', 'icon' => '🍰', 'display_order' => 7, 'recipe_count' => 0],
-            ['id' => 8, 'name' => 'Món canh', 'slug' => 'mon-canh', 'icon' => '🥣', 'display_order' => 8, 'recipe_count' => 0],
-            ['id' => 9, 'name' => 'Món nướng', 'slug' => 'mon-nuong', 'icon' => '🍖', 'display_order' => 9, 'recipe_count' => 0],
-            ['id' => 10, 'name' => 'Món chay', 'slug' => 'mon-chay', 'icon' => '🥗', 'display_order' => 10, 'recipe_count' => 0],
-            ['id' => 11, 'name' => 'Món luộc', 'slug' => 'mon-luoc', 'icon' => '🥬', 'display_order' => 11, 'recipe_count' => 0],
-            ['id' => 12, 'name' => 'Món lẩu', 'slug' => 'mon-lau', 'icon' => '🫕', 'display_order' => 12, 'recipe_count' => 0],
+            ['id' => 1, 'name' => 'Món Âu - Mỹ', 'slug' => 'mon-au-my', 'icon' => '', 'display_order' => 1, 'recipe_count' => 0],
+            ['id' => 2, 'name' => 'Món bún & phở', 'slug' => 'mon-bun-pho', 'icon' => '', 'display_order' => 2, 'recipe_count' => 0],
+            ['id' => 3, 'name' => 'Món hấp', 'slug' => 'mon-hap', 'icon' => '', 'display_order' => 3, 'recipe_count' => 0],
+            ['id' => 4, 'name' => 'Món kho', 'slug' => 'mon-kho', 'icon' => '', 'display_order' => 4, 'recipe_count' => 0],
+            ['id' => 5, 'name' => 'Món chiên', 'slug' => 'mon-chien', 'icon' => '', 'display_order' => 5, 'recipe_count' => 0],
+            ['id' => 6, 'name' => 'Món xào', 'slug' => 'mon-xao', 'icon' => '', 'display_order' => 6, 'recipe_count' => 0],
+            ['id' => 7, 'name' => 'Món bánh', 'slug' => 'mon-banh', 'icon' => '', 'display_order' => 7, 'recipe_count' => 0],
+            ['id' => 8, 'name' => 'Món canh', 'slug' => 'mon-canh', 'icon' => '', 'display_order' => 8, 'recipe_count' => 0],
+            ['id' => 9, 'name' => 'Món nướng', 'slug' => 'mon-nuong', 'icon' => '', 'display_order' => 9, 'recipe_count' => 0],
+            ['id' => 10, 'name' => 'Món chay', 'slug' => 'mon-chay', 'icon' => '', 'display_order' => 10, 'recipe_count' => 0],
+            ['id' => 11, 'name' => 'Món luộc', 'slug' => 'mon-luoc', 'icon' => '', 'display_order' => 11, 'recipe_count' => 0],
+            ['id' => 12, 'name' => 'Món lẩu', 'slug' => 'mon-lau', 'icon' => '', 'display_order' => 12, 'recipe_count' => 0],
         ];
     }
 }

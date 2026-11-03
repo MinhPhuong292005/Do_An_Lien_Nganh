@@ -290,7 +290,7 @@ if (isset($_SESSION['user_id'])) {
                         foreach ($headerCategories as $hCat):
                         ?>
                             <a href="<?= BASE_URL ?>/index.php?cat=<?= urlencode($hCat['name']) ?>">
-                                <?= e($hCat['icon'] ?: '🍳') ?> <?= e($hCat['name']) ?>
+                                <?= e($hCat['name']) ?>
                             </a>
                         <?php endforeach; ?>
                     </div>

@@ -13,6 +13,7 @@ function findBestMatch(string $title, string $cat): string {
     if (str_contains($t, 'cá hồi')) return 'assets/images/real_dishes/ca-hoi.jpg';
     if (str_contains($t, 'gà nướng')) return 'assets/images/real_dishes/ga-nuong.jpg';
     if (str_contains($t, 'heo quay') || str_contains($t, 'thịt quay') || str_contains($t, 'giòn bì')) return 'assets/images/real_dishes/thit-quay-gion-bi.jpg';
+    if (str_contains($t, 'bò sốt vang') || str_contains($t, 'sốt vang')) return 'assets/images/real_dishes/bo-sot-vang.jpg';
     if (str_contains($t, 'bún cá')) return 'assets/images/real_dishes/bun-ca.jpg';
     if (str_contains($t, 'bánh khọt')) return 'assets/images/real_dishes/banh-khot.jpg';
     if (str_contains($t, 'mì xào giòn')) return 'assets/images/real_dishes/mi-xao-gion.jpg';

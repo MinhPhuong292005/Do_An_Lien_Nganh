@@ -16,27 +16,13 @@ if ($action === 'search') {
         exit;
     }
 
-    // Tách từ khóa & mở rộng từ đồng nghĩa ẩm thực (thịt heo == thịt lợn)
-    $tokens = parse_search_query_tokens($q);
+    // Tách từ khóa & mở rộng tìm kiếm theo tiêu đề món ăn
+    require_once __DIR__ . '/../includes/search_helper.php';
+    [$searchClauses, $searchParams] = build_smart_search_conditions($q);
 
     $searchWhere = ["r.status = 'approved'"];
-    $searchParams = [];
-
-    if (!empty($tokens)) {
-        $subConds = [];
-        foreach ($tokens as $tk) {
-            $regex = build_synonym_regex($tk);
-            $subConds[] = "(r.title REGEXP ? OR r.ingredients REGEXP ?)";
-            $searchParams[] = $regex;
-            $searchParams[] = $regex;
-        }
-        $searchWhere[] = "(" . implode(' AND ', $subConds) . ")";
-    }
-
-    $firstRegex = !empty($tokens) ? build_synonym_regex($tokens[0]) : '';
-    $titleOrder = $firstRegex !== '' ? "CASE WHEN r.title REGEXP ? THEN 0 ELSE 1 END ASC, " : "";
-    if ($firstRegex !== '') {
-        $searchParams[] = $firstRegex;
+    foreach ($searchClauses as $sc) {
+        $searchWhere[] = $sc;
     }
 
     $sql = "
@@ -48,7 +34,7 @@ if ($action === 'search') {
         FROM recipes r
         JOIN users u ON u.id = r.author_id
         WHERE " . implode(' AND ', $searchWhere) . "
-        ORDER BY " . $titleOrder . "r.views_count DESC, r.created_at DESC
+        ORDER BY r.views_count DESC, r.created_at DESC
         LIMIT 6
     ";
     $stmt = db()->prepare($sql);
