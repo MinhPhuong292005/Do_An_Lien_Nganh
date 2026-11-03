@@ -278,7 +278,7 @@ if (isset($_SESSION['user_id'])) {
 
                 <!-- 2. Món ngon (Dropdown & Click directly opens all recipes) -->
                 <div class="y-nav-dropdown-wrap">
-                    <a href="<?= BASE_URL ?>/index.php?cat=all" class="y-nav-item <?= $isDishesActive ? 'is-active' : '' ?>" title="Xem tất cả công thức món ngon">
+                    <a href="<?= BASE_URL ?>/index.php?cat=all&view=vertical" class="y-nav-item <?= $isDishesActive ? 'is-active' : '' ?>" title="Xem tất cả công thức món ngon theo hàng dọc">
                         <?= $isDishesActive ? '<span class="y-dot">•</span> ' : '' ?>Món ngon
                         <svg class="y-nav-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="6 9 12 15 18 9"></polyline>

@@ -106,11 +106,17 @@ $menuCategories = ['Tất cả', 'Món xào', 'Món canh', 'Món kho', 'Món h�
         </div>
 
         <!-- Modal Footer -->
-        <div style="padding: 0.85rem 1.75rem; background: #ffffff; border-top: 1px solid #e7e5e4; display: flex; justify-content: space-between; align-items: center; font-size: 0.84rem; color: #6b7280;">
+        <div style="padding: 0.85rem 1.75rem; background: #ffffff; border-top: 1px solid #e7e5e4; display: flex; justify-content: space-between; align-items: center; font-size: 0.84rem; color: #6b7280; flex-wrap: wrap; gap: 0.75rem;">
             <span>💡 Nhấn vào bất kỳ món nào để mở trang công thức và nguyên liệu</span>
-            <button type="button" onclick="closeAllRecipesMenuModal()" class="button button-outline" style="padding: 0.4rem 1rem; font-size: 0.84rem; border-radius: 9999px;">
-                Đóng bảng thực đơn
-            </button>
+            <div style="display: flex; gap: 0.65rem; align-items: center;">
+                <a href="<?= BASE_URL ?>/index.php?cat=all&view=vertical" style="padding: 0.45rem 1.15rem; font-size: 0.84rem; border-radius: 9999px; background: #ea580c; color: #ffffff; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 0.35rem;">
+                    <span>Xem theo hàng dọc</span>
+                    <span>&rarr;</span>
+                </a>
+                <button type="button" onclick="closeAllRecipesMenuModal()" class="button button-outline" style="padding: 0.4rem 1rem; font-size: 0.84rem; border-radius: 9999px;">
+                    Đóng bảng thực đơn
+                </button>
+            </div>
         </div>
     </div>
 </div>
