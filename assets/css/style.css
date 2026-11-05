@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
     --primary: #ea580c;
@@ -3325,30 +3325,41 @@ input:focus, textarea:focus, select:focus {
     display: flex;
     align-items: center;
     background: #ffffff;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 9999px;
-    padding: 0.2rem 0.25rem 0.2rem 0.85rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    border: 1.5px solid #cbd5e1;
+    border-radius: 9999px !important;
+    padding: 0 1.15rem !important;
+    height: 42px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     transition: all 0.2s ease;
+    cursor: pointer;
+    overflow: hidden;
 }
 
+.yummy-search-form:hover,
 .yummy-search-form:focus-within {
-    border-color: #4a1c17;
-    box-shadow: 0 4px 14px rgba(74, 28, 23, 0.12);
+    border-color: #ea580c !important;
+    box-shadow: 0 4px 14px rgba(234, 88, 12, 0.15) !important;
 }
 
 .y-search-icon {
     flex-shrink: 0;
-    margin-right: 0.4rem;
+    margin-right: 0.65rem;
+    color: #64748b;
 }
 
 .yummy-search-form input {
-    border: none;
-    background: transparent;
-    outline: none;
-    font-size: 0.9rem;
-    color: #1e293b;
-    width: 100%;
+    border: none !important;
+    background: transparent !important;
+    outline: none !important;
+    font-size: 0.92rem;
+    color: #0f172a;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: 100% !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    cursor: pointer;
 }
 
 .yummy-search-form input::placeholder {
@@ -5627,4 +5638,24 @@ input:focus, textarea:focus, select:focus {
 [data-theme="dark"] .fav-tab-btn:not(.is-active) {
     background: #1e293b !important;
     color: #94a3b8 !important;
+}
+
+
+/* Kitchen Tips Section Styling (High contrast, clean layout) */
+.tips-hero-banner {
+    background: linear-gradient(135deg, #2a120e 0%, #431b14 100%);
+    border: 1.5px solid rgba(245, 158, 11, 0.35);
+}
+
+.share-tips-cta-section {
+    background: #fff7ed;
+    border: 1.5px solid #fed7aa;
+}
+
+.share-tips-title {
+    color: #1e293b !important;
+}
+
+.share-tips-desc {
+    color: #475569 !important;
 }
