@@ -903,3 +903,200 @@
     color: #f97316 !important;
 }
 
+
+/* ==========================================================================
+   ENHANCED HIGH-CONTRAST DARK THEME STYLING
+   ========================================================================== */
+
+/* 1. Global High Contrast Text */
+[data-theme="dark"] {
+    --text-main: #ffffff !important;
+    --text-muted: #cbd5e1 !important;
+    --border-color: #334155 !important;
+}
+
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] p {
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] .section-title,
+[data-theme="dark"] .yummy-section-title {
+    color: #ffffff !important;
+}
+
+/* 2. Horizontal Search Overlay High Contrast */
+[data-theme="dark"] .horizontal-search-container {
+    background: #1e293b !important;
+    border: 1.5px solid #475569 !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75) !important;
+}
+
+[data-theme="dark"] .horizontal-search-bar {
+    background: #0f172a !important;
+    border-bottom: 1.5px solid #334155 !important;
+}
+
+[data-theme="dark"] .horizontal-search-input {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .horizontal-search-input::placeholder {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .btn-h-search-close {
+    display: none !important;
+}
+
+[data-theme="dark"] .h-section-title {
+    color: #fb923c !important;
+}
+
+[data-theme="dark"] .h-tag-pill {
+    background: #0f172a !important;
+    border: 1.5px solid #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .h-tag-pill:hover {
+    background: #ea580c !important;
+    border-color: #ea580c !important;
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .h-result-item {
+    border-bottom: 1px solid #334155 !important;
+}
+
+[data-theme="dark"] .h-result-item:hover {
+    background: #0f172a !important;
+}
+
+[data-theme="dark"] .h-result-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .h-result-meta {
+    color: #94a3b8 !important;
+}
+
+/* 3. Smart Fridge Page High Contrast */
+[data-theme="dark"] .fridge-container {
+    background: #1e293b !important;
+    border: 1.5px solid #334155 !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] .fridge-section-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .fridge-chip span {
+    background: #0f172a !important;
+    border: 1.5px solid #475569 !important;
+    color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .fridge-chip:hover span {
+    border-color: #f97316 !important;
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .fridge-chip input:checked + span {
+    background: #ea580c !important;
+    border-color: #ea580c !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(234, 88, 12, 0.45) !important;
+}
+
+[data-theme="dark"] .fridge-mode-toggle {
+    background: #0f172a !important;
+    border: 1.5px solid #334155 !important;
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] #fridgeMessage {
+    background: #0f172a !important;
+    border: 1px solid #334155 !important;
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] #customIngredientInput {
+    background: #0f172a !important;
+    border: 1.5px solid #475569 !important;
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] #customIngredientInput::placeholder {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .fridge-recipe .recipe-card-body p {
+    background: #0f172a !important;
+    border: 1px solid #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+/* 4. Saved Recipes Page (Unauthenticated & Authenticated) */
+[data-theme="dark"] .saved-recipes-unauth-card {
+    background: #1e293b !important;
+    border: 1.5px solid #334155 !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .saved-recipes-unauth-card div[style*="background: var(--bg-page)"] {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+}
+
+[data-theme="dark"] .saved-recipes-unauth-card h2,
+[data-theme="dark"] .saved-recipes-unauth-card h4 {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .saved-recipes-unauth-card p {
+    color: #cbd5e1 !important;
+}
+
+/* 5. Clean Card Surfaces & Meta text */
+[data-theme="dark"] .recipe-card {
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .recipe-card:hover {
+    border-color: #ea580c !important;
+    transform: translateY(-4px);
+}
+
+[data-theme="dark"] .recipe-card-body h3 a,
+[data-theme="dark"] .recipe-card h3 a {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .card-meta-row {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .tag-pill,
+[data-theme="dark"] .category-chip {
+    background: #1e293b !important;
+    border: 1px solid #475569 !important;
+    color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .tag-pill:hover,
+[data-theme="dark"] .category-chip:hover {
+    border-color: #ea580c !important;
+    color: #ea580c !important;
+}

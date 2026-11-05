@@ -292,7 +292,7 @@ $totalCategories = count($categories);
     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
         <div>
             <h1 style="margin: 0; font-size: 1.65rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
-                <span>📁</span> Quản lý danh mục món ăn
+                Quản lý danh mục món ăn
             </h1>
             <p style="margin: 0.35rem 0 0; color: #64748b; font-size: 0.92rem;">
                 Quản lý, điều chỉnh tên, biểu tượng và kéo thả thứ tự hiển thị danh mục trên toàn hệ thống Cookio (Tổng cộng <?= $totalCategories ?> danh mục).
@@ -300,7 +300,7 @@ $totalCategories = count($categories);
         </div>
         <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
             <a href="<?= BASE_URL ?>/index.php" target="_blank" class="button button-outline" style="font-size: 0.85rem; padding: 0.45rem 0.95rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">
-                <span>🌐</span> Xem trên web
+                Xem trên web
             </a>
             <!-- Nút nhỏ Chỉnh sửa bảng ở góc trên bên phải -->
             <button type="button" id="btnToggleEdit" class="btn-edit-table" onclick="toggleEditMode(true)" title="Chỉnh sửa icon, tên và kéo thả sắp xếp danh mục">

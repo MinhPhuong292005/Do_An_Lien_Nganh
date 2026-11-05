@@ -173,7 +173,7 @@ $pageTitle = 'Quản lý kinh nghiệm hay - Cookio Admin';
 <main class="admin-content">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;">
         <div>
-            <h1 style="margin: 0; font-size: 1.6rem; color: #1e293b;">💡 Quản lý kinh nghiệm hay</h1>
+            <h1 style="margin: 0; font-size: 1.6rem; color: #1e293b;">Quản lý kinh nghiệm hay</h1>
             <p style="margin: 0.25rem 0 0; color: #64748b; font-size: 0.88rem;">
                 Sắp xếp theo ID mới nhất đến cũ nhất • Tổng cộng <strong><?= number_format($totalTips) ?></strong> bài viết
             </p>

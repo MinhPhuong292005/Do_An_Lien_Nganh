@@ -437,12 +437,7 @@ if (isset($_SESSION['user_id'])) {
                 </svg>
                 <input type="text" id="horizontalSearchInput" class="horizontal-search-input" placeholder="Tìm kiếm món ăn, nguyên liệu, cách nấu..." autocomplete="off" oninput="handleHorizontalSearchInput(this.value)">
                 <button type="button" id="hSearchClear" class="btn-h-search-clear" onclick="clearHorizontalSearch()" title="Xóa tìm kiếm" style="display: none;">&times;</button>
-                <button type="button" class="btn-h-search-close" onclick="closeHorizontalSearch()" title="Đóng tìm kiếm (Esc)">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
+
             </div>
 
             <div class="horizontal-search-body">

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
     --primary: #ea580c;
@@ -8,8 +8,8 @@
     --accent: #f59e0b;
     --bg-page: #fdfbf7;
     --bg-surface: #ffffff;
-    --text-main: #1f2937;
-    --text-muted: #6b7280;
+    --text-main: #0f172a;
+    --text-muted: #475569;
     --text-subtle: #9ca3af;
     --border-color: #f1ebe1;
     --border-dark: #e5e7eb;
@@ -4613,16 +4613,7 @@ input:focus, textarea:focus, select:focus {
 }
 
 .btn-h-search-close {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 9999px;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.15s ease;
+    display: none !important;
 }
 
 .btn-h-search-close:hover {

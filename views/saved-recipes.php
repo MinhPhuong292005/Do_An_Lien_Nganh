@@ -137,17 +137,50 @@ require __DIR__ . '/../includes/header.php';
     <?php endif; ?>
 
     <?php if (!is_logged_in()): ?>
-        <!-- Not logged in state -->
-        <div style="text-align: center; padding: 3.5rem 1.5rem; background: #fff; border-radius: 1.25rem; border: 1.5px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-            <div style="width: 64px; height: 64px; border-radius: 50%; background: #fff7ed; margin: 0 auto 1.25rem; display: flex; align-items: center; justify-content: center; border: 1.5px solid #fed7aa;">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        <!-- Not logged in state: Modern culinary showcase card -->
+        <div class="saved-recipes-unauth-card" style="background: var(--bg-surface); border-radius: 20px; border: 1.5px solid var(--border-color); box-shadow: var(--shadow-sm); padding: 3.5rem 2rem; text-align: center; margin-bottom: 2rem;">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: var(--primary-light); color: var(--primary); padding: 0.4rem 1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; margin-bottom: 1.25rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                 </svg>
+                <span>Bộ sưu tập cá nhân</span>
             </div>
-            <h3 style="margin: 0 0 0.5rem; font-size: 1.3rem; color: var(--text-main); font-weight: 800;">Đăng nhập để xem món yêu thích</h3>
-            <p style="color: var(--text-muted); margin: 0 0 1.5rem; font-size: 0.95rem;">Bạn cần đăng nhập để quản lý các món ăn đã lưu và đã thả tim cùng ghi chú cá nhân.</p>
-            <button type="button" class="button button-create" data-open-login style="padding: 0.75rem 2rem;">Đăng nhập ngay</button>
+
+            <h2 style="font-size: 2rem; font-weight: 800; color: var(--text-main); margin: 0 0 0.75rem; letter-spacing: -0.5px;">
+                Lưu giữ những món ngon tâm đắc của bạn
+            </h2>
+            <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 600px; margin: 0 auto 2.5rem; line-height: 1.6;">
+                Đăng nhập ngay để khám phá và quản lý thực đơn yêu thích, lưu công thức nấu ăn, viết ghi chú gia vị riêng và tự động tạo danh sách đi chợ thông minh.
+            </p>
+
+            <!-- 3 Benefit Pillars -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; max-width: 780px; margin: 0 auto 2.5rem; text-align: left;">
+                <div style="background: var(--bg-page); border: 1.5px solid var(--border-color); border-radius: 14px; padding: 1.35rem 1.25rem;">
+                    <div style="font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--primary);">🔖</div>
+                    <h4 style="margin: 0 0 0.35rem; font-size: 1rem; font-weight: 700; color: var(--text-main);">Lưu công thức 1 chạm</h4>
+                    <p style="margin: 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">Lưu nhanh món ăn muốn nấu vào cẩm nang bếp để mở lại bất kỳ lúc nào.</p>
+                </div>
+                <div style="background: var(--bg-page); border: 1.5px solid var(--border-color); border-radius: 14px; padding: 1.35rem 1.25rem;">
+                    <div style="font-size: 1.3rem; margin-bottom: 0.5rem; color: #ef4444;">❤️</div>
+                    <h4 style="margin: 0 0 0.35rem; font-size: 1rem; font-weight: 700; color: var(--text-main);">Theo dõi món đã thả tim</h4>
+                    <p style="margin: 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">Gom trọn những món bạn yêu thích và đánh giá cao trên cộng đồng ẩm thực.</p>
+                </div>
+                <div style="background: var(--bg-page); border: 1.5px solid var(--border-color); border-radius: 14px; padding: 1.35rem 1.25rem;">
+                    <div style="font-size: 1.3rem; margin-bottom: 0.5rem; color: #16a34a;">🛒</div>
+                    <h4 style="margin: 0 0 0.35rem; font-size: 1rem; font-weight: 700; color: var(--text-main);">Tạo giỏ đi chợ tiện lợi</h4>
+                    <p style="margin: 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">Tự động tổng hợp và tính toán khối lượng nguyên liệu cần mua chính xác.</p>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                <button type="button" class="button button-create" data-open-login style="padding: 0.85rem 2.25rem; font-size: 1rem; border-radius: 9999px; font-weight: 700; box-shadow: 0 4px 14px rgba(234, 88, 12, 0.3);">
+                    Đăng nhập ngay
+                </button>
+                <a href="<?= BASE_URL ?>/index.php" class="button button-outline" style="padding: 0.85rem 1.85rem; font-size: 1rem; border-radius: 9999px; font-weight: 700; text-decoration: none;">
+                    Khám phá công thức &rarr;
+                </a>
+            </div>
         </div>
     <?php else: ?>
 
