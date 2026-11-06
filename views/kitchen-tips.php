@@ -64,12 +64,12 @@ $allTipsList = $allDbTips;
     <!-- =====================================================================
          CHIA SẺ KINH NGHIỆM NẤU NƯỚNG (Xóa icon, tương phản cao trên cả 2 theme)
          ===================================================================== -->
-    <section class="share-tips-cta-section" style="margin-bottom: 3.5rem; border-radius: 20px; padding: 2.5rem 2rem; text-align: center; box-shadow: var(--shadow-sm);">
+    <section class="share-tips-cta-section" style="margin-bottom: 3.5rem; border-radius: 20px; padding: 2.5rem 2rem; text-align: center; background: var(--bg-surface); border: 1.5px solid var(--border-color); box-shadow: var(--shadow-sm);">
         <div style="max-width: 720px; margin: 0 auto;">
-            <h2 class="share-tips-title" style="font-size: 1.85rem; font-weight: 800; margin: 0 0 0.75rem; line-height: 1.35; letter-spacing: -0.3px;">
+            <h2 class="share-tips-title" style="font-size: 1.85rem; font-weight: 800; margin: 0 0 0.75rem; line-height: 1.35; letter-spacing: -0.3px; color: var(--text-main);">
                 Bạn có muốn chia sẻ kinh nghiệm nấu nướng của mình không?
             </h2>
-            <p class="share-tips-desc" style="font-size: 1.02rem; margin: 0 0 1.75rem; line-height: 1.6;">
+            <p class="share-tips-desc" style="font-size: 1.02rem; margin: 0 0 1.75rem; line-height: 1.6; color: var(--text-muted);">
                 Mỗi mẹo nhỏ, tỷ lệ ướp gia vị hay bí quyết giữ rau xanh, thịt mềm của bạn đều là món quà quý giá giúp cộng đồng yêu bếp nấu ăn dễ dàng và ngon miệng hơn mỗi ngày!
             </p>
             <div>
@@ -98,7 +98,7 @@ $allTipsList = $allDbTips;
                 <article class="featured-tip-card" style="border-radius: 16px; overflow: hidden; border: 1.5px solid var(--border-color); background: var(--bg-surface); display: flex; flex-direction: column; transition: transform 0.25s, box-shadow 0.25s; cursor: pointer;" onclick="openTipModal(<?= (int)$t['id'] ?>)">
                     <!-- Card Thumbnail with Badge -->
                     <div style="position: relative; width: 100%; aspect-ratio: 1/1; overflow: hidden; background: var(--bg-page);">
-                        <img src="<?= BASE_URL ?>/<?= e($t['image_url'] ?: 'assets/images/real_dishes/hero-dish-1.jpg') ?>" alt="<?= e($t['title']) ?>" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;" loading="lazy">
+                        <img src="<?= get_img_url($t['image_url'] ?? null, 'assets/images/real_dishes/hero-dish-1.jpg') ?>" alt="<?= e($t['title']) ?>" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;" loading="lazy">
                         <span style="position: absolute; top: 0.75rem; left: 0.75rem; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(4px); color: #ffffff; font-size: 0.76rem; font-weight: 700; padding: 0.3rem 0.75rem; border-radius: 9999px;">
                             <?= e($t['category'] ?: 'Kinh nghiệm hay') ?>
                         </span>
@@ -147,7 +147,7 @@ $allTipsList = $allDbTips;
                 <article class="horizontal-tip-card <?= $isExtra ? 'tip-item-extra' : '' ?>" style="display: <?= $isExtra ? 'none' : 'flex' ?>; gap: 1.5rem; align-items: center; background: var(--bg-surface); border-radius: 16px; padding: 1.15rem; border: 1.5px solid var(--border-color); box-shadow: var(--shadow-sm); transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;" onclick="openTipModal(<?= (int)$item['id'] ?>)">
                     <!-- Left Photo -->
                     <div style="position: relative; width: 190px; height: 130px; border-radius: 12px; overflow: hidden; flex-shrink: 0; background: var(--bg-page);">
-                        <img src="<?= BASE_URL ?>/<?= e($item['image_url'] ?: 'assets/images/real_dishes/hero-dish-1.jpg') ?>" alt="<?= e($item['title']) ?>" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+                        <img src="<?= get_img_url($item['image_url'] ?? null, 'assets/images/real_dishes/hero-dish-1.jpg') ?>" alt="<?= e($item['title']) ?>" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
                         <span style="position: absolute; top: 0.5rem; left: 0.5rem; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(4px); color: #ffffff; font-size: 0.72rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 9999px;">
                             <?= e($item['category'] ?: 'Kinh nghiệm hay') ?>
                         </span>

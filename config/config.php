@@ -38,6 +38,17 @@ function e(?string $value): string
     return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
 }
 
+function get_img_url(?string $path, string $default = 'assets/images/default-recipe.jpg'): string
+{
+    $target = !empty($path) ? ltrim($path, '/') : $default;
+    if (!str_starts_with($target, 'assets/') && !str_starts_with($target, 'uploads/')) {
+        $target = 'uploads/recipes/' . $target;
+    }
+    $localFile = dirname(__DIR__) . '/' . $target;
+    $v = file_exists($localFile) ? filemtime($localFile) : 1793960000;
+    return BASE_URL . '/' . $target . '?v=' . $v;
+}
+
 function redirect(string $path): never
 {
     $base = rtrim(BASE_URL, '/');

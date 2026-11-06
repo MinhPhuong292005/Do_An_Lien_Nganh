@@ -291,7 +291,7 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
                            class="hero-flat-slide" 
                            data-index="<?= $idx ?>" 
                            title="<?= e($r['title']) ?>">
-                            <img src="<?= BASE_URL ?>/<?= e($r['image_url']) ?>" alt="<?= e($r['title']) ?>" loading="<?= $idx < 8 ? 'eager' : 'lazy' ?>">
+                            <img src="<?= get_img_url($r['image_url']) ?>" alt="<?= e($r['title']) ?>" loading="<?= $idx < 8 ? 'eager' : 'lazy' ?>">
                         </a>
                     <?php endforeach; ?>
                 </div>
@@ -490,7 +490,7 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
             <div class="yummy-cards-5-grid">
                 <?php foreach ($menuSuggestDishes as $dish): ?>
                     <?php
-                    $img = !empty($dish['image_url']) ? BASE_URL . '/' . e($dish['image_url']) : BASE_URL . '/assets/images/default-recipe.jpg';
+                    $img = get_img_url($dish['image_url'] ?? null);
                     $badgeTag = match($dish['category'] ?? '') {
                         'Món chiên' => 'Chiên',
                         'Món kho' => 'Kho',
@@ -543,7 +543,7 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
                     <?php foreach ($ingredientsList as $ing): ?>
                         <a href="<?= BASE_URL ?>/index.php?q=<?= urlencode($ing['q']) ?>" class="ing-circle-item">
                             <div class="ing-circle-img-wrap">
-                                <img src="<?= BASE_URL ?>/<?= $ing['img'] ?>" alt="<?= e($ing['name']) ?>" class="ing-circle-img" loading="lazy">
+                                <img src="<?= get_img_url($ing['img']) ?>" alt="<?= e($ing['name']) ?>" class="ing-circle-img" loading="lazy">
                             </div>
                             <span class="ing-circle-name"><?= e($ing['name']) ?></span>
                         </a>
@@ -573,7 +573,7 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
             <div class="yummy-cards-grid">
                 <?php foreach ($tipsDishes as $dish): ?>
                     <?php
-                    $img = !empty($dish['image_url']) ? BASE_URL . '/' . e($dish['image_url']) : BASE_URL . '/assets/images/default-recipe.jpg';
+                    $img = get_img_url($dish['image_url'] ?? null);
                     $badgeTag = match($dish['category']) {
                         'Món kho' => 'Kho',
                         'Món hấp' => 'Hấp',
@@ -628,7 +628,7 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
             <div class="latest-featured-grid">
                 <?php foreach ($featuredLatest as $dish): ?>
                     <?php
-                    $img = !empty($dish['image_url']) ? BASE_URL . '/' . e($dish['image_url']) : BASE_URL . '/assets/images/default-recipe.jpg';
+                    $img = get_img_url($dish['image_url'] ?? null);
                     $badgeTag = match($dish['category'] ?? '') {
                         'Món chiên' => 'Chiên',
                         'Món kho' => 'Kho',
@@ -677,7 +677,7 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
                     <div class="sidebar-dishes-list">
                         <?php foreach ($sidebarMoreDishes as $sDish): ?>
                             <?php
-                            $sImg = !empty($sDish['image_url']) ? BASE_URL . '/' . e($sDish['image_url']) : BASE_URL . '/assets/images/default-recipe.jpg';
+                            $sImg = get_img_url($sDish['image_url'] ?? null);
                             ?>
                             <a href="<?= BASE_URL ?>/views/recipe-detail.php?id=<?= (int) $sDish['id'] ?>" class="sidebar-dish-item">
                                 <img src="<?= $sImg ?>" alt="<?= e($sDish['title']) ?>" class="sidebar-dish-thumb" loading="lazy">
@@ -790,7 +790,7 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
             <div class="yummy-vertical-list">
                 <?php foreach ($recipes as $recipe): ?>
                     <?php 
-                    $imgSrc = !empty($recipe['image_url']) ? BASE_URL . '/' . e($recipe['image_url']) : BASE_URL . '/assets/images/default-recipe.jpg';
+                    $imgSrc = get_img_url($recipe['image_url'] ?? null);
                     $badgeTag = match($recipe['category'] ?? '') {
                         'Món chiên' => 'Chiên',
                         'Món kho' => 'Kho',
@@ -857,7 +857,7 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
             <div class="yummy-cards-grid">
                 <?php foreach ($recipes as $recipe): ?>
                     <?php 
-                    $imgSrc = !empty($recipe['image_url']) ? BASE_URL . '/' . e($recipe['image_url']) : BASE_URL . '/assets/images/default-recipe.jpg';
+                    $imgSrc = get_img_url($recipe['image_url'] ?? null);
                     $badgeTag = match($recipe['category'] ?? '') {
                         'Món chiên' => 'Chiên',
                         'Món kho' => 'Kho',
