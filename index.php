@@ -34,7 +34,7 @@ $categoryList = [
 $where = ["r.status = 'approved'"];
 $params = [];
 
-// Nâng cấp tìm kiếm thông minh: hỗ trợ từ khóa đồng nghĩa (thịt gà -> gà, thịt bò -> bò,...)
+// Nâng cấp tìm kiếm thông minh: hỗ trợ từ khóa đồng nghĩa (thịt gà ->gà, thịt bò ->bò,...)
 if ($searchQuery !== '') {
     [$searchClauses, $searchParams] = build_smart_search_conditions($searchQuery);
     foreach ($searchClauses as $sc) {
@@ -52,11 +52,11 @@ if ($selectedCategory !== '' && !$isAllCategories) {
 
 // Multi-Criteria Smart Filters
 if ($filterTime === 'quick') {
-    $where[] = "CAST(r.cooking_time AS UNSIGNED) > 0 AND CAST(r.cooking_time AS UNSIGNED) <= 15";
+    $where[] = "CAST(r.cooking_time AS UNSIGNED) >0 AND CAST(r.cooking_time AS UNSIGNED) <= 15";
 } elseif ($filterTime === 'medium') {
-    $where[] = "CAST(r.cooking_time AS UNSIGNED) > 15 AND CAST(r.cooking_time AS UNSIGNED) <= 30";
+    $where[] = "CAST(r.cooking_time AS UNSIGNED) >15 AND CAST(r.cooking_time AS UNSIGNED) <= 30";
 } elseif ($filterTime === 'long') {
-    $where[] = "CAST(r.cooking_time AS UNSIGNED) > 30";
+    $where[] = "CAST(r.cooking_time AS UNSIGNED) >30";
 }
 
 if ($filterCal === 'low') {
@@ -64,7 +64,7 @@ if ($filterCal === 'low') {
 } elseif ($filterCal === 'medium') {
     $where[] = "r.calories >= 300 AND r.calories <= 500";
 } elseif ($filterCal === 'high') {
-    $where[] = "r.calories > 500";
+    $where[] = "r.calories >500";
 }
 
 if ($filterDiet === 'eatclean') {
@@ -97,7 +97,7 @@ $buildFilterUrl = function (array $overrides) use ($searchQuery, $selectedCatego
         'time' => $filterTime,
         'cal' => $filterCal,
         'diet' => $filterDiet,
-        'page' => $page > 1 ? $page : '',
+        'page' => $page >1 ? $page : '',
     ];
     $merged = array_merge($state, $overrides);
     $clean = array_filter($merged, fn($v) => $v !== null && $v !== '');
@@ -348,7 +348,7 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
 
                     slides.forEach(function(slide, idx) {
                         var offset = idx - activeIdx;
-                        if (offset > total / 2) offset -= total;
+                        if (offset >total / 2) offset -= total;
                         if (offset < -total / 2) offset += total;
 
                         slide.classList.remove('is-active', 'is-visible');
@@ -566,8 +566,7 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
                     <h2 class="yummy-sec-title">Kinh nghiệm hay trong ngày</h2>
                     <p class="yummy-sec-sub">Mỗi ngày một mẹo nhỏ, giúp việc nội trợ thêm phần nhẹ tênh</p>
                 </div>
-                <a href="<?= BASE_URL ?>/views/kitchen-tips.php" class="yummy-btn-more">
-                    Xem thêm &rarr;
+                <a href="<?= BASE_URL ?>/views/kitchen-tips.php" class="yummy-btn-more">Xem thêm &rarr;
                 </a>
             </div>
 
@@ -647,7 +646,7 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
                             
                             <!-- Quick Like Button -->
                             <button type="button" class="yummy-quick-like-btn js-like-btn" data-recipe-id="<?= (int) $dish['id'] ?>" title="Thả tim">
-                                ❤️ <span class="like-count"><?= (int)($dish['likes_count'] ?? 0) ?></span>
+                                 <span class="like-count"><?= (int)($dish['likes_count'] ?? 0) ?></span>
                             </button>
                         </div>
                         <div class="yummy-card-body">
@@ -673,7 +672,7 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
                 <div class="sidebar-more-box">
                     <div class="sidebar-more-header">
                         <h3 class="sidebar-more-title">Xem thêm món ăn</h3>
-                        <span class="sidebar-more-count"><?= count($recipes) ?> món</span>
+                        <span class="sidebar-more-count"><?= count($recipes) ?>món</span>
                     </div>
                     <div class="sidebar-dishes-list">
                         <?php foreach ($sidebarMoreDishes as $sDish): ?>
@@ -711,16 +710,12 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
         <div class="section-heading" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
             <div>
                 <h2 style="margin:0; font-size: 1.6rem; font-weight: 800; color: #3e1f17;">
-                    <?php if ($isAllCategories && $searchQuery === ''): ?>
-                        Toàn bộ công thức món ăn
-                    <?php elseif ($searchQuery !== ''): ?>
-                        Kết quả tìm kiếm &bull; "<em><?= e($searchQuery) ?></em>"
-                    <?php elseif ($selectedCategory !== ''): ?>
-                        Danh mục &bull; "<em><?= e($selectedCategory) ?></em>"
-                    <?php else: ?>
-                        Khám phá công thức món ngon
+                    <?php if ($isAllCategories && $searchQuery === ''): ?>Toàn bộ công thức món ăn
+                    <?php elseif ($searchQuery !== ''): ?>Kết quả tìm kiếm &bull; "<em><?= e($searchQuery) ?></em>"
+                    <?php elseif ($selectedCategory !== ''): ?>Danh mục &bull; "<em><?= e($selectedCategory) ?></em>"
+                    <?php else: ?>Khám phá công thức món ngon
                     <?php endif; ?>
-                    <span style="font-size: 1.05rem; color: #ea580c; font-weight: 700; margin-left: 0.4rem;">(<?= number_format($totalRecipes) ?> món)</span>
+                    <span style="font-size: 1.05rem; color: #ea580c; font-weight: 700; margin-left: 0.4rem;">(<?= number_format($totalRecipes) ?>món)</span>
                 </h2>
                 <div style="display: flex; gap: 1rem; align-items: center; margin-top: 0.4rem;">
                     <?php if ($searchQuery !== '' || $selectedCategory !== '' || $filterTime !== '' || $filterCal !== '' || $filterDiet !== ''): ?>
@@ -736,13 +731,11 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
                 <div style="display:flex; align-items:center; background:#fff; padding:0.2rem; border-radius:9999px; border:1.5px solid #fed7aa; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
                     <a href="<?= $buildFilterUrl(['view' => 'vertical']) ?>" 
                        style="font-size:0.84rem; font-weight:700; text-decoration:none; padding:0.35rem 0.85rem; border-radius:9999px; transition:all 0.15s; display: flex; align-items: center; gap: 0.35rem; <?= $isVerticalView ? 'background:#3e1f17; color:#fff;' : 'color:#64748b;' ?>"
-                       title="Xem danh sách theo hàng dọc">
-                        <span>☰</span> Hàng dọc
+                       title="Xem danh sách theo hàng dọc">Hàng dọc
                     </a>
                     <a href="<?= $buildFilterUrl(['view' => 'grid']) ?>" 
                        style="font-size:0.84rem; font-weight:700; text-decoration:none; padding:0.35rem 0.85rem; border-radius:9999px; transition:all 0.15s; display: flex; align-items: center; gap: 0.35rem; <?= !$isVerticalView ? 'background:#3e1f17; color:#fff;' : 'color:#64748b;' ?>"
-                       title="Xem dạng lưới ô">
-                        <span>☷</span> Lưới ô
+                       title="Xem dạng lưới ô">Lưới ô
                     </a>
                 </div>
 
@@ -785,13 +778,11 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
 
         <?php if (empty($recipes)): ?>
             <div style="text-align: center; padding: 4rem 1.5rem; background: #ffffff; border-radius: 1.25rem; border: 1.5px dashed #fed7aa; margin: 1.5rem 0;">
-                <div style="font-size: 3rem; margin-bottom: 0.75rem;">🍲</div>
+                <div style="font-size: 3rem; margin-bottom: 0.75rem;"></div>
                 <h3 style="font-size: 1.25rem; font-weight: 800; color: #3e1f17; margin-bottom: 0.5rem;">Không tìm thấy món ăn phù hợp</h3>
-                <p style="color: #64748b; font-size: 0.92rem; max-width: 480px; margin: 0 auto 1.5rem;">
-                    Hãy thử tìm kiếm với các từ khóa ngắn gọn hơn như "gà", "bò", "canh", hoặc khám phá danh mục món ngon Cookio.
+                <p style="color: #64748b; font-size: 0.92rem; max-width: 480px; margin: 0 auto 1.5rem;">Hãy thử tìm kiếm với các từ khóa ngắn gọn hơn như "gà", "bò", "canh", hoặc khám phá danh mục món ngon Cookio.
                 </p>
-                <a href="<?= BASE_URL ?>/index.php?cat=all&view=vertical" class="btn-list-view-recipe" style="display: inline-flex;">
-                    Xem tất cả công thức &rarr;
+                <a href="<?= BASE_URL ?>/index.php?cat=all&view=vertical" class="btn-list-view-recipe" style="display: inline-flex;">Xem tất cả công thức &rarr;
                 </a>
             </div>
         <?php elseif ($isVerticalView): ?>
@@ -822,7 +813,7 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
                             
                             <!-- Quick Like Button -->
                             <button type="button" class="yummy-quick-like-btn js-like-btn" data-recipe-id="<?= (int) $recipe['id'] ?>" title="Thả tim">
-                                ❤️ <span class="like-count"><?= (int)($recipe['likes_count'] ?? 0) ?></span>
+                                 <span class="like-count"><?= (int)($recipe['likes_count'] ?? 0) ?></span>
                             </button>
                         </div>
 
@@ -831,7 +822,7 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
                             <div>
                                 <div class="list-row-top">
                                     <span class="list-row-cat-pill"><?= e($recipe['category'] ?: 'Món ngon') ?></span>
-                                    <span class="list-row-author">👨‍🍳 Người nấu: <strong><?= e($recipe['author_name']) ?></strong></span>
+                                    <span class="list-row-author">‍ Người nấu: <strong><?= e($recipe['author_name']) ?></strong></span>
                                 </div>
                                 <h3 class="list-row-title">
                                     <a href="<?= BASE_URL ?>/views/recipe-detail.php?id=<?= (int) $recipe['id'] ?>">
@@ -845,9 +836,9 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
                             <div class="list-row-meta">
                                 <span>⏱ <?= e($recipe['cooking_time']) ?></span>
                                 <span class="meta-sep">&bull;</span>
-                                <span>⭐ <?= $recipe['avg_rating'] ?> (<?= (int)$recipe['review_count'] ?> đánh giá)</span>
+                                <span>⭐ <?= $recipe['avg_rating'] ?> (<?= (int)$recipe['review_count'] ?>đánh giá)</span>
                                 <span class="meta-sep">&bull;</span>
-                                <span>👁️ <?= number_format((int)$recipe['views_count']) ?> xem</span>
+                                <span> <?= number_format((int)$recipe['views_count']) ?>xem</span>
                             </div>
                         </div>
 
@@ -884,7 +875,7 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
                             
                             <!-- Quick Like Button -->
                             <button type="button" class="yummy-quick-like-btn js-like-btn" data-recipe-id="<?= (int) $recipe['id'] ?>" title="Thả tim">
-                                ❤️ <span class="like-count"><?= (int)($recipe['likes_count'] ?? 0) ?></span>
+                                 <span class="like-count"><?= (int)($recipe['likes_count'] ?? 0) ?></span>
                             </button>
                         </div>
                         <div class="yummy-card-body">
@@ -906,15 +897,14 @@ $isDefaultHome = ($searchQuery === '' && $selectedCategory === '' && $filterTime
             </div>
         <?php endif; ?>
 
-        <?php if ($totalPages > 1): ?>
+        <?php if ($totalPages >1): ?>
             <!-- Smart Pagination -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid #fed7aa; flex-wrap: wrap; gap: 1rem;">
-                <div style="font-size: 0.92rem; color: #64748b; font-weight: 600;">
-                    Đang hiển thị trang <strong style="color: #ea580c;"><?= $page ?></strong> trên tổng số <strong><?= $totalPages ?></strong> trang (<?= number_format($totalRecipes) ?> món)
+                <div style="font-size: 0.92rem; color: #64748b; font-weight: 600;">Đang hiển thị trang <strong style="color: #ea580c;"><?= $page ?></strong>trên tổng số <strong><?= $totalPages ?></strong>trang (<?= number_format($totalRecipes) ?>món)
                 </div>
                 <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-                    <?php if ($page > 1): ?>
-                        <a href="<?= $buildFilterUrl(['page' => 1]) ?>" style="padding: 0.45rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: #334155; font-weight: 700; font-size: 0.88rem; background: #fff;" title="Trang đầu">&laquo; Đầu</a>
+                    <?php if ($page >1): ?>
+                        <a href="<?= $buildFilterUrl(['page' =>1]) ?>" style="padding: 0.45rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: #334155; font-weight: 700; font-size: 0.88rem; background: #fff;" title="Trang đầu">&laquo; Đầu</a>
                         <a href="<?= $buildFilterUrl(['page' => $page - 1]) ?>" style="padding: 0.45rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: #334155; font-weight: 700; font-size: 0.88rem; background: #fff;" title="Trang trước">&lsaquo; Trước</a>
                     <?php endif; ?>
 

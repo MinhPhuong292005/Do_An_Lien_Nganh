@@ -229,8 +229,7 @@ $pageTitle = 'Quản lý bình luận & đánh giá - Cookio Admin';
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;">
         <div>
             <h1 style="margin: 0; font-size: 1.6rem; color: #1e293b;">Quản lý bình luận & đánh giá</h1>
-            <p style="margin: 0.25rem 0 0; color: #64748b; font-size: 0.88rem;">
-                Kiểm duyệt bình luận • Tự động phát hiện nội dung tiêu cực vi phạm tiêu chuẩn cộng đồng • Tổng cộng <strong><?= number_format($totalComments) ?></strong> đánh giá
+            <p style="margin: 0.25rem 0 0; color: #64748b; font-size: 0.88rem;">Kiểm duyệt bình luận • Tự động phát hiện nội dung tiêu cực vi phạm tiêu chuẩn cộng đồng • Tổng cộng <strong><?= number_format($totalComments) ?></strong>đánh giá
             </p>
         </div>
     </div>
@@ -249,7 +248,7 @@ $pageTitle = 'Quản lý bình luận & đánh giá - Cookio Admin';
     <form method="get" action="<?= BASE_URL ?>/admin/manage-comments.php" class="filter-form-bar">
         <!-- TÌM KIẾM THEO NGƯỜI BÌNH LUẬN / NỘI DUNG / MÓN ĂN -->
         <div class="filter-group" style="flex: 1; min-width: 220px;">
-            <label for="q">👤 Ai bình luận / Nội dung / ID:</label>
+            <label for="q">Ai bình luận / Nội dung / ID:</label>
             <input type="text" name="q" id="q" class="filter-input" placeholder="Tìm ID món/bình luận, tên người gửi, nội dung..." value="<?= e($search) ?>" style="width: 100%;">
         </div>
 
@@ -268,17 +267,17 @@ $pageTitle = 'Quản lý bình luận & đánh giá - Cookio Admin';
 
         <!-- Ô CHỌN LỰA: LỌC THEO KIỂM DUYỆT & TIÊU CHUẨN CỘNG ĐỒNG -->
         <div class="filter-group">
-            <label for="moderation">🛡️ Tiêu chuẩn:</label>
+            <label for="moderation">Tiêu chuẩn:</label>
             <select name="moderation" id="moderation" class="filter-select">
                 <option value="all" <?= $moderationFilter === 'all' ? 'selected' : '' ?>>-- Tất cả bình luận --</option>
-                <option value="approved" <?= $moderationFilter === 'approved' ? 'selected' : '' ?>>✅ Hợp lệ (Đang hiện)</option>
-                <option value="flagged" <?= $moderationFilter === 'flagged' ? 'selected' : '' ?>>⚠️ Vi phạm tiêu chuẩn (Chứa từ cấm)</option>
-                <option value="hidden" <?= $moderationFilter === 'hidden' ? 'selected' : '' ?>>🚫 Đã bị ẩn (Không hiện trên web)</option>
+                <option value="approved" <?= $moderationFilter === 'approved' ? 'selected' : '' ?>>Hợp lệ (Đang hiện)</option>
+                <option value="flagged" <?= $moderationFilter === 'flagged' ? 'selected' : '' ?>>Vi phạm tiêu chuẩn (Chứa từ cấm)</option>
+                <option value="hidden" <?= $moderationFilter === 'hidden' ? 'selected' : '' ?>>Đã bị ẩn (Không hiện trên web)</option>
             </select>
         </div>
 
         <div class="filter-group">
-            <label for="per_page">📄 Hiển thị:</label>
+            <label for="per_page">Hiển thị:</label>
             <select name="per_page" id="per_page" class="filter-select" onchange="this.form.submit()">
                 <option value="25" <?= $perPage === 25 ? 'selected' : '' ?>>25 bình luận / trang</option>
                 <option value="30" <?= $perPage === 30 ? 'selected' : '' ?>>30 bình luận / trang</option>
@@ -289,7 +288,7 @@ $pageTitle = 'Quản lý bình luận & đánh giá - Cookio Admin';
 
         <button type="submit" class="btn-filter">Lọc</button>
         <?php if ($search !== '' || $ratingFilter !== 'all' || $moderationFilter !== 'all' || $perPage !== 25): ?>
-            <a href="<?= BASE_URL ?>/admin/manage-comments.php" class="btn-reset">✕ Bỏ lọc</a>
+            <a href="<?= BASE_URL ?>/admin/manage-comments.php" class="btn-reset">Bỏ lọc</a>
         <?php endif; ?>
     </form>
 
@@ -335,8 +334,7 @@ $pageTitle = 'Quản lý bình luận & đánh giá - Cookio Admin';
                         </td>
                         <td>
                             <?php if ($isToxic): ?>
-                                <div class="toxic-tag">
-                                    ⚠️ Vi phạm tiêu chuẩn cộng đồng <?= $toxCheck['matched'] !== '' ? '(từ khóa: "' . e($toxCheck['matched']) . '")' : '' ?>
+                                <div class="toxic-tag">Vi phạm tiêu chuẩn cộng đồng <?= $toxCheck['matched'] !== '' ? '(từ khóa: "' . e($toxCheck['matched']) . '")' : '' ?>
                                 </div>
                             <?php endif; ?>
                             <div style="font-size: 0.9rem; line-height: 1.45; color: #334155;">
@@ -352,10 +350,10 @@ $pageTitle = 'Quản lý bình luận & đánh giá - Cookio Admin';
                         </td>
                         <td>
                             <?php if ($isHidden): ?>
-                                <span class="badge-hidden">🚫 Đã ẩn</span>
+                                <span class="badge-hidden">Đã ẩn</span>
                                 <small style="display:block; color: #94a3b8; margin-top:2px; font-size: 0.72rem;">Không hiện trên web</small>
                             <?php else: ?>
-                                <span class="badge-live">✅ Đang hiện</span>
+                                <span class="badge-live">Đang hiện</span>
                             <?php endif; ?>
                         </td>
                         <td style="font-size: 0.82rem; color: #64748b;">
@@ -375,8 +373,7 @@ $pageTitle = 'Quản lý bình luận & đánh giá - Cookio Admin';
                                 </form>
 
                                 <!-- NÚT XÓA -->
-                                <button type="button" class="button-sm danger" onclick="openDeleteCommentModal(<?= (int)$comm['id'] ?>, '<?= e(addslashes($comm['author_name'])) ?>')">
-                                    Xóa
+                                <button type="button" class="button-sm danger" onclick="openDeleteCommentModal(<?= (int)$comm['id'] ?>, '<?= e(addslashes($comm['author_name'])) ?>')">Xóa
                                 </button>
                             </div>
                         </td>
@@ -384,8 +381,7 @@ $pageTitle = 'Quản lý bình luận & đánh giá - Cookio Admin';
                 <?php endforeach; ?>
                 <?php if (empty($comments)): ?>
                     <tr>
-                        <td colspan="8" style="text-align: center; padding: 2.5rem; color: #64748b;">
-                            Không tìm thấy bình luận nào phù hợp với bộ lọc hiện tại.
+                        <td colspan="8" style="text-align: center; padding: 2.5rem; color: #64748b;">Không tìm thấy bình luận nào phù hợp với bộ lọc hiện tại.
                         </td>
                     </tr>
                 <?php endif; ?>
@@ -394,7 +390,7 @@ $pageTitle = 'Quản lý bình luận & đánh giá - Cookio Admin';
         </div>
 
         <!-- PHÂN TRANG -->
-        <?php if ($totalComments > 0): ?>
+        <?php if ($totalComments >0): ?>
             <?php
             $paginationParams = [
                 'q' => $search,
@@ -415,24 +411,23 @@ $pageTitle = 'Quản lý bình luận & đánh giá - Cookio Admin';
             ?>
             <div class="pagination-bar">
                 <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-                    <div style="font-size: 0.85rem; color: #64748b;">
-                        Đang hiển thị trang <strong><?= $page ?></strong> trên tổng số <strong><?= $totalPages ?></strong> trang (<?= number_format($totalComments) ?> bình luận)
+                    <div style="font-size: 0.85rem; color: #64748b;">Đang hiển thị trang <strong><?= $page ?></strong>trên tổng số <strong><?= $totalPages ?></strong>trang (<?= number_format($totalComments) ?>bình luận)
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; color: #475569;">
                         <label for="bottom_per_page" style="font-weight: 600;">Hiển thị:</label>
                         <select id="bottom_per_page" class="filter-select" style="padding: 0.2rem 0.5rem; font-size: 0.82rem; height: auto;" onchange="window.location.href = this.value;">
                             <?php foreach ($allowedPerPage as $opt): ?>
                                 <option value="<?= $buildPageUrl(1, $opt) ?>" <?= $perPage === $opt ? 'selected' : '' ?>>
-                                    <?= $opt ?> bình luận / trang
+                                    <?= $opt ?>bình luận / trang
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                 </div>
 
-                <?php if ($totalPages > 1): ?>
+                <?php if ($totalPages >1): ?>
                 <div class="pagination-links">
-                    <?php if ($page > 1): ?>
+                    <?php if ($page >1): ?>
                         <a href="<?= $buildPageUrl(1) ?>" class="page-link" title="Trang đầu">&laquo; Đầu</a>
                         <a href="<?= $buildPageUrl($page - 1) ?>" class="page-link" title="Trang trước">&lsaquo; Trước</a>
                     <?php endif; ?>
@@ -461,7 +456,7 @@ $pageTitle = 'Quản lý bình luận & đánh giá - Cookio Admin';
     <div style="background: #ffffff; border-radius: 16px; max-width: 480px; width: 100%; padding: 1.75rem; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border: 1px solid #e2e8f0;">
         <div style="display: flex; align-items: center; gap: 0.65rem; margin-bottom: 1rem;">
             <div style="width: 40px; height: 40px; border-radius: 50%; background: #fee2e2; color: #dc2626; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-                ⚠️
+                
             </div>
             <div>
                 <h3 style="margin: 0; font-size: 1.2rem; font-weight: 800; color: #1e293b;">Xác nhận xóa bình luận</h3>
@@ -469,8 +464,7 @@ $pageTitle = 'Quản lý bình luận & đánh giá - Cookio Admin';
             </div>
         </div>
 
-        <p style="color: #334155; font-size: 0.95rem; line-height: 1.5; margin: 0 0 1rem;">
-            Bạn có chắc chắn muốn xóa vĩnh viễn bình luận của tác giả <strong id="modalCommentAuthor" style="color: #ea580c;"></strong> không?
+        <p style="color: #334155; font-size: 0.95rem; line-height: 1.5; margin: 0 0 1rem;">Bạn có chắc chắn muốn xóa vĩnh viễn bình luận của tác giả <strong id="modalCommentAuthor" style="color: #ea580c;"></strong>không?
         </p>
 
         <form id="deleteCommentForm" method="post" action="<?= BASE_URL ?>/actions/comment_action.php" style="display: flex; justify-content: flex-end; gap: 0.75rem;">
@@ -479,18 +473,15 @@ $pageTitle = 'Quản lý bình luận & đánh giá - Cookio Admin';
             <input type="hidden" name="comment_id" id="modalCommentId" value="">
             <input type="hidden" name="return_url" value="admin/manage-comments.php<?= !empty($_SERVER['QUERY_STRING']) ? '?' . $_SERVER['QUERY_STRING'] : '' ?>">
 
-            <button type="button" onclick="closeDeleteCommentModal()" style="padding: 0.55rem 1.15rem; background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 700; font-size: 0.88rem; color: #475569; cursor: pointer;">
-                Hủy bỏ
+            <button type="button" onclick="closeDeleteCommentModal()" style="padding: 0.55rem 1.15rem; background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 700; font-size: 0.88rem; color: #475569; cursor: pointer;">Hủy bỏ
             </button>
-            <button type="submit" style="padding: 0.55rem 1.25rem; background: #dc2626; border: 1.5px solid #dc2626; border-radius: 8px; font-weight: 700; font-size: 0.88rem; color: #ffffff; cursor: pointer; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);">
-                Xác nhận xóa
+            <button type="submit" style="padding: 0.55rem 1.25rem; background: #dc2626; border: 1.5px solid #dc2626; border-radius: 8px; font-weight: 700; font-size: 0.88rem; color: #ffffff; cursor: pointer; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);">Xác nhận xóa
             </button>
         </form>
     </div>
 </div>
 
-<script>
-function openDeleteCommentModal(commentId, authorName) {
+<script>function openDeleteCommentModal(commentId, authorName) {
     document.getElementById('modalCommentId').value = commentId;
     document.getElementById('modalCommentAuthor').textContent = `"${authorName}"`;
     document.getElementById('deleteCommentModalBackdrop').style.display = 'flex';

@@ -139,7 +139,7 @@ if ($action === 'save_categories_bulk') {
     if (!is_array($categoriesList)) {
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
             header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => 'Dữ liệu không hợp lệ']);
+            echo json_encode(['success' =>false, 'error' => 'Dữ liệu không hợp lệ']);
             exit;
         }
         redirect('admin/manage-categories.php?error=failed');
@@ -151,7 +151,7 @@ if ($action === 'save_categories_bulk') {
     try {
         foreach ($categoriesList as $index => $item) {
             $name = trim((string)($item['name'] ?? ''));
-            $icon = trim((string)($item['icon'] ?? '🍳')) ?: '🍳';
+            $icon = trim((string)($item['icon'] ?? '')) ?: '';
             $order = $index + 1;
             $catId = isset($item['id']) && is_numeric($item['id']) ? (int)$item['id'] : null;
 
@@ -161,7 +161,7 @@ if ($action === 'save_categories_bulk') {
 
             $slug = slugify_category($name);
 
-            if ($catId && $catId > 0) {
+            if ($catId && $catId >0) {
                 // Fetch old category name
                 $stmtOld = $db->prepare('SELECT name FROM categories WHERE id = ?');
                 $stmtOld->execute([$catId]);
@@ -187,7 +187,7 @@ if ($action === 'save_categories_bulk') {
 
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
             header('Content-Type: application/json');
-            echo json_encode(['success' => true]);
+            echo json_encode(['success' =>true]);
             exit;
         }
         redirect('admin/manage-categories.php?success=categories-saved');
@@ -195,7 +195,7 @@ if ($action === 'save_categories_bulk') {
         $db->rollBack();
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
             header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+            echo json_encode(['success' =>false, 'error' => $e->getMessage()]);
             exit;
         }
         redirect('admin/manage-categories.php?error=save-failed');
@@ -205,7 +205,7 @@ if ($action === 'save_categories_bulk') {
 if ($action === 'add_category') {
     require_once __DIR__ . '/../includes/categories_helper.php';
     $name = trim((string)($_POST['name'] ?? ''));
-    $icon = trim((string)($_POST['icon'] ?? '🍳')) ?: '🍳';
+    $icon = trim((string)($_POST['icon'] ?? '')) ?: '';
 
     // Auto sequence: max display_order + 1
     $stmtMax = db()->query('SELECT COALESCE(MAX(display_order), 0) + 1 FROM categories');
@@ -233,7 +233,7 @@ if ($action === 'edit_category') {
     require_once __DIR__ . '/../includes/categories_helper.php';
     $catId = filter_input(INPUT_POST, 'category_id', FILTER_VALIDATE_INT);
     $name = trim((string)($_POST['name'] ?? ''));
-    $icon = trim((string)($_POST['icon'] ?? '🍳')) ?: '🍳';
+    $icon = trim((string)($_POST['icon'] ?? '')) ?: '';
 
     if (!$catId || $name === '') {
         redirect('admin/manage-categories.php?error=missing-fields');

@@ -48,7 +48,7 @@ require __DIR__ . '/../includes/header.php';
     <!-- Page header -->
     <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:2rem;">
         <div>
-            <h1 style="font-size:1.8rem; font-weight:800; color:var(--text-main); margin:0 0 0.25rem;">✏️ Chỉnh sửa công thức</h1>
+            <h1 style="font-size:1.8rem; font-weight:800; color:var(--text-main); margin:0 0 0.25rem;">Chỉnh sửa công thức</h1>
             <p style="margin:0; color:var(--text-muted); font-size:0.95rem;">Cập nhật thông tin cho món <strong><?= e($recipe['title']) ?></strong></p>
         </div>
         <a href="<?= BASE_URL ?>/views/my-recipes.php"
@@ -60,11 +60,11 @@ require __DIR__ . '/../includes/header.php';
     <?php if (isset($_GET['error'])): ?>
         <div class="notice error" style="margin-bottom:1.5rem;">
             <?php echo match ($_GET['error']) {
-                'csrf'           => '⚠️ Yêu cầu không hợp lệ hoặc phiên làm việc đã hết hạn.',
-                'missing-fields' => '⚠️ Vui lòng điền đầy đủ tiêu đề, nguyên liệu và cách làm.',
-                'invalid-image'  => '⚠️ Ảnh tải lên không hợp lệ hoặc vượt quá 5MB.',
-                'upload-failed'  => '⚠️ Không thể lưu ảnh tải lên máy chủ.',
-                default          => '⚠️ Đã có lỗi xảy ra. Vui lòng kiểm tra lại.',
+                'csrf'           => ' Yêu cầu không hợp lệ hoặc phiên làm việc đã hết hạn.',
+                'missing-fields' => ' Vui lòng điền đầy đủ tiêu đề, nguyên liệu và cách làm.',
+                'invalid-image'  => ' Ảnh tải lên không hợp lệ hoặc vượt quá 5MB.',
+                'upload-failed'  => ' Không thể lưu ảnh tải lên máy chủ.',
+                default          => ' Đã có lỗi xảy ra. Vui lòng kiểm tra lại.',
             }; ?>
         </div>
     <?php endif; ?>
@@ -76,13 +76,11 @@ require __DIR__ . '/../includes/header.php';
 
         <!-- Section 1: General Info -->
         <div class="recipe-detail-hero-card" style="margin-bottom:1.5rem;">
-            <h2 style="font-size:1.05rem; font-weight:700; color:var(--primary); margin:0 0 1.25rem; padding-bottom:0.75rem; border-bottom:2px solid var(--primary-light); display:flex; align-items:center; gap:0.5rem;">
-                📋 Thông tin chung
+            <h2 style="font-size:1.05rem; font-weight:700; color:var(--primary); margin:0 0 1.25rem; padding-bottom:0.75rem; border-bottom:2px solid var(--primary-light); display:flex; align-items:center; gap:0.5rem;">Thông tin chung
             </h2>
 
             <label style="display:block; margin-bottom:1rem;">
-                <span style="font-weight:600; font-size:0.9rem; color:var(--text-main); display:block; margin-bottom:0.4rem;">
-                    Tên món ăn <span style="color:#ef4444;">*</span>
+                <span style="font-weight:600; font-size:0.9rem; color:var(--text-main); display:block; margin-bottom:0.4rem;">Tên món ăn <span style="color:#ef4444;">*</span>
                 </span>
                 <input type="text" name="title" value="<?= e($recipe['title']) ?>" required
                     placeholder="Ví dụ: Bò xào sả ớt, Canh chua cá lóc..."
@@ -90,8 +88,7 @@ require __DIR__ . '/../includes/header.php';
             </label>
 
             <label style="display:block; margin-bottom:1rem;">
-                <span style="font-weight:600; font-size:0.9rem; color:var(--text-main); display:block; margin-bottom:0.4rem;">
-                    Mô tả ngắn
+                <span style="font-weight:600; font-size:0.9rem; color:var(--text-main); display:block; margin-bottom:0.4rem;">Mô tả ngắn
                 </span>
                 <textarea name="description" rows="3"
                     placeholder="Giới thiệu ngắn gọn về món ăn, hương vị đặc trưng..."
@@ -100,26 +97,26 @@ require __DIR__ . '/../includes/header.php';
 
             <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:1rem;">
                 <label style="display:block;">
-                    <span style="font-weight:600; font-size:0.9rem; color:var(--text-main); display:block; margin-bottom:0.4rem;">🍽️ Danh mục</span>
+                    <span style="font-weight:600; font-size:0.9rem; color:var(--text-main); display:block; margin-bottom:0.4rem;">Danh mục</span>
                     <select name="category"
                         style="width:100%; padding:0.75rem 1rem; border:1.5px solid var(--border); border-radius:0.5rem; font-size:0.95rem; background:#fff; outline:none; cursor:pointer; font-family:inherit;">
                         <?php foreach ($categoryList as $cat): ?>
                             <option value="<?= e($cat['name']) ?>" <?= $currentCat === $cat['name'] ? 'selected' : '' ?>>
-                                <?= e($cat['icon'] ?: '🍳') ?> <?= e($cat['name']) ?>
+                                <?= e($cat['icon'] ?: '') ?> <?= e($cat['name']) ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
                 </label>
 
                 <label style="display:block;">
-                    <span style="font-weight:600; font-size:0.9rem; color:var(--text-main); display:block; margin-bottom:0.4rem;">⏱️ Thời gian nấu</span>
+                    <span style="font-weight:600; font-size:0.9rem; color:var(--text-main); display:block; margin-bottom:0.4rem;">⏱ Thời gian nấu</span>
                     <input type="text" name="cooking_time" value="<?= e($recipe['cooking_time'] ?? '30 phút') ?>"
                         placeholder="Ví dụ: 30 phút"
                         style="width:100%; padding:0.75rem 1rem; border:1.5px solid var(--border); border-radius:0.5rem; font-size:0.95rem; outline:none; box-sizing:border-box; font-family:inherit;">
                 </label>
 
                 <label style="display:block;">
-                    <span style="font-weight:600; font-size:0.9rem; color:var(--text-main); display:block; margin-bottom:0.4rem;">👥 Khẩu phần</span>
+                    <span style="font-weight:600; font-size:0.9rem; color:var(--text-main); display:block; margin-bottom:0.4rem;">Khẩu phần</span>
                     <input type="text" name="servings" value="<?= e($recipe['servings'] ?? '2 - 4 người') ?>"
                         placeholder="Ví dụ: 4 người"
                         style="width:100%; padding:0.75rem 1rem; border:1.5px solid var(--border); border-radius:0.5rem; font-size:0.95rem; outline:none; box-sizing:border-box; font-family:inherit;">
@@ -129,8 +126,7 @@ require __DIR__ . '/../includes/header.php';
 
         <!-- Section 2: Image -->
         <div class="recipe-detail-hero-card" style="margin-bottom:1.5rem;">
-            <h2 style="font-size:1.05rem; font-weight:700; color:var(--primary); margin:0 0 1.25rem; padding-bottom:0.75rem; border-bottom:2px solid var(--primary-light); display:flex; align-items:center; gap:0.5rem;">
-                📸 Ảnh minh họa
+            <h2 style="font-size:1.05rem; font-weight:700; color:var(--primary); margin:0 0 1.25rem; padding-bottom:0.75rem; border-bottom:2px solid var(--primary-light); display:flex; align-items:center; gap:0.5rem;">Ảnh minh họa
             </h2>
 
             <?php if (!empty($recipe['image_url'])): ?>
@@ -144,8 +140,7 @@ require __DIR__ . '/../includes/header.php';
             <?php endif; ?>
 
             <label style="display:block;">
-                <span style="font-weight:600; font-size:0.9rem; color:var(--text-main); display:block; margin-bottom:0.4rem;">
-                    Chọn ảnh mới (nếu muốn thay đổi)
+                <span style="font-weight:600; font-size:0.9rem; color:var(--text-main); display:block; margin-bottom:0.4rem;">Chọn ảnh mới (nếu muốn thay đổi)
                 </span>
                 <input type="file" name="image" id="recipeEditImageInput" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" onchange="validateRecipeImage(this)"
                     style="padding:0.5rem 0; font-size:0.9rem; color:var(--text-muted);">
@@ -155,8 +150,7 @@ require __DIR__ . '/../includes/header.php';
 
         <!-- Section 3: Ingredients -->
         <div class="recipe-detail-hero-card" style="margin-bottom:1.5rem;">
-            <h2 style="font-size:1.05rem; font-weight:700; color:var(--primary); margin:0 0 0.4rem; padding-bottom:0.75rem; border-bottom:2px solid var(--primary-light); display:flex; align-items:center; gap:0.5rem;">
-                🛒 Nguyên liệu
+            <h2 style="font-size:1.05rem; font-weight:700; color:var(--primary); margin:0 0 0.4rem; padding-bottom:0.75rem; border-bottom:2px solid var(--primary-light); display:flex; align-items:center; gap:0.5rem;">Nguyên liệu
             </h2>
             <p style="font-size:0.85rem; color:var(--text-muted); margin:0 0 1rem;">Mỗi nguyên liệu trên một dòng. Ghi rõ số lượng và đơn vị.</p>
 
@@ -168,7 +162,7 @@ require __DIR__ . '/../includes/header.php';
         <!-- Section 4: Instructions -->
         <div class="recipe-detail-hero-card" style="margin-bottom:1.5rem;">
             <h2 style="font-size:1.05rem; font-weight:700; color:var(--primary); margin:0 0 0.4rem; padding-bottom:0.75rem; border-bottom:2px solid var(--primary-light); display:flex; align-items:center; gap:0.5rem;">
-                👨‍🍳 Các bước thực hiện
+                ‍ Các bước thực hiện
             </h2>
             <p style="font-size:0.85rem; color:var(--text-muted); margin:0 0 1rem;">Mô tả từng bước thực hiện rõ ràng, mỗi bước trên một dòng.</p>
 
@@ -179,8 +173,7 @@ require __DIR__ . '/../includes/header.php';
 
         <!-- Section 5: Author Tips -->
         <div class="recipe-detail-hero-card" style="margin-bottom:2rem;">
-            <h2 style="font-size:1.05rem; font-weight:700; color:var(--primary); margin:0 0 0.4rem; padding-bottom:0.75rem; border-bottom:2px solid var(--primary-light); display:flex; align-items:center; gap:0.5rem;">
-                💡 Bí quyết & Mẹo nấu của bạn (Tùy chọn)
+            <h2 style="font-size:1.05rem; font-weight:700; color:var(--primary); margin:0 0 0.4rem; padding-bottom:0.75rem; border-bottom:2px solid var(--primary-light); display:flex; align-items:center; gap:0.5rem;">Bí quyết & Mẹo nấu của bạn (Tùy chọn)
             </h2>
             <p style="font-size:0.85rem; color:var(--text-muted); margin:0 0 1rem;">Mẹo chọn nguyên liệu ngon, cách canh lửa hoặc lưu ý giúp món ăn thành công.</p>
 
@@ -191,8 +184,7 @@ require __DIR__ . '/../includes/header.php';
 
         <!-- Section 6: Nutrition Facts & Dietary Tags -->
         <div class="recipe-detail-hero-card" style="margin-bottom:2rem;">
-            <h2 style="font-size:1.05rem; font-weight:700; color:var(--primary); margin:0 0 0.4rem; padding-bottom:0.75rem; border-bottom:2px solid var(--primary-light); display:flex; align-items:center; gap:0.5rem;">
-                🥗 Thông tin dinh dưỡng & Thẻ chế độ ăn (Tùy chọn)
+            <h2 style="font-size:1.05rem; font-weight:700; color:var(--primary); margin:0 0 0.4rem; padding-bottom:0.75rem; border-bottom:2px solid var(--primary-light); display:flex; align-items:center; gap:0.5rem;">Thông tin dinh dưỡng & Thẻ chế độ ăn (Tùy chọn)
             </h2>
             <p style="font-size:0.85rem; color:var(--text-muted); margin:0 0 1rem;">Cung cấp thành phần dinh dưỡng ước tính trên 1 khẩu phần ăn.</p>
 
@@ -230,33 +222,30 @@ require __DIR__ . '/../includes/header.php';
         <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
             <button type="submit"
                 style="background:var(--primary); color:#fff; border:none; padding:0.85rem 2.25rem; border-radius:0.6rem; font-size:1rem; font-weight:700; cursor:pointer; transition:background 0.2s;"
-                onmouseover="this.style.background='var(--primary-hover)'" onmouseout="this.style.background='var(--primary)'">
-                💾 Lưu thay đổi
+                onmouseover="this.style.background='var(--primary-hover)'" onmouseout="this.style.background='var(--primary)'">Lưu thay đổi
             </button>
             <a href="<?= BASE_URL ?>/views/my-recipes.php"
-                style="padding:0.85rem 1.5rem; border:1.5px solid var(--border); border-radius:0.6rem; color:var(--text-muted); font-size:0.95rem; font-weight:600; text-decoration:none;">
-                Hủy bỏ
+                style="padding:0.85rem 1.5rem; border:1.5px solid var(--border); border-radius:0.6rem; color:var(--text-muted); font-size:0.95rem; font-weight:600; text-decoration:none;">Hủy bỏ
             </a>
         </div>
     </form>
 </div>
 
-<script>
-function validateRecipeImage(input) {
+<script>function validateRecipeImage(input) {
     if (!input || !input.files || !input.files[0]) return true;
     const file = input.files[0];
     const allowedExts = ['jpg', 'jpeg', 'png', 'webp'];
     const parts = file.name.split('.');
-    const ext = parts.length > 1 ? parts.pop().toLowerCase() : '';
+    const ext = parts.length >1 ? parts.pop().toLowerCase() : '';
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
 
     if (!allowedExts.includes(ext) || (file.type && !allowedTypes.includes(file.type))) {
-        alert('⚠️ Định dạng tệp không được hỗ trợ!\n\nVui lòng chỉ tải lên ảnh có đuôi .jpg, .jpeg, .png hoặc .webp (Tệp "' + file.name + '" không hợp lệ).');
+        alert(' Định dạng tệp không được hỗ trợ!\n\nVui lòng chỉ tải lên ảnh có đuôi .jpg, .jpeg, .png hoặc .webp (Tệp "' + file.name + '" không hợp lệ).');
         input.value = '';
         return false;
     }
-    if (file.size > 5 * 1024 * 1024) {
-        alert('⚠️ Dung lượng tệp vượt quá 5MB. Vui lòng tải lên ảnh có dung lượng nhỏ hơn.');
+    if (file.size >5 * 1024 * 1024) {
+        alert(' Dung lượng tệp vượt quá 5MB. Vui lòng tải lên ảnh có dung lượng nhỏ hơn.');
         input.value = '';
         return false;
     }

@@ -174,12 +174,11 @@ $pageTitle = 'Quản lý kinh nghiệm hay - Cookio Admin';
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;">
         <div>
             <h1 style="margin: 0; font-size: 1.6rem; color: #1e293b;">Quản lý kinh nghiệm hay</h1>
-            <p style="margin: 0.25rem 0 0; color: #64748b; font-size: 0.88rem;">
-                Sắp xếp theo ID mới nhất đến cũ nhất • Tổng cộng <strong><?= number_format($totalTips) ?></strong> bài viết
+            <p style="margin: 0.25rem 0 0; color: #64748b; font-size: 0.88rem;">Sắp xếp theo ID mới nhất đến cũ nhất • Tổng cộng <strong><?= number_format($totalTips) ?></strong>bài viết
             </p>
         </div>
         <a href="<?= BASE_URL ?>/views/create-tip.php" target="_blank" class="btn-filter" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">
-            <span>+</span> Đăng bài kinh nghiệm mới
+            <span>+</span>Đăng bài kinh nghiệm mới
         </a>
     </div>
 
@@ -196,12 +195,12 @@ $pageTitle = 'Quản lý kinh nghiệm hay - Cookio Admin';
     <!-- THANH TÌM KIẾM & BỘ LỌC -->
     <form method="get" action="<?= BASE_URL ?>/admin/manage-tips.php" class="filter-form-bar">
         <div class="filter-group" style="flex: 1; min-width: 220px;">
-            <label for="q">🔍 Tìm kiếm:</label>
+            <label for="q">Tìm kiếm:</label>
             <input type="text" name="q" id="q" class="filter-input" placeholder="Tìm theo ID (VD: #1), tiêu đề kinh nghiệm hoặc tác giả..." value="<?= e($search) ?>" style="width: 100%;">
         </div>
 
         <div class="filter-group">
-            <label for="status">📊 Trạng thái:</label>
+            <label for="status">Trạng thái:</label>
             <select name="status" id="status" class="filter-select">
                 <option value="all" <?= $statusFilter === 'all' ? 'selected' : '' ?>>-- Tất cả trạng thái --</option>
                 <option value="approved" <?= $statusFilter === 'approved' ? 'selected' : '' ?>>Đã duyệt</option>
@@ -211,7 +210,7 @@ $pageTitle = 'Quản lý kinh nghiệm hay - Cookio Admin';
         </div>
 
         <div class="filter-group">
-            <label for="per_page">📄 Hiển thị:</label>
+            <label for="per_page">Hiển thị:</label>
             <select name="per_page" id="per_page" class="filter-select" onchange="this.form.submit()">
                 <option value="25" <?= $perPage === 25 ? 'selected' : '' ?>>25 bài / trang</option>
                 <option value="30" <?= $perPage === 30 ? 'selected' : '' ?>>30 bài / trang</option>
@@ -222,7 +221,7 @@ $pageTitle = 'Quản lý kinh nghiệm hay - Cookio Admin';
 
         <button type="submit" class="btn-filter">Lọc bài viết</button>
         <?php if ($search !== '' || $statusFilter !== 'all' || $perPage !== 25): ?>
-            <a href="<?= BASE_URL ?>/admin/manage-tips.php" class="btn-reset">✕ Bỏ lọc</a>
+            <a href="<?= BASE_URL ?>/admin/manage-tips.php" class="btn-reset">Bỏ lọc</a>
         <?php endif; ?>
     </form>
 
@@ -246,8 +245,7 @@ $pageTitle = 'Quản lý kinh nghiệm hay - Cookio Admin';
                         <td><strong>#<?= (int) $tip['id'] ?></strong></td>
                         <td>
                             <strong style="color: #1e293b; font-size: 0.95rem; display: block; margin-bottom: 0.2rem;"><?= e($tip['title']) ?></strong>
-                            <a href="<?= BASE_URL ?>/views/kitchen-tips.php?tip=<?= (int)$tip['id'] ?>" target="_blank" style="font-size: 0.78rem; color: #ea580c; text-decoration: none; font-weight: 600;">
-                                Xem bài viết &rarr;
+                            <a href="<?= BASE_URL ?>/views/kitchen-tips.php?tip=<?= (int)$tip['id'] ?>" target="_blank" style="font-size: 0.78rem; color: #ea580c; text-decoration: none; font-weight: 600;">Xem bài viết &rarr;
                             </a>
                         </td>
                         <td>
@@ -304,8 +302,7 @@ $pageTitle = 'Quản lý kinh nghiệm hay - Cookio Admin';
                 <?php endforeach; ?>
                 <?php if (!$tips): ?>
                     <tr>
-                        <td colspan="7" style="text-align: center; padding: 2.5rem; color: #64748b;">
-                            Không tìm thấy bài viết kinh nghiệm nào phù hợp với bộ lọc hiện tại.
+                        <td colspan="7" style="text-align: center; padding: 2.5rem; color: #64748b;">Không tìm thấy bài viết kinh nghiệm nào phù hợp với bộ lọc hiện tại.
                         </td>
                     </tr>
                 <?php endif; ?>
@@ -314,7 +311,7 @@ $pageTitle = 'Quản lý kinh nghiệm hay - Cookio Admin';
         </div>
 
         <!-- PHÂN TRANG -->
-        <?php if ($totalTips > 0): ?>
+        <?php if ($totalTips >0): ?>
             <?php
             $paginationParams = [
                 'q' => $search,
@@ -334,24 +331,23 @@ $pageTitle = 'Quản lý kinh nghiệm hay - Cookio Admin';
             ?>
             <div class="pagination-bar">
                 <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-                    <div style="font-size: 0.85rem; color: #64748b;">
-                        Đang hiển thị trang <strong><?= $page ?></strong> trên tổng số <strong><?= $totalPages ?></strong> trang (<?= number_format($totalTips) ?> bài viết)
+                    <div style="font-size: 0.85rem; color: #64748b;">Đang hiển thị trang <strong><?= $page ?></strong>trên tổng số <strong><?= $totalPages ?></strong>trang (<?= number_format($totalTips) ?>bài viết)
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; color: #475569;">
                         <label for="bottom_per_page" style="font-weight: 600;">Hiển thị:</label>
                         <select id="bottom_per_page" class="filter-select" style="padding: 0.2rem 0.5rem; font-size: 0.82rem; height: auto;" onchange="window.location.href = this.value;">
                             <?php foreach ($allowedPerPage as $opt): ?>
                                 <option value="<?= $buildPageUrl(1, $opt) ?>" <?= $perPage === $opt ? 'selected' : '' ?>>
-                                    <?= $opt ?> bài / trang
+                                    <?= $opt ?>bài / trang
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                 </div>
 
-                <?php if ($totalPages > 1): ?>
+                <?php if ($totalPages >1): ?>
                 <div class="pagination-links">
-                    <?php if ($page > 1): ?>
+                    <?php if ($page >1): ?>
                         <a href="<?= $buildPageUrl(1) ?>" class="page-link" title="Trang đầu">&laquo; Đầu</a>
                         <a href="<?= $buildPageUrl($page - 1) ?>" class="page-link" title="Trang trước">&lsaquo; Trước</a>
                     <?php endif; ?>

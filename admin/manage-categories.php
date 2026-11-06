@@ -291,16 +291,13 @@ $totalCategories = count($categories);
     <!-- Top Header -->
     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
         <div>
-            <h1 style="margin: 0; font-size: 1.65rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
-                Quản lý danh mục món ăn
+            <h1 style="margin: 0; font-size: 1.65rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">Quản lý danh mục món ăn
             </h1>
-            <p style="margin: 0.35rem 0 0; color: #64748b; font-size: 0.92rem;">
-                Quản lý, điều chỉnh tên, biểu tượng và kéo thả thứ tự hiển thị danh mục trên toàn hệ thống Cookio (Tổng cộng <?= $totalCategories ?> danh mục).
+            <p style="margin: 0.35rem 0 0; color: #64748b; font-size: 0.92rem;">Quản lý, điều chỉnh tên, biểu tượng và kéo thả thứ tự hiển thị danh mục trên toàn hệ thống Cookio (Tổng cộng <?= $totalCategories ?>danh mục).
             </p>
         </div>
         <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
-            <a href="<?= BASE_URL ?>/index.php" target="_blank" class="button button-outline" style="font-size: 0.85rem; padding: 0.45rem 0.95rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">
-                Xem trên web
+            <a href="<?= BASE_URL ?>/index.php" target="_blank" class="button button-outline" style="font-size: 0.85rem; padding: 0.45rem 0.95rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">Xem trên web
             </a>
             <!-- Nút nhỏ Chỉnh sửa bảng ở góc trên bên phải -->
             <button type="button" id="btnToggleEdit" class="btn-edit-table" onclick="toggleEditMode(true)" title="Chỉnh sửa icon, tên và kéo thả sắp xếp danh mục">
@@ -317,10 +314,10 @@ $totalCategories = count($categories);
     <?php if (isset($_GET['success'])): ?>
         <div class="notice success" style="margin-bottom: 1.5rem;">
             <?= match ($_GET['success']) {
-                'categories-saved' => '🎉 Đã lưu thay đổi thông tin và thứ tự bảng danh mục thành công!',
-                'category-added' => '🎉 Đã thêm danh mục mới thành công!',
-                'category-updated' => '🎉 Đã cập nhật danh mục thành công!',
-                'category-deleted' => '🗑️ Đã xóa danh mục và toàn bộ dữ liệu công thức liên quan thành công!',
+                'categories-saved' => ' Đã lưu thay đổi thông tin và thứ tự bảng danh mục thành công!',
+                'category-added' => ' Đã thêm danh mục mới thành công!',
+                'category-updated' => ' Đã cập nhật danh mục thành công!',
+                'category-deleted' => ' Đã xóa danh mục và toàn bộ dữ liệu công thức liên quan thành công!',
                 default => 'Thao tác hoàn tất thành công.',
             } ?>
         </div>
@@ -329,10 +326,10 @@ $totalCategories = count($categories);
     <?php if (isset($_GET['error'])): ?>
         <div class="notice error" style="margin-bottom: 1.5rem;">
             <?= match ($_GET['error']) {
-                'missing-fields' => '⚠️ Vui lòng nhập đầy đủ tên danh mục.',
-                'duplicate' => '⚠️ Tên danh mục đã tồn tại trong hệ thống. Vui lòng chọn tên khác.',
-                'not-found' => '⚠️ Danh mục không tồn tại.',
-                'save-failed' => '⚠️ Đã có lỗi xảy ra trong quá trình lưu dữ liệu. Vui lòng thử lại.',
+                'missing-fields' => ' Vui lòng nhập đầy đủ tên danh mục.',
+                'duplicate' => ' Tên danh mục đã tồn tại trong hệ thống. Vui lòng chọn tên khác.',
+                'not-found' => ' Danh mục không tồn tại.',
+                'save-failed' => ' Đã có lỗi xảy ra trong quá trình lưu dữ liệu. Vui lòng thử lại.',
                 default => 'Đã có lỗi xảy ra. Vui lòng thử lại.',
             } ?>
         </div>
@@ -343,23 +340,19 @@ $totalCategories = count($categories);
         <!-- Edit Mode Toolbar (Hiển thị khi bật Chỉnh sửa bảng) -->
         <div id="editModeToolbar" class="edit-mode-bar">
             <div style="display: flex; align-items: center; gap: 0.65rem;">
-                <span style="font-size: 1.1rem;">✏️</span>
+                <span style="font-size: 1.1rem;"></span>
                 <div>
                     <strong style="color: #9a3412; font-size: 0.92rem;">Đang trong chế độ Chỉnh sửa bảng:</strong>
-                    <span style="color: #64748b; font-size: 0.85rem; margin-left: 0.35rem;">
-                        Kéo thả biểu tượng <strong>☰</strong> để xếp lại thứ tự • Nhập tên hoặc icon để cập nhật • Thêm danh mục mới sẽ tự nhảy số STT tiếp theo.
+                    <span style="color: #64748b; font-size: 0.85rem; margin-left: 0.35rem;">Kéo thả biểu tượng <strong></strong>để xếp lại thứ tự • Nhập tên hoặc icon để cập nhật • Thêm danh mục mới sẽ tự nhảy số STT tiếp theo.
                     </span>
                 </div>
             </div>
             <div style="display: flex; align-items: center; gap: 0.65rem;">
-                <button type="button" class="btn-add-row" onclick="addNewCategoryRow()">
-                    <span>➕</span> Thêm danh mục mới
+                <button type="button" class="btn-add-row" onclick="addNewCategoryRow()">Thêm danh mục mới
                 </button>
-                <button type="button" class="btn-save-table" onclick="saveCategoriesChanges()">
-                    <span>💾</span> Lưu thay đổi
+                <button type="button" class="btn-save-table" onclick="saveCategoriesChanges()">Lưu thay đổi
                 </button>
-                <button type="button" class="btn-cancel-table" onclick="toggleEditMode(false)">
-                    <span>✕</span> Hủy
+                <button type="button" class="btn-cancel-table" onclick="toggleEditMode(false)">Hủy
                 </button>
             </div>
         </div>
@@ -379,8 +372,7 @@ $totalCategories = count($categories);
                 <tbody id="categoriesTableBody">
                     <?php if (empty($categories)): ?>
                         <tr id="emptyRow">
-                            <td colspan="6" style="text-align: center; padding: 2.5rem; color: #94a3b8;">
-                                Chưa có danh mục nào. Hãy bấm "Chỉnh sửa bảng" để tạo danh mục đầu tiên!
+                            <td colspan="6" style="text-align: center; padding: 2.5rem; color: #94a3b8;">Chưa có danh mục nào. Hãy bấm "Chỉnh sửa bảng" để tạo danh mục đầu tiên!
                             </td>
                         </tr>
                     <?php else: ?>
@@ -388,7 +380,7 @@ $totalCategories = count($categories);
                             <tr class="cat-row" data-id="<?= (int)$c['id'] ?>" data-name="<?= e($c['name']) ?>" data-count="<?= (int)$c['recipe_count'] ?>" draggable="false">
                                 <!-- Drag Handle Cell (Chỉ hiển thị khi Chỉnh sửa) -->
                                 <td style="text-align: center; width: 45px; display: none;" class="col-drag">
-                                    <span class="drag-handle" title="Kéo thả để sắp xếp thứ tự">☰</span>
+                                    <span class="drag-handle" title="Kéo thả để sắp xếp thứ tự"></span>
                                 </td>
                                 
                                 <!-- STT -->
@@ -398,8 +390,8 @@ $totalCategories = count($categories);
 
                                 <!-- Icon -->
                                 <td style="text-align: center;" class="col-icon">
-                                    <span class="view-icon" style="font-size: 1.45rem;"><?= e($c['icon'] ?: '🍳') ?></span>
-                                    <input type="text" class="cat-edit-icon edit-icon" value="<?= e($c['icon'] ?: '🍳') ?>" style="display: none;" title="Nhập icon emoji">
+                                    <span class="view-icon" style="font-size: 1.45rem;"><?= e($c['icon'] ?: '') ?></span>
+                                    <input type="text" class="cat-edit-icon edit-icon" value="<?= e($c['icon'] ?: '') ?>" style="display: none;" title="Nhập icon emoji">
                                 </td>
 
                                 <!-- Tên danh mục -->
@@ -413,9 +405,9 @@ $totalCategories = count($categories);
                                 <!-- Món ăn (Khớp chính xác số lượng công thức thực tế) -->
                                 <td style="text-align: center;" class="col-count">
                                     <a href="<?= BASE_URL ?>/index.php?cat=<?= urlencode($c['name']) ?>" target="_blank" 
-                                       class="cat-badge-count <?= (int)$c['recipe_count'] > 0 ? 'has-recipes' : '' ?>" 
+                                       class="cat-badge-count <?= (int)$c['recipe_count'] >0 ? 'has-recipes' : '' ?>" 
                                        title="Bấm để xem danh sách món ăn thuộc danh mục này trên web">
-                                        <?= number_format((int)$c['recipe_count']) ?> món
+                                        <?= number_format((int)$c['recipe_count']) ?>món
                                     </a>
                                 </td>
 
@@ -443,7 +435,7 @@ $totalCategories = count($categories);
     <div class="cookio-modal-dialog">
         <div style="display: flex; align-items: center; gap: 0.65rem; margin-bottom: 1rem;">
             <div style="width: 40px; height: 40px; border-radius: 50%; background: #fee2e2; color: #dc2626; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-                ⚠️
+                
             </div>
             <div>
                 <h3 style="margin: 0; font-size: 1.2rem; font-weight: 800; color: #1e293b;">Xác nhận xóa danh mục</h3>
@@ -451,15 +443,13 @@ $totalCategories = count($categories);
             </div>
         </div>
 
-        <p style="color: #334155; font-size: 0.95rem; line-height: 1.5; margin: 0 0 1rem;">
-            Bạn có chắc chắn muốn xóa danh mục <strong id="modalCatName" style="color: #ea580c;"></strong> không?
+        <p style="color: #334155; font-size: 0.95rem; line-height: 1.5; margin: 0 0 1rem;">Bạn có chắc chắn muốn xóa danh mục <strong id="modalCatName" style="color: #ea580c;"></strong>không?
         </p>
 
         <div style="background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 10px; padding: 1rem; margin-bottom: 1.5rem; color: #991b1b; font-size: 0.88rem; line-height: 1.5;">
             <div style="font-weight: 800; display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.35rem; color: #b91c1c;">
-                <span>🚨 CẢNH BÁO QUAN TRỌNG:</span>
-            </div>
-            Nếu xóa danh mục này, <strong id="modalCatCount">0</strong> công thức nấu ăn có trong danh mục cùng toàn bộ dữ liệu bình luận, yêu thích và đánh giá sẽ bị <strong>XÓA HOÀN TOÀN</strong> khỏi hệ thống và không thể khôi phục!
+                <span>CẢNH BÁO QUAN TRỌNG:</span>
+            </div>Nếu xóa danh mục này, <strong id="modalCatCount">0</strong>công thức nấu ăn có trong danh mục cùng toàn bộ dữ liệu bình luận, yêu thích và đánh giá sẽ bị <strong>XÓA HOÀN TOÀN</strong>khỏi hệ thống và không thể khôi phục!
         </div>
 
         <form id="deleteCatForm" method="post" action="<?= BASE_URL ?>/actions/admin_action.php" style="display: flex; justify-content: flex-end; gap: 0.75rem;">
@@ -468,18 +458,15 @@ $totalCategories = count($categories);
             <input type="hidden" name="category_id" id="modalCatId" value="">
             <input type="hidden" name="return_url" value="admin/manage-categories.php">
 
-            <button type="button" onclick="closeDeleteModal()" style="padding: 0.55rem 1.15rem; background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 700; font-size: 0.88rem; color: #475569; cursor: pointer;">
-                Hủy bỏ
+            <button type="button" onclick="closeDeleteModal()" style="padding: 0.55rem 1.15rem; background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 700; font-size: 0.88rem; color: #475569; cursor: pointer;">Hủy bỏ
             </button>
-            <button type="submit" style="padding: 0.55rem 1.25rem; background: #dc2626; border: 1.5px solid #dc2626; border-radius: 8px; font-weight: 700; font-size: 0.88rem; color: #ffffff; cursor: pointer; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);">
-                Xác nhận xóa vĩnh viễn
+            <button type="submit" style="padding: 0.55rem 1.25rem; background: #dc2626; border: 1.5px solid #dc2626; border-radius: 8px; font-weight: 700; font-size: 0.88rem; color: #ffffff; cursor: pointer; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);">Xác nhận xóa vĩnh viễn
             </button>
         </form>
     </div>
 </div>
 
-<script>
-let isEditMode = false;
+<script>let isEditMode = false;
 let draggedRow = null;
 
 // Bật / Tắt chế độ Chỉnh sửa bảng
@@ -497,11 +484,11 @@ function toggleEditMode(enable) {
     if (enable) {
         toolbar.style.display = 'flex';
         btnToggle.style.display = 'none';
-        dragCols.forEach(col => col.style.display = 'table-cell');
-        viewIcons.forEach(i => i.style.display = 'none');
-        editIcons.forEach(i => i.style.display = 'inline-block');
-        viewNames.forEach(n => n.style.display = 'none');
-        editNames.forEach(n => n.style.display = 'block');
+        dragCols.forEach(col =>col.style.display = 'table-cell');
+        viewIcons.forEach(i =>i.style.display = 'none');
+        editIcons.forEach(i =>i.style.display = 'inline-block');
+        viewNames.forEach(n =>n.style.display = 'none');
+        editNames.forEach(n =>n.style.display = 'block');
 
         // Bật tính năng kéo thả trên các hàng
         rows.forEach(row => {
@@ -530,13 +517,13 @@ function addNewCategoryRow() {
 
     tr.innerHTML = `
         <td style="text-align: center; width: 45px; display: table-cell;" class="col-drag">
-            <span class="drag-handle" title="Kéo thả để sắp xếp thứ tự">☰</span>
+            <span class="drag-handle" title="Kéo thả để sắp xếp thứ tự"></span>
         </td>
         <td style="text-align: center; font-weight: 700; color: #ea580c;" class="col-stt">
             ${nextStt}
         </td>
         <td style="text-align: center;" class="col-icon">
-            <input type="text" class="cat-edit-icon edit-icon" value="🍽️" style="display: inline-block;" title="Nhập icon emoji">
+            <input type="text" class="cat-edit-icon edit-icon" value="" style="display: inline-block;" title="Nhập icon emoji">
         </td>
         <td class="col-name">
             <input type="text" class="cat-edit-input edit-name" value="" required style="display: block;" placeholder="Nhập tên danh mục mới (Ví dụ: Món ăn dịp đặc biệt)...">
@@ -655,7 +642,7 @@ function saveCategoriesChanges() {
         const nameInput = row.querySelector('.edit-name');
 
         const name = nameInput ? nameInput.value.trim() : '';
-        const icon = iconInput ? iconInput.value.trim() : '🍽️';
+        const icon = iconInput ? iconInput.value.trim() : '';
 
         if (!name) {
             alert(`Hàng thứ ${i + 1} chưa có tên danh mục. Vui lòng nhập đầy đủ tên!`);
@@ -666,7 +653,7 @@ function saveCategoriesChanges() {
         categoriesData.push({
             id: idVal,
             name: name,
-            icon: icon || '🍽️'
+            icon: icon || ''
         });
     }
 

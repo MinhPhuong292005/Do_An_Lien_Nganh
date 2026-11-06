@@ -80,7 +80,7 @@ if ($recipe) {
     $ratingData = db()->query(
         "SELECT AVG(rating) as avg_rating, COUNT(*) as count FROM comments WHERE recipe_id = " . (int) $recipe['id']
     )->fetch();
-    if ($ratingData && (int) $ratingData['count'] > 0) {
+    if ($ratingData && (int) $ratingData['count'] >0) {
         $avgRating = round((float) $ratingData['avg_rating'], 1);
         $ratingCount = (int) $ratingData['count'];
     }
@@ -154,7 +154,7 @@ require __DIR__ . '/../includes/header.php';
 
         <?php if (isset($_GET['bookmark'])): ?>
             <p class="notice success">
-                <?= $_GET['bookmark'] === 'saved' ? '❤️ Đã lưu công thức vào bộ sưu tập của bạn!' : 'Đã xóa món khỏi danh sách lưu.' ?>
+                <?= $_GET['bookmark'] === 'saved' ? ' Đã lưu công thức vào bộ sưu tập của bạn!' : 'Đã xóa món khỏi danh sách lưu.' ?>
             </p>
         <?php endif; ?>
 
@@ -191,7 +191,7 @@ require __DIR__ . '/../includes/header.php';
                                     </span>
                                 <?php endif; ?>
                             </div>
-                            <span>Chia sẻ ngày <?= date('d/m/Y', strtotime((string) $recipe['created_at'])) ?> &bull; <?= $followerCount ?> người theo dõi</span>
+                            <span>Chia sẻ ngày <?= date('d/m/Y', strtotime((string) $recipe['created_at'])) ?> &bull; <?= $followerCount ?>người theo dõi</span>
                         </div>
                     </a>
 
@@ -201,7 +201,7 @@ require __DIR__ . '/../includes/header.php';
                             <input type="hidden" name="author_id" value="<?= (int) $recipe['author_id'] ?>">
                             <input type="hidden" name="return_url" value="views/recipe-detail.php?id=<?= (int) $recipe['id'] ?>">
                             <button type="submit" class="button <?= $isFollowing ? 'button-saved' : 'button-outline' ?>" style="padding: 0.35rem 0.85rem; font-size: 0.82rem; border-radius: 99px;">
-                                <?= $isFollowing ? '✓ Đang theo dõi' : '+ Theo dõi' ?>
+                                <?= $isFollowing ? ' Đang theo dõi' : '+ Theo dõi' ?>
                             </button>
                         </form>
                     <?php endif; ?>
@@ -210,12 +210,12 @@ require __DIR__ . '/../includes/header.php';
                 <div class="recipe-actions-bar" style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
                     <!-- Cookpad Cooking Mode button -->
                     <button type="button" class="button button-create" id="btnOpenCookingMode" style="padding: 0.55rem 1.1rem; display: flex; align-items: center; gap: 0.4rem; font-weight: 700;">
-                        👩‍🍳 Bắt đầu nấu
+                        ‍ Bắt đầu nấu
                     </button>
 
                     <!-- Like button (AJAX 1-Click) -->
                     <button type="button" class="js-like-btn <?= $isLiked ? 'is-liked' : '' ?>" data-recipe-id="<?= (int) $recipe['id'] ?>" style="padding: 0.55rem 0.95rem;">
-                        <span>❤️</span> <span class="like-count"><?= (int)($recipe['likes_count'] ?? 0) ?></span> Thả tim
+                        <span class="like-count"><?= (int)($recipe['likes_count'] ?? 0) ?></span>Thả tim
                     </button>
 
                     <?php if (is_logged_in()): ?>
@@ -224,25 +224,21 @@ require __DIR__ . '/../includes/header.php';
                             <input type="hidden" name="recipe_id" value="<?= (int) $recipe['id'] ?>">
                             <input type="hidden" name="return_url" value="views/recipe-detail.php?id=<?= (int) $recipe['id'] ?>">
                             <button type="submit" class="button <?= $isSaved ? 'button-saved' : 'button-outline' ?>" style="padding: 0.55rem 1rem;">
-                                <?= $isSaved ? '🔖 Đã lưu' : '🔖 Lưu món' ?>
+                                <?= $isSaved ? ' Đã lưu' : ' Lưu món' ?>
                             </button>
                         </form>
                     <?php else: ?>
-                        <button type="button" class="button button-outline" data-open-login style="padding: 0.55rem 1rem;">
-                            🔖 Lưu món
+                        <button type="button" class="button button-outline" data-open-login style="padding: 0.55rem 1rem;">Lưu món
                         </button>
                     <?php endif; ?>
 
-                    <button type="button" class="button button-outline js-copy-ingredients" title="Sao chép danh sách nguyên liệu" style="padding: 0.55rem 0.85rem;">
-                        📋 Đi chợ
+                    <button type="button" class="button button-outline js-copy-ingredients" title="Sao chép danh sách nguyên liệu" style="padding: 0.55rem 0.85rem;">Đi chợ
                     </button>
 
-                    <button type="button" class="button button-outline js-share-recipe" title="Sao chép liên kết món ăn" style="padding: 0.55rem 0.85rem;">
-                        🔗 Chia sẻ
+                    <button type="button" class="button button-outline js-share-recipe" title="Sao chép liên kết món ăn" style="padding: 0.55rem 0.85rem;">Chia sẻ
                     </button>
 
-                    <button type="button" class="button button-outline" onclick="window.print()" title="In công thức này" style="padding: 0.55rem 0.85rem;">
-                        🖨️ In
+                    <button type="button" class="button button-outline" onclick="window.print()" title="In công thức này" style="padding: 0.55rem 0.85rem;">In
                     </button>
                 </div>
             </div>
@@ -263,15 +259,15 @@ require __DIR__ . '/../includes/header.php';
             <!-- Cooking Specs Grid -->
             <div class="cooking-specs-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
                 <div class="spec-box">
-                    <small>⏱️ Thời gian</small>
+                    <small>⏱ Thời gian</small>
                     <strong><?= e($recipe['cooking_time'] ?? '30 phút') ?></strong>
                 </div>
                 <div class="spec-box">
-                    <small>👥 Khẩu phần</small>
+                    <small>Khẩu phần</small>
                     <strong><?= e($recipe['servings'] ?? '2 - 4 người') ?></strong>
                 </div>
                 <div class="spec-box">
-                    <small>🏷️ Danh mục</small>
+                    <small>Danh mục</small>
                     <strong><?= e($recipe['category'] ?? 'Món chính') ?></strong>
                 </div>
                 <div class="spec-box">
@@ -279,7 +275,7 @@ require __DIR__ . '/../includes/header.php';
                     <strong><?= $avgRating ?>/5</strong> (<?= $ratingCount ?>)
                 </div>
                 <div class="spec-box">
-                    <small>💰 Chi phí ước tính</small>
+                    <small>Chi phí ước tính</small>
                     <?php
                     $detailEstCost = match($recipe['category'] ?? '') {
                         'Món kho' => '~45k - 70k',
@@ -293,7 +289,7 @@ require __DIR__ . '/../includes/header.php';
                     <strong><?= $detailEstCost ?></strong>
                 </div>
                 <div class="spec-box">
-                    <small>👁️ Lượt xem</small>
+                    <small>Lượt xem</small>
                     <strong><?= number_format((int) ($recipe['views_count'] ?? 0)) ?></strong>
                 </div>
             </div>
@@ -306,8 +302,7 @@ require __DIR__ . '/../includes/header.php';
         ?>
         <section class="ingredients-card">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; margin-bottom: 1rem;">
-                <h2 style="margin: 0; font-size: 1.25rem;">
-                    🛒 Nguyên liệu chuẩn bị
+                <h2 style="margin: 0; font-size: 1.25rem;">Nguyên liệu chuẩn bị
                 </h2>
 
                 <!-- Dynamic Servings Scaler -->
@@ -316,7 +311,7 @@ require __DIR__ . '/../includes/header.php';
                     <div style="display: flex; align-items: center; gap: 0.35rem; background: #fff7ed; border: 1.5px solid #fed7aa; border-radius: 99px; padding: 0.2rem 0.65rem;">
                         <button type="button" id="btnDecServing" style="border:none; background:transparent; font-size:1.15rem; font-weight:bold; cursor:pointer; padding:0 0.4rem; color:var(--primary); line-height:1;">−</button>
                         <strong id="servingsDisplay" data-base="<?= $baseServings ?>" style="color:var(--primary); font-size:0.92rem; min-width: 50px; text-align: center;">
-                            <?= $baseServings ?> người
+                            <?= $baseServings ?>người
                         </strong>
                         <button type="button" id="btnIncServing" style="border:none; background:transparent; font-size:1.15rem; font-weight:bold; cursor:pointer; padding:0 0.4rem; color:var(--primary); line-height:1;">+</button>
                     </div>
@@ -345,11 +340,9 @@ require __DIR__ . '/../includes/header.php';
             <section class="card mb-6" style="padding: 1.5rem; background: #ffffff; border-radius: 1rem; border: 1.5px solid #fed7aa;">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
                     <div style="flex: 1; min-width: 260px;">
-                        <h3 style="font-size: 1.25rem; font-weight: 800; margin: 0 0 0.5rem 0; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
-                            🥗 Bảng Giá Trị Dinh Dưỡng <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">(Ước tính / 1 người)</span>
+                        <h3 style="font-size: 1.25rem; font-weight: 800; margin: 0 0 0.5rem 0; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">Bảng Giá Trị Dinh Dưỡng <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">(Ước tính / 1 người)</span>
                         </h3>
-                        <p style="font-size: 0.88rem; color: #64748b; margin: 0 0 1rem 0; line-height: 1.5;">
-                            Thông tin dinh dưỡng tiêu chuẩn giúp bạn tính toán macro, calo nạp vào cơ thể và duy trì lối sống lành mạnh.
+                        <p style="font-size: 0.88rem; color: #64748b; margin: 0 0 1rem 0; line-height: 1.5;">Thông tin dinh dưỡng tiêu chuẩn giúp bạn tính toán macro, calo nạp vào cơ thể và duy trì lối sống lành mạnh.
                         </p>
                         <?php if (!empty($recipe['dietary_tags'])): ?>
                             <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
@@ -357,7 +350,7 @@ require __DIR__ . '/../includes/header.php';
                                 $tags = array_map('trim', explode(',', (string) $recipe['dietary_tags']));
                                 foreach ($tags as $t):
                                 ?>
-                                    <span class="badge-diet-pill">🌿 <?= e($t) ?></span>
+                                    <span class="badge-diet-pill"> <?= e($t) ?></span>
                                 <?php endforeach; ?>
                             </div>
                         <?php endif; ?>
@@ -373,16 +366,16 @@ require __DIR__ . '/../includes/header.php';
                             <span class="nutrition-cal-val"><?= (int)$recipe['calories'] ?> <span style="font-size: 1rem; font-weight: normal; color: #64748b;">kcal</span></span>
                         </div>
                         <div class="nutrition-macro-row">
-                            <span class="nutrition-macro-label">🥩 Chất đạm (Protein)</span>
-                            <span class="nutrition-macro-val"><?= (int)($recipe['protein'] ?? 0) ?> g</span>
+                            <span class="nutrition-macro-label">Chất đạm (Protein)</span>
+                            <span class="nutrition-macro-val"><?= (int)($recipe['protein'] ?? 0) ?>g</span>
                         </div>
                         <div class="nutrition-macro-row">
-                            <span class="nutrition-macro-label">🌾 Tinh bột (Carbs)</span>
-                            <span class="nutrition-macro-val"><?= (int)($recipe['carbs'] ?? 0) ?> g</span>
+                            <span class="nutrition-macro-label">Tinh bột (Carbs)</span>
+                            <span class="nutrition-macro-val"><?= (int)($recipe['carbs'] ?? 0) ?>g</span>
                         </div>
                         <div class="nutrition-macro-row" style="border-bottom: 3px solid #0f172a;">
-                            <span class="nutrition-macro-label">🥑 Chất béo (Fat)</span>
-                            <span class="nutrition-macro-val"><?= (int)($recipe['fat'] ?? 0) ?> g</span>
+                            <span class="nutrition-macro-label">Chất béo (Fat)</span>
+                            <span class="nutrition-macro-val"><?= (int)($recipe['fat'] ?? 0) ?>g</span>
                         </div>
                     </div>
                 </div>
@@ -393,7 +386,7 @@ require __DIR__ . '/../includes/header.php';
         <section class="kitchen-timer-card mb-6" style="background: linear-gradient(135deg, #090d16 0%, #131b2e 100%); border: 2px solid #fdba74; border-radius: 1.25rem; padding: 1.5rem; color: #ffffff; box-shadow: 0 10px 25px rgba(0,0,0,0.25);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <span style="font-size: 1.6rem;">⏱️</span>
+                    <span style="font-size: 1.6rem;">⏱</span>
                     <div>
                         <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #ffffff;">Đồng Hồ Hẹn Giờ Nấu Ăn (Cookio Timer)</h3>
                         <p style="margin: 0; font-size: 0.8rem; color: #94a3b8;">Hẹn giờ rảnh tay khi luộc, kho, rán hoặc hầm canh</p>
@@ -408,19 +401,17 @@ require __DIR__ . '/../includes/header.php';
             </div>
 
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; background: rgba(0,0,0,0.3); padding: 1rem 1.5rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.1);">
-                <div id="kitchenTimerDisplay" style="font-family: monospace, system-ui; font-size: 2.8rem; font-weight: 900; color: #ff7a45; letter-spacing: 2px;">
-                    15:00
+                <div id="kitchenTimerDisplay" style="font-family: monospace, system-ui; font-size: 2.8rem; font-weight: 900; color: #ff7a45; letter-spacing: 2px;">15:00
                 </div>
 
                 <div style="display: flex; gap: 0.6rem; align-items: center;">
                     <button type="button" id="btnStartTimer" onclick="startCookingTimer()" class="button button-create" style="padding: 0.6rem 1.4rem; font-weight: 800; font-size: 0.95rem; border-radius: 9999px;">
-                        ▶️ Bắt đầu
+                        ▶ Bắt đầu
                     </button>
                     <button type="button" id="btnPauseTimer" onclick="pauseCookingTimer()" class="button button-outline" style="padding: 0.6rem 1rem; font-size: 0.9rem; border-radius: 9999px; background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.3); display: none;">
-                        ⏸️ Tạm dừng
+                        ⏸ Tạm dừng
                     </button>
-                    <button type="button" onclick="resetCookingTimer()" class="button button-outline" style="padding: 0.6rem 1rem; font-size: 0.9rem; border-radius: 9999px; background: rgba(255,255,255,0.1); color: #cbd5e1; border-color: rgba(255,255,255,0.2);">
-                        🔄 Đặt lại
+                    <button type="button" onclick="resetCookingTimer()" class="button button-outline" style="padding: 0.6rem 1rem; font-size: 0.9rem; border-radius: 9999px; background: rgba(255,255,255,0.1); color: #cbd5e1; border-color: rgba(255,255,255,0.2);">Đặt lại
                     </button>
                 </div>
             </div>
@@ -433,7 +424,7 @@ require __DIR__ . '/../includes/header.php';
         <section class="steps-card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
                 <h2 style="margin: 0; font-size: 1.25rem;">
-                    👩‍🍳 Các bước thực hiện (<?= count($instructionSteps) ?> bước)
+                    ‍ Các bước thực hiện (<?= count($instructionSteps) ?>bước)
                 </h2>
                 <small style="color: var(--text-muted); font-size: 0.82rem;">Tích vào bước đã hoàn thành để dễ theo dõi</small>
             </div>
@@ -454,8 +445,7 @@ require __DIR__ . '/../includes/header.php';
         <!-- Author Tips / Bí quyết nấu ngon -->
         <?php if (!empty($recipe['tips'])): ?>
             <section class="recipe-detail-hero-card" style="margin-bottom: 2rem; background: #fffaf0; border: 2px solid #fed7aa;">
-                <h2 style="font-size: 1.15rem; font-weight: 800; color: #ea580c; margin: 0 0 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-                    💡 Bí quyết nấu ngon từ tác giả
+                <h2 style="font-size: 1.15rem; font-weight: 800; color: #ea580c; margin: 0 0 0.75rem; display: flex; align-items: center; gap: 0.5rem;">Bí quyết nấu ngon từ tác giả
                 </h2>
                 <div style="font-size: 0.95rem; color: #4b5563; line-height: 1.65;">
                     <?= nl2br(e($recipe['tips'])) ?>
@@ -466,8 +456,8 @@ require __DIR__ . '/../includes/header.php';
         <!-- Community Reviews & Cooksnap Section -->
         <section class="reviews-card" id="comments">
             <h2>
-                <span>💬 Nhận xét & Đánh giá</span>
-                <span style="font-size: 1rem; font-weight: normal; color: #6b7280;">(<?= count($comments) ?> nhận xét)</span>
+                <span>Nhận xét & Đánh giá</span>
+                <span style="font-size: 1rem; font-weight: normal; color: #6b7280;">(<?= count($comments) ?>nhận xét)</span>
             </h2>
 
             <!-- Review Form -->
@@ -480,8 +470,7 @@ require __DIR__ . '/../includes/header.php';
                         <input type="hidden" name="return_url" value="views/recipe-detail.php?id=<?= (int) $recipe['id'] ?>">
 
                         <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-                            <label style="font-size: 0.95rem; font-weight: 700; margin: 0;">
-                                Chấm điểm món ăn:
+                            <label style="font-size: 0.95rem; font-weight: 700; margin: 0;">Chấm điểm món ăn:
                             </label>
                             <select name="rating" style="width: auto; padding: 0.5rem 1rem; border-radius: 9999px; border: 1.5px solid #fed7aa; font-weight: 700; color: #ea580c; background: #ffffff;">
                                 <option value="5" selected>⭐⭐⭐⭐⭐ Tuyệt hảo (5 sao)</option>
@@ -498,15 +487,13 @@ require __DIR__ . '/../includes/header.php';
 
                         <!-- Cooksnap Photo Attachment -->
                         <label style="margin-top: -0.25rem;">
-                            <span style="font-size: 0.88rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 0.35rem;">
-                                📸 Đính kèm ảnh Cooksnap (Ảnh thành phẩm bạn đã nấu - Tùy chọn):
+                            <span style="font-size: 0.88rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 0.35rem;">Đính kèm ảnh Cooksnap (Ảnh thành phẩm bạn đã nấu - Tùy chọn):
                             </span>
                             <input type="file" name="cooksnap_image" accept="image/jpeg,image/png,image/webp" style="padding: 0.4rem 0; font-size: 0.88rem;">
                             <small style="color: var(--text-muted); font-size: 0.78rem;">Định dạng: JPG, PNG, WEBP &bull; Tối đa 5MB</small>
                         </label>
 
-                        <button type="submit" class="button button-create" style="justify-self: start; margin-top: 0.5rem;">
-                            Gửi đánh giá & Cooksnap
+                        <button type="submit" class="button button-create" style="justify-self: start; margin-top: 0.5rem;">Gửi đánh giá & Cooksnap
                         </button>
                     </form>
                 </div>
@@ -531,7 +518,7 @@ require __DIR__ . '/../includes/header.php';
                                     <strong style="display: block; color: #1f2937; font-size: 0.95rem;">
                                         <?= e($comm['author_name']) ?>
                                         <?php if ((int)$comm['user_id'] === (int)$recipe['author_id']): ?>
-                                            <span class="author-tag-badge">👑 Tác giả</span>
+                                            <span class="author-tag-badge">Tác giả</span>
                                         <?php endif; ?>
                                     </strong>
                                     <div style="color: #f59e0b; font-size: 0.85rem;">
@@ -565,8 +552,7 @@ require __DIR__ . '/../includes/header.php';
                                     <img src="<?= BASE_URL . '/' . e($comm['image_url']) ?>" alt="Ảnh Cooksnap từ <?= e($comm['author_name']) ?>"
                                         style="max-width: 220px; max-height: 160px; object-fit: cover; border-radius: 0.6rem; border: 2px solid #fed7aa; display: block; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
                                 </a>
-                                <small style="display: block; font-size: 0.75rem; color: var(--primary); font-weight: 600; margin-top: 0.3rem;">
-                                    🍳 Cooksnap của <?= e($comm['author_name']) ?>
+                                <small style="display: block; font-size: 0.75rem; color: var(--primary); font-weight: 600; margin-top: 0.3rem;">Cooksnap của <?= e($comm['author_name']) ?>
                                 </small>
                             </div>
                         <?php endif; ?>
@@ -574,12 +560,10 @@ require __DIR__ . '/../includes/header.php';
                         <!-- Reply action button -->
                         <div>
                             <?php if (is_logged_in()): ?>
-                                <button type="button" class="btn-reply-comment" onclick="toggleReplyForm(<?= (int) $comm['id'] ?>)">
-                                    💬 Trả lời
+                                <button type="button" class="btn-reply-comment" onclick="toggleReplyForm(<?= (int) $comm['id'] ?>)">Trả lời
                                 </button>
                             <?php else: ?>
-                                <button type="button" class="btn-reply-comment" data-open-login>
-                                    💬 Trả lời
+                                <button type="button" class="btn-reply-comment" data-open-login>Trả lời
                                 </button>
                             <?php endif; ?>
                         </div>
@@ -612,7 +596,7 @@ require __DIR__ . '/../includes/header.php';
                                             <div style="display: flex; align-items: center; gap: 0.4rem;">
                                                 <strong style="font-size: 0.88rem; color: #1f2937;"><?= e($rep['author_name']) ?></strong>
                                                 <?php if ($isRepAuthor): ?>
-                                                    <span class="author-tag-badge">👑 Tác giả</span>
+                                                    <span class="author-tag-badge">Tác giả</span>
                                                 <?php endif; ?>
                                             </div>
                                             <div style="display: flex; align-items: center; gap: 0.5rem;">
@@ -639,8 +623,7 @@ require __DIR__ . '/../includes/header.php';
                 <?php endforeach; ?>
 
                 <?php if (empty($topLevelComments)): ?>
-                    <p style="text-align: center; color: #9ca3af; padding: 2rem 0; font-style: italic;">
-                        Chưa có nhận xét nào cho món này. Hãy là người đầu tiên nấu thử và chấm điểm nhé!
+                    <p style="text-align: center; color: #9ca3af; padding: 2rem 0; font-style: italic;">Chưa có nhận xét nào cho món này. Hãy là người đầu tiên nấu thử và chấm điểm nhé!
                     </p>
                 <?php endif; ?>
             </div>
@@ -650,11 +633,9 @@ require __DIR__ . '/../includes/header.php';
         <?php if (!empty($relatedRecipes)): ?>
             <section class="related-recipes-section mb-8" style="margin-top: 2rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-                    <h2 style="font-size: 1.35rem; font-weight: 800; margin: 0; color: #1e293b;">
-                        ✨ Có thể bạn cũng thích món này
+                    <h2 style="font-size: 1.35rem; font-weight: 800; margin: 0; color: #1e293b;">Có thể bạn cũng thích món này
                     </h2>
-                    <a href="<?= BASE_URL ?>/index.php?cat=<?= urlencode($recipe['category']) ?>" style="font-size: 0.9rem; color: var(--primary); font-weight: 600; text-decoration: none;">
-                        Xem thêm món <?= e($recipe['category']) ?> &rarr;
+                    <a href="<?= BASE_URL ?>/index.php?cat=<?= urlencode($recipe['category']) ?>" style="font-size: 0.9rem; color: var(--primary); font-weight: 600; text-decoration: none;">Xem thêm món <?= e($recipe['category']) ?> &rarr;
                     </a>
                 </div>
                 <div class="recipe-grid">
@@ -669,12 +650,12 @@ require __DIR__ . '/../includes/header.php';
                                 </a>
                                 <span class="card-category-badge"><?= e($rel['category']) ?></span>
                                 <?php if (!empty($rel['calories'])): ?>
-                                    <span class="badge-cal-pill" style="position:absolute; bottom:0.65rem; left:0.65rem; z-index:2;">🔥 <?= (int)$rel['calories'] ?> kcal</span>
+                                    <span class="badge-cal-pill" style="position:absolute; bottom:0.65rem; left:0.65rem; z-index:2;"> <?= (int)$rel['calories'] ?>kcal</span>
                                 <?php endif; ?>
                             </div>
                             <div class="recipe-card-body">
                                 <div class="card-meta-row">
-                                    <span>⏱️ <?= e($rel['cooking_time']) ?></span>
+                                    <span>⏱ <?= e($rel['cooking_time']) ?></span>
                                     <span>⭐ <?= round((float)($rel['avg_rating'] ?? 5), 1) ?> (<?= (int)$rel['review_count'] ?>)</span>
                                 </div>
                                 <h3>
@@ -703,8 +684,7 @@ require __DIR__ . '/../includes/header.php';
         <!-- Header -->
         <div style="padding:1.25rem 1.75rem; background:#fff7ed; border-bottom:1.5px solid #fed7aa; display:flex; align-items:center; justify-content:space-between;">
             <div>
-                <span style="font-size:0.8rem; font-weight:800; color:var(--primary); text-transform:uppercase; letter-spacing:0.05em; display:block;">
-                    🍳 Chế độ nấu bếp rảnh tay
+                <span style="font-size:0.8rem; font-weight:800; color:var(--primary); text-transform:uppercase; letter-spacing:0.05em; display:block;">Chế độ nấu bếp rảnh tay
                 </span>
                 <h3 style="margin:0.2rem 0 0; font-size:1.15rem; color:var(--text-main); font-weight:800;" id="cmRecipeTitle">
                     <?= e($recipe['title'] ?? '') ?>
@@ -719,11 +699,9 @@ require __DIR__ . '/../includes/header.php';
         <div style="padding:2rem 2.25rem; flex:1; overflow-y:auto;">
             <!-- Step Badge & Counter -->
             <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem;">
-                <span id="cmStepBadge" style="background:var(--primary); color:#ffffff; font-weight:800; padding:0.3rem 0.9rem; border-radius:99px; font-size:0.95rem;">
-                    Bước 1
+                <span id="cmStepBadge" style="background:var(--primary); color:#ffffff; font-weight:800; padding:0.3rem 0.9rem; border-radius:99px; font-size:0.95rem;">Bước 1
                 </span>
-                <span id="cmStepProgress" style="font-size:0.9rem; color:var(--text-muted); font-weight:600;">
-                    1 / <?= count($instructionSteps) ?>
+                <span id="cmStepProgress" style="font-size:0.9rem; color:var(--text-muted); font-weight:600;">1 / <?= count($instructionSteps) ?>
                 </span>
             </div>
 
@@ -736,7 +714,7 @@ require __DIR__ . '/../includes/header.php';
             <div style="margin-top:1.5rem; background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:1rem; padding:1.25rem;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap; gap:0.5rem;">
                     <strong style="font-size:0.95rem; color:#334155; display:flex; align-items:center; gap:0.4rem;">
-                        ⏱️ Hẹn giờ nấu ăn
+                        ⏱ Hẹn giờ nấu ăn
                     </strong>
                     <!-- Preset chips -->
                     <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
@@ -749,18 +727,16 @@ require __DIR__ . '/../includes/header.php';
                 </div>
 
                 <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
-                    <div id="cmTimerDisplay" style="font-size:2.4rem; font-weight:800; font-family:monospace; color:#ea580c; letter-spacing:0.05em;">
-                        05:00
+                    <div id="cmTimerDisplay" style="font-size:2.4rem; font-weight:800; font-family:monospace; color:#ea580c; letter-spacing:0.05em;">05:00
                     </div>
                     <div style="display:flex; gap:0.5rem;">
                         <button type="button" id="btnTimerStart" style="padding:0.6rem 1.25rem; background:var(--primary); color:#fff; border:none; border-radius:0.5rem; font-weight:700; cursor:pointer;">
-                            ▶️ Bắt đầu
+                            ▶ Bắt đầu
                         </button>
                         <button type="button" id="btnTimerPause" style="padding:0.6rem 1rem; background:#e2e8f0; color:#334155; border:none; border-radius:0.5rem; font-weight:700; cursor:pointer;">
-                            ⏸️ Dừng
+                            ⏸ Dừng
                         </button>
-                        <button type="button" id="btnTimerReset" style="padding:0.6rem 1rem; background:#fee2e2; color:#dc2626; border:none; border-radius:0.5rem; font-weight:700; cursor:pointer;">
-                            🔄 Đặt lại
+                        <button type="button" id="btnTimerReset" style="padding:0.6rem 1rem; background:#fee2e2; color:#dc2626; border:none; border-radius:0.5rem; font-weight:700; cursor:pointer;">Đặt lại
                         </button>
                     </div>
                 </div>
@@ -772,15 +748,13 @@ require __DIR__ . '/../includes/header.php';
             <button type="button" id="cmPrevStep" style="padding:0.85rem 1.75rem; border:2px solid #cbd5e1; border-radius:0.75rem; background:#fff; font-size:1.05rem; font-weight:700; color:#475569; cursor:pointer;">
                 &larr; Bước trước
             </button>
-            <button type="button" id="cmNextStep" style="padding:0.85rem 2rem; border:none; border-radius:0.75rem; background:var(--primary); font-size:1.05rem; font-weight:700; color:#ffffff; cursor:pointer; box-shadow:0 4px 12px rgba(234,88,12,0.3);">
-                Bước tiếp theo &rarr;
+            <button type="button" id="cmNextStep" style="padding:0.85rem 2rem; border:none; border-radius:0.75rem; background:var(--primary); font-size:1.05rem; font-weight:700; color:#ffffff; cursor:pointer; box-shadow:0 4px 12px rgba(234,88,12,0.3);">Bước tiếp theo &rarr;
             </button>
         </div>
     </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
+<script>document.addEventListener('DOMContentLoaded', () => {
     // 1. Dynamic Servings Scaler
     const servingsDisplay = document.querySelector('#servingsDisplay');
     const btnInc = document.querySelector('#btnIncServing');
@@ -791,7 +765,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let currentServings = baseServings;
 
         const updateServings = (newServings) => {
-            if (newServings < 1 || newServings > 20) return;
+            if (newServings < 1 || newServings >20) return;
             currentServings = newServings;
             servingsDisplay.textContent = currentServings + ' người';
 
@@ -812,8 +786,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
-        btnInc.addEventListener('click', () => updateServings(currentServings + 1));
-        btnDec.addEventListener('click', () => updateServings(currentServings - 1));
+        btnInc.addEventListener('click', () =>updateServings(currentServings + 1));
+        btnDec.addEventListener('click', () =>updateServings(currentServings - 1));
     }
 
     // 2. Step Completion Checkboxes
@@ -825,7 +799,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.target.checked) {
                 row.style.opacity = '0.55';
                 badge.style.background = '#16a34a';
-                badge.textContent = '✓';
+                badge.textContent = '';
             } else {
                 row.style.opacity = '1';
                 badge.style.background = 'var(--primary)';
@@ -858,7 +832,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cmPrevStep.style.opacity = currentStepIdx === 0 ? '0.4' : '1';
 
         if (currentStepIdx === stepsData.length - 1) {
-            cmNextStep.textContent = '🎉 Hoàn tất nấu ăn!';
+            cmNextStep.textContent = ' Hoàn tất nấu ăn!';
             cmNextStep.style.background = '#16a34a';
         } else {
             cmNextStep.textContent = 'Bước tiếp theo →';
@@ -880,7 +854,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (cmPrevStep) {
-        cmPrevStep.addEventListener('click', () => renderCookingStep(currentStepIdx - 1));
+        cmPrevStep.addEventListener('click', () =>renderCookingStep(currentStepIdx - 1));
     }
 
     if (cmNextStep) {
@@ -929,14 +903,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function startTimer() {
         if (timerInterval) return;
         timerInterval = setInterval(() => {
-            if (timerRemainingSeconds > 0) {
+            if (timerRemainingSeconds >0) {
                 timerRemainingSeconds--;
                 timerDisplay.textContent = formatTime(timerRemainingSeconds);
             } else {
                 clearInterval(timerInterval);
                 timerInterval = null;
                 playBeep();
-                if (window.showToast) window.showToast('🔔 Hết thời gian nấu ăn!', 'info');
+                if (window.showToast) window.showToast(' Hết thời gian nấu ăn!', 'info');
                 timerDisplay.style.color = '#16a34a';
             }
         }, 1000);
@@ -964,7 +938,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnTStart?.addEventListener('click', startTimer);
     btnTPause?.addEventListener('click', pauseTimer);
-    btnTReset?.addEventListener('click', () => resetTimer());
+    btnTReset?.addEventListener('click', () =>resetTimer());
 });
 </script>
 

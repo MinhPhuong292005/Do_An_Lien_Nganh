@@ -41,8 +41,7 @@ if (isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css?v=<?= filemtime(__DIR__ . '/../assets/css/style.css') ?>">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/user.css?v=<?= filemtime(__DIR__ . '/../assets/css/user.css') ?>">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/dark-theme.css?v=<?= filemtime(__DIR__ . '/../assets/css/dark-theme.css') ?>">
-    <script>
-        window.BASE_URL = '<?= BASE_URL ?>';
+    <script>window.BASE_URL = '<?= BASE_URL ?>';
         window.CSRF_TOKEN = '<?= csrf_token() ?>';
     </script>
     <script src="<?= BASE_URL ?>/assets/js/enterprise-features.js" defer></script>
@@ -137,7 +136,7 @@ if (isset($_SESSION['user_id'])) {
                     <line x1="3" y1="9" x2="21" y2="9"/>
                     <line x1="9" y1="21" x2="9" y2="9"/>
                 </svg>
-                <span>⚡ Admin Portal (Quản trị)</span>
+                <span>Admin Portal (Quản trị)</span>
             </a>
         <?php endif; ?>
 
@@ -175,7 +174,7 @@ if (isset($_SESSION['user_id'])) {
                 </div>
                 <div class="cookpad-sub-text">
                     <span class="sub-name">Tất Cả</span>
-                    <span class="sub-count"><?= $sidebarTotal ?> món</span>
+                    <span class="sub-count"><?= $sidebarTotal ?>món</span>
                 </div>
             </a>
 
@@ -188,7 +187,7 @@ if (isset($_SESSION['user_id'])) {
                 </div>
                 <div class="cookpad-sub-text">
                     <span class="sub-name">Đã Lưu</span>
-                    <span class="sub-count"><?= $sidebarSaved ?> món</span>
+                    <span class="sub-count"><?= $sidebarSaved ?>món</span>
                 </div>
             </a>
 
@@ -202,7 +201,7 @@ if (isset($_SESSION['user_id'])) {
                 </div>
                 <div class="cookpad-sub-text">
                     <span class="sub-name">Món Của Tôi</span>
-                    <span class="sub-count"><?= $sidebarMy ?> món</span>
+                    <span class="sub-count"><?= $sidebarMy ?>món</span>
                 </div>
             </a>
 
@@ -217,7 +216,7 @@ if (isset($_SESSION['user_id'])) {
                 </div>
                 <div class="cookpad-sub-text">
                     <span class="sub-name">Đã lên sóng</span>
-                    <span class="sub-count"><?= $sidebarLive ?> món</span>
+                    <span class="sub-count"><?= $sidebarLive ?>món</span>
                 </div>
             </a>
         </div>
@@ -348,7 +347,7 @@ if (isset($_SESSION['user_id'])) {
 
                     <?php if (is_admin()): ?>
                         <a href="<?= BASE_URL ?>/admin/index.php" class="admin-portal-btn" style="padding: 0.38rem 0.95rem; border-radius: 9999px; font-weight: 800; font-size: 0.82rem; background: #0f172a; color: #fed7aa; border: 1.5px solid #ea580c; display: inline-flex; align-items: center; gap: 0.35rem; box-shadow: 0 2px 8px rgba(234, 88, 12, 0.25); text-decoration: none;" title="Truy cập Bảng điều khiển Quản trị">
-                            <span style="font-size: 0.95rem;">⚡</span>
+                            <span style="font-size: 0.95rem;"></span>
                             <span>Admin Portal</span>
                         </a>
                     <?php endif; ?>
@@ -376,8 +375,7 @@ if (isset($_SESSION['user_id'])) {
                     </button>
 
                     <!-- Nút Đăng nhập -->
-                    <button type="button" class="y-pill-btn-brown" data-open-login style="padding: 0.45rem 1.15rem; font-size: 0.88rem;">
-                        Đăng nhập
+                    <button type="button" class="y-pill-btn-brown" data-open-login style="padding: 0.45rem 1.15rem; font-size: 0.88rem;">Đăng nhập
                     </button>
                 <?php endif; ?>
 
@@ -407,20 +405,16 @@ if (isset($_SESSION['user_id'])) {
                 </svg>
             </div>
 
-            <h3 style="margin: 0 0 0.85rem; font-size: 1.2rem; font-weight: 800; color: #1e293b; line-height: 1.35; white-space: normal !important;">
-                Thông báo kiểm duyệt nội dung
+            <h3 style="margin: 0 0 0.85rem; font-size: 1.2rem; font-weight: 800; color: #1e293b; line-height: 1.35; white-space: normal !important;">Thông báo kiểm duyệt nội dung
             </h3>
 
-            <div id="rejectionModalMessage" style="background: #fff7ed; border: 1.5px solid #fed7aa; border-radius: 12px; padding: 0.85rem 1rem; font-size: 0.95rem; font-weight: 700; color: #9a3412; margin-bottom: 1.25rem; line-height: 1.5; text-align: center; white-space: normal !important; word-break: break-word !important; overflow-wrap: break-word !important;">
-                Rất tiếc, bài đăng không được duyệt.
+            <div id="rejectionModalMessage" style="background: #fff7ed; border: 1.5px solid #fed7aa; border-radius: 12px; padding: 0.85rem 1rem; font-size: 0.95rem; font-weight: 700; color: #9a3412; margin-bottom: 1.25rem; line-height: 1.5; text-align: center; white-space: normal !important; word-break: break-word !important; overflow-wrap: break-word !important;">Rất tiếc, bài đăng không được duyệt.
             </div>
 
             <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
-                <button type="button" onclick="closeRejectionNoticeModal()" class="button button-create" style="padding: 0.65rem 2rem; border-radius: 9999px; font-weight: 800; font-size: 0.9rem; background: #ea580c; color: #ffffff; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);">
-                    Đã hiểu
+                <button type="button" onclick="closeRejectionNoticeModal()" class="button button-create" style="padding: 0.65rem 2rem; border-radius: 9999px; font-weight: 800; font-size: 0.9rem; background: #ea580c; color: #ffffff; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);">Đã hiểu
                 </button>
-                <a href="<?= BASE_URL ?>/views/profile.php" class="button button-outline" style="padding: 0.65rem 1.35rem; border-radius: 9999px; font-weight: 700; font-size: 0.9rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">
-                    Quản lý bài của tôi
+                <a href="<?= BASE_URL ?>/views/profile.php" class="button button-outline" style="padding: 0.65rem 1.35rem; border-radius: 9999px; font-weight: 700; font-size: 0.9rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">Quản lý bài của tôi
                 </a>
             </div>
         </div>
@@ -472,8 +466,7 @@ if (isset($_SESSION['user_id'])) {
             </div>
         </div>
     </div>
-    <script>
-    function openCookioLogin(redirectPath = '') {
+    <script>function openCookioLogin(redirectPath = '') {
         const redirectInput = document.getElementById('loginRedirectTo');
         if (redirectInput) {
             redirectInput.value = redirectPath;

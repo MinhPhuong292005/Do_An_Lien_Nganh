@@ -75,8 +75,8 @@ $pageTitle = 'Dashboard Quản trị - Cookio';
         <div><strong><?= (int) $userCount ?></strong><span>Thành viên</span></div>
         <div style="cursor: pointer;" onclick="location.href='<?= BASE_URL ?>/admin/manage-tips.php'"><strong><?= $tipCount ?></strong><span>Bài kinh nghiệm &rarr;</span></div>
         <div style="cursor: pointer;" onclick="location.href='<?= BASE_URL ?>/admin/manage-comments.php?moderation=flagged'">
-            <strong style="color: <?= $flaggedCommentCount > 0 ? '#dc2626' : '#16a34a' ?>;"><?= $flaggedCommentCount ?></strong>
-            <span style="font-weight: 700;">🛡️ Vi phạm / Đã ẩn &rarr;</span>
+            <strong style="color: <?= $flaggedCommentCount >0 ? '#dc2626' : '#16a34a' ?>;"><?= $flaggedCommentCount ?></strong>
+            <span style="font-weight: 700;">Vi phạm / Đã ẩn &rarr;</span>
         </div>
     </div>
 

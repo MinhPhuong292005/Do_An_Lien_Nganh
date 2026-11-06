@@ -13,7 +13,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 
 if (!is_logged_in()) {
     http_response_code(401);
-    echo json_encode(['success' => false, 'message' => 'Vui lòng đăng nhập']);
+    echo json_encode(['success' =>false, 'message' => 'Vui lòng đăng nhập']);
     exit;
 }
 
@@ -54,12 +54,12 @@ if ($action === 'list') {
     foreach ($rows as $row) {
         $type = $row['type'];
         $icon = match ($type) {
-            'like' => '❤️',
-            'comment' => '💬',
-            'cooksnap' => '📸',
-            'follow' => '👥',
-            'system' => '🔔',
-            default => '🔔'
+            'like' => '',
+            'comment' => '',
+            'cooksnap' => '',
+            'follow' => '',
+            'system' => '',
+            default => ''
         };
 
         $actorName = (string) $row['actor_name'];
@@ -88,7 +88,7 @@ if ($action === 'list') {
                 $rejectMessage = 'Rất tiếc, bài đăng «<strong>' . htmlspecialchars($rejectTitle, ENT_QUOTES, 'UTF-8') . '</strong>» không được duyệt.';
                 $targetUrl = 'javascript:void(0);';
             } else {
-                // Đã duyệt -> chuyển tới bài đăng đó
+                // Đã duyệt ->chuyển tới bài đăng đó
                 if (str_contains((string)$row['content'], 'kinh nghiệm') || str_contains((string)$row['content'], 'bí quyết')) {
                     $targetUrl = BASE_URL . '/views/kitchen-tips.php' . ($row['target_id'] ? '#tip-' . $row['target_id'] : '');
                 } elseif ($row['target_id']) {
@@ -134,7 +134,7 @@ if ($action === 'list') {
     }
 
     echo json_encode([
-        'success' => true,
+        'success' =>true,
         'unread_count' => $unreadCount,
         'notifications' => $items
     ]);
@@ -147,15 +147,15 @@ if ($action === 'mark_read') {
         $up = db()->prepare("UPDATE notifications SET is_read = 1 WHERE id = ? AND user_id = ?");
         $up->execute([$notifId, $userId]);
     }
-    echo json_encode(['success' => true]);
+    echo json_encode(['success' =>true]);
     exit;
 }
 
 if ($action === 'mark_all_read') {
     $up = db()->prepare("UPDATE notifications SET is_read = 1 WHERE user_id = ?");
     $up->execute([$userId]);
-    echo json_encode(['success' => true]);
+    echo json_encode(['success' =>true]);
     exit;
 }
 
-echo json_encode(['success' => false, 'message' => 'Action không hợp lệ']);
+echo json_encode(['success' =>false, 'message' => 'Action không hợp lệ']);

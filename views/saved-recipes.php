@@ -112,27 +112,25 @@ require __DIR__ . '/../includes/header.php';
 
     <!-- Page Header -->
     <div style="margin-bottom: 1.5rem;">
-        <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text-main); margin: 0 0 0.35rem;">
-            Món Yêu Thích Của Bạn
+        <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text-main); margin: 0 0 0.35rem;">Món Yêu Thích Của Bạn
         </h1>
-        <p style="margin: 0; color: var(--text-muted); font-size: 0.95rem;">
-            Không gian lưu giữ công thức tâm đắc, món bạn đã thả tim và ghi chú nấu nướng riêng.
+        <p style="margin: 0; color: var(--text-muted); font-size: 0.95rem;">Không gian lưu giữ công thức tâm đắc, món bạn đã thả tim và ghi chú nấu nướng riêng.
         </p>
     </div>
 
     <?php if (isset($_GET['bookmark'])): ?>
         <div class="notice success" style="margin-bottom: 1.25rem;">
             <?= match ($_GET['bookmark']) {
-                'unsaved' => '✅ Đã bỏ lưu món khỏi bộ sưu tập thành công.',
-                'note_saved' => '✅ Đã lưu ghi chú bếp riêng thành công.',
-                default => '✅ Thao tác cập nhật thành công.'
+                'unsaved' => ' Đã bỏ lưu món khỏi bộ sưu tập thành công.',
+                'note_saved' => ' Đã lưu ghi chú bếp riêng thành công.',
+                default => ' Thao tác cập nhật thành công.'
             } ?>
         </div>
     <?php endif; ?>
 
     <?php if (isset($_GET['liked'])): ?>
         <div class="notice success" style="margin-bottom: 1.25rem;">
-            <?= $_GET['liked'] === '0' ? '✅ Đã bỏ thích món ăn.' : '✅ Đã thả tim món ăn thành công.' ?>
+            <?= $_GET['liked'] === '0' ? ' Đã bỏ thích món ăn.' : ' Đã thả tim món ăn thành công.' ?>
         </div>
     <?php endif; ?>
 
@@ -146,27 +144,25 @@ require __DIR__ . '/../includes/header.php';
                 <span>Bộ sưu tập cá nhân</span>
             </div>
 
-            <h2 style="font-size: 2rem; font-weight: 800; color: var(--text-main); margin: 0 0 0.75rem; letter-spacing: -0.5px;">
-                Lưu giữ những món ngon tâm đắc của bạn
+            <h2 style="font-size: 2rem; font-weight: 800; color: var(--text-main); margin: 0 0 0.75rem; letter-spacing: -0.5px;">Lưu giữ những món ngon tâm đắc của bạn
             </h2>
-            <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 600px; margin: 0 auto 2.5rem; line-height: 1.6;">
-                Đăng nhập ngay để khám phá và quản lý thực đơn yêu thích, lưu công thức nấu ăn, viết ghi chú gia vị riêng và tự động tạo danh sách đi chợ thông minh.
+            <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 600px; margin: 0 auto 2.5rem; line-height: 1.6;">Đăng nhập ngay để khám phá và quản lý thực đơn yêu thích, lưu công thức nấu ăn, viết ghi chú gia vị riêng và tự động tạo danh sách đi chợ thông minh.
             </p>
 
             <!-- 3 Benefit Pillars -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; max-width: 780px; margin: 0 auto 2.5rem; text-align: left;">
                 <div style="background: var(--bg-page); border: 1.5px solid var(--border-color); border-radius: 14px; padding: 1.35rem 1.25rem;">
-                    <div style="font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--primary);">🔖</div>
+                    <div style="font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--primary);"></div>
                     <h4 style="margin: 0 0 0.35rem; font-size: 1rem; font-weight: 700; color: var(--text-main);">Lưu công thức 1 chạm</h4>
                     <p style="margin: 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">Lưu nhanh món ăn muốn nấu vào cẩm nang bếp để mở lại bất kỳ lúc nào.</p>
                 </div>
                 <div style="background: var(--bg-page); border: 1.5px solid var(--border-color); border-radius: 14px; padding: 1.35rem 1.25rem;">
-                    <div style="font-size: 1.3rem; margin-bottom: 0.5rem; color: #ef4444;">❤️</div>
+                    <div style="font-size: 1.3rem; margin-bottom: 0.5rem; color: #ef4444;"></div>
                     <h4 style="margin: 0 0 0.35rem; font-size: 1rem; font-weight: 700; color: var(--text-main);">Theo dõi món đã thả tim</h4>
                     <p style="margin: 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">Gom trọn những món bạn yêu thích và đánh giá cao trên cộng đồng ẩm thực.</p>
                 </div>
                 <div style="background: var(--bg-page); border: 1.5px solid var(--border-color); border-radius: 14px; padding: 1.35rem 1.25rem;">
-                    <div style="font-size: 1.3rem; margin-bottom: 0.5rem; color: #16a34a;">🛒</div>
+                    <div style="font-size: 1.3rem; margin-bottom: 0.5rem; color: #16a34a;"></div>
                     <h4 style="margin: 0 0 0.35rem; font-size: 1rem; font-weight: 700; color: var(--text-main);">Tạo giỏ đi chợ tiện lợi</h4>
                     <p style="margin: 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">Tự động tổng hợp và tính toán khối lượng nguyên liệu cần mua chính xác.</p>
                 </div>
@@ -174,11 +170,9 @@ require __DIR__ . '/../includes/header.php';
 
             <!-- Action buttons -->
             <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap;">
-                <button type="button" class="button button-create" data-open-login style="padding: 0.85rem 2.25rem; font-size: 1rem; border-radius: 9999px; font-weight: 700; box-shadow: 0 4px 14px rgba(234, 88, 12, 0.3);">
-                    Đăng nhập ngay
+                <button type="button" class="button button-create" data-open-login style="padding: 0.85rem 2.25rem; font-size: 1rem; border-radius: 9999px; font-weight: 700; box-shadow: 0 4px 14px rgba(234, 88, 12, 0.3);">Đăng nhập ngay
                 </button>
-                <a href="<?= BASE_URL ?>/index.php" class="button button-outline" style="padding: 0.85rem 1.85rem; font-size: 1rem; border-radius: 9999px; font-weight: 700; text-decoration: none;">
-                    Khám phá công thức &rarr;
+                <a href="<?= BASE_URL ?>/index.php" class="button button-outline" style="padding: 0.85rem 1.85rem; font-size: 1rem; border-radius: 9999px; font-weight: 700; text-decoration: none;">Khám phá công thức &rarr;
                 </a>
             </div>
         </div>
@@ -216,8 +210,7 @@ require __DIR__ . '/../includes/header.php';
         <!-- Category Filter Pills Bar (nếu có category trong tab hiện tại) -->
         <?php if (!empty($categories)): ?>
             <div class="saved-filter-bar" style="margin-bottom: 1.25rem;">
-                <a href="<?= BASE_URL ?>/views/saved-recipes.php?tab=<?= $currentTab ?>" class="saved-filter-pill <?= $selectedCat === '' ? 'is-active' : '' ?>">
-                    Tất cả danh mục
+                <a href="<?= BASE_URL ?>/views/saved-recipes.php?tab=<?= $currentTab ?>" class="saved-filter-pill <?= $selectedCat === '' ? 'is-active' : '' ?>">Tất cả danh mục
                 </a>
                 <?php foreach ($categories as $catName): ?>
                     <a href="<?= BASE_URL ?>/views/saved-recipes.php?tab=<?= $currentTab ?>&cat=<?= urlencode($catName) ?>" 
@@ -250,14 +243,12 @@ require __DIR__ . '/../includes/header.php';
                         ? 'Khi xem các công thức, hãy nhấn nút "Lưu món" để lưu lại và thêm ghi chú nấu nướng riêng cho gia đình.'
                         : 'Thả tim cho những công thức thơm ngon hấp dẫn mà bạn yêu thích để dễ dàng tìm lại tại đây.' ?>
                 </p>
-                <a href="<?= BASE_URL ?>/index.php" class="button button-create" style="display: inline-block; padding: 0.75rem 2rem; font-weight: 700; text-decoration: none;">
-                    Khám phá món ngon ngay
+                <a href="<?= BASE_URL ?>/index.php" class="button button-create" style="display: inline-block; padding: 0.75rem 2rem; font-weight: 700; text-decoration: none;">Khám phá món ngon ngay
                 </a>
             </div>
         <?php else: ?>
 
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0 0 1.25rem;">
-                Đang hiển thị <strong style="color: var(--primary);"><?= count($recipes) ?> món</strong> trong danh sách <?= $currentTab === 'saved' ? 'đã lưu' : 'đã thả tim' ?> của bạn.
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0 0 1.25rem;">Đang hiển thị <strong style="color: var(--primary);"><?= count($recipes) ?>món</strong>trong danh sách <?= $currentTab === 'saved' ? 'đã lưu' : 'đã thả tim' ?>của bạn.
             </p>
 
             <!-- Sticky / Prominent Multi-Dish Grocery Batch Bar -->
@@ -268,13 +259,11 @@ require __DIR__ . '/../includes/header.php';
                         <span>Chọn tất cả món</span>
                     </label>
                     <span style="color: #fdba74;">|</span>
-                    <span style="font-size: 0.86rem; color: #9a3412;">
-                        Đã tích chọn: <strong id="selectedDishCountText" style="color: #ea580c;"><?= count($recipes) ?></strong> món để nấu
+                    <span style="font-size: 0.86rem; color: #9a3412;">Đã tích chọn: <strong id="selectedDishCountText" style="color: #ea580c;"><?= count($recipes) ?></strong>món để nấu
                     </span>
                 </div>
                 <div>
-                    <button type="button" onclick="openConsolidatedGroceryModal()" class="button button-create" style="padding: 0.55rem 1.35rem; font-size: 0.88rem; font-weight: 800; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.45rem; box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);">
-                        🛒 Gom nguyên liệu đi chợ (<span id="groceryBtnCount"><?= count($recipes) ?></span> món)
+                    <button type="button" onclick="openConsolidatedGroceryModal()" class="button button-create" style="padding: 0.55rem 1.35rem; font-size: 0.88rem; font-weight: 800; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.45rem; box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);">Gom nguyên liệu đi chợ (<span id="groceryBtnCount"><?= count($recipes) ?></span>món)
                     </button>
                 </div>
             </div>
@@ -365,27 +354,26 @@ require __DIR__ . '/../includes/header.php';
 
                                 <div style="display: flex; gap: 0.75rem; align-items: center; font-size: 0.8rem; color: #64748b; margin-bottom: 0.85rem;">
                                     <?php if (!empty($recipe['cooking_time'])): ?>
-                                        <span>⏱️ <?= e($recipe['cooking_time']) ?></span>
+                                        <span>⏱ <?= e($recipe['cooking_time']) ?></span>
                                     <?php endif; ?>
                                     <?php if (!empty($recipe['calories'])): ?>
-                                        <span>🔥 <?= (int)$recipe['calories'] ?> kcal</span>
+                                        <span> <?= (int)$recipe['calories'] ?>kcal</span>
                                     <?php endif; ?>
-                                    <span>❤️ <?= (int)($recipe['likes_count'] ?? 0) ?></span>
+                                    <span> <?= (int)($recipe['likes_count'] ?? 0) ?></span>
                                 </div>
 
                                 <?php if ($currentTab === 'saved'): ?>
                                     <!-- Personal Chef Note Box (chỉ hiện ở tab Món đã lưu) -->
                                     <div class="personal-note-box" id="personal-note-box-<?= (int) $recipe['id'] ?>" style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 0.75rem; padding: 0.75rem; margin-top: 0.5rem;">
                                         <div class="personal-note-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; font-size: 0.8rem; font-weight: 700; color: #92400e;">
-                                            <span>📝 Ghi chú bếp của bạn</span>
+                                            <span>Ghi chú bếp của bạn</span>
                                             <?php if ($hasNote): ?>
-                                                <span style="font-size: 0.7rem; color: #16a34a; font-weight: 700;">✓ Có ghi chú</span>
+                                                <span style="font-size: 0.7rem; color: #16a34a; font-weight: 700;">Có ghi chú</span>
                                             <?php endif; ?>
                                         </div>
                                         <textarea class="personal-note-textarea" placeholder="Thêm lưu ý riêng (VD: giảm cay, nấu 15 phút, chồng rất thích...)" style="width: 100%; box-sizing: border-box; border: 1px solid #fcd34d; border-radius: 0.5rem; padding: 0.5rem; font-size: 0.82rem; font-family: inherit; resize: vertical; min-height: 48px; background: #ffffff; color: #374151;"><?= e($recipe['personal_note'] ?? '') ?></textarea>
                                         <div style="display: flex; justify-content: flex-end; margin-top: 0.4rem;">
-                                            <button type="button" class="personal-note-save-btn" onclick="saveRecipeNote(<?= (int) $recipe['id'] ?>, this)" style="background: #d97706; color: #ffffff; border: none; padding: 0.35rem 0.85rem; border-radius: 0.45rem; font-size: 0.78rem; font-weight: 700; cursor: pointer;">
-                                                Lưu ghi chú
+                                            <button type="button" class="personal-note-save-btn" onclick="saveRecipeNote(<?= (int) $recipe['id'] ?>, this)" style="background: #d97706; color: #ffffff; border: none; padding: 0.35rem 0.85rem; border-radius: 0.45rem; font-size: 0.78rem; font-weight: 700; cursor: pointer;">Lưu ghi chú
                                             </button>
                                         </div>
                                     </div>
@@ -396,10 +384,9 @@ require __DIR__ . '/../includes/header.php';
                         <!-- Card Footer Actions: Vào bếp nấu & Đi chợ -->
                         <div style="padding: 0 1.1rem 1.1rem; display: flex; gap: 0.5rem;">
                             <a href="<?= BASE_URL ?>/views/recipe-detail.php?id=<?= (int) $recipe['id'] ?>" class="button button-primary" style="flex: 1.2; font-size: 0.84rem; padding: 0.55rem; text-decoration: none; text-align: center; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; border-radius: 9999px;">
-                                👩‍🍳 Vào bếp nấu
+                                ‍ Vào bếp nấu
                             </a>
-                            <button type="button" class="button button-outline js-open-grocery-modal" data-title="Nguyên liệu: <?= e($recipe['title']) ?>" data-ingredients="<?= e($recipe['ingredients'] ?? '') ?>" style="flex: 0.8; font-size: 0.84rem; padding: 0.55rem; border-radius: 9999px;" title="Xem nguyên liệu món này">
-                                📋 Đi chợ
+                            <button type="button" class="button button-outline js-open-grocery-modal" data-title="Nguyên liệu: <?= e($recipe['title']) ?>" data-ingredients="<?= e($recipe['ingredients'] ?? '') ?>" style="flex: 0.8; font-size: 0.84rem; padding: 0.55rem; border-radius: 9999px;" title="Xem nguyên liệu món này">Đi chợ
                             </button>
                         </div>
                     </article>
@@ -419,11 +406,9 @@ require __DIR__ . '/../includes/header.php';
         <h3 id="confirmModalTitle" style="margin: 0 0 0.5rem; font-size: 1.25rem; font-weight: 800; color: #1e293b;"></h3>
         <p id="confirmModalMessage" style="margin: 0 0 1.5rem; font-size: 0.95rem; color: #475569; line-height: 1.5;"></p>
         <div style="display: flex; gap: 0.75rem; justify-content: center;">
-            <button type="button" onclick="closeConfirmActionModal()" class="button button-outline" style="padding: 0.65rem 1.35rem; font-weight: 700; border-radius: 9999px;">
-                Hủy bỏ
+            <button type="button" onclick="closeConfirmActionModal()" class="button button-outline" style="padding: 0.65rem 1.35rem; font-weight: 700; border-radius: 9999px;">Hủy bỏ
             </button>
-            <button type="button" id="confirmModalSubmitBtn" class="button button-create" style="padding: 0.65rem 1.5rem; font-weight: 800; border-radius: 9999px;">
-                Xác nhận
+            <button type="button" id="confirmModalSubmitBtn" class="button button-create" style="padding: 0.65rem 1.5rem; font-weight: 800; border-radius: 9999px;">Xác nhận
             </button>
         </div>
     </div>
@@ -438,8 +423,7 @@ require __DIR__ . '/../includes/header.php';
         <!-- Modal Header -->
         <div style="padding: 1.25rem 1.5rem; border-bottom: 1.5px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; background: #fff7ed;">
             <div>
-                <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #9a3412; display: flex; align-items: center; gap: 0.5rem;">
-                    🛒 Danh Sách Đi Chợ Tổng Hợp
+                <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #9a3412; display: flex; align-items: center; gap: 0.5rem;">Danh Sách Đi Chợ Tổng Hợp
                 </h3>
                 <div id="smartGroceryDishesSubtitle" style="font-size: 0.82rem; color: #c2410c; margin-top: 0.25rem; font-weight: 600;"></div>
             </div>
@@ -452,7 +436,7 @@ require __DIR__ . '/../includes/header.php';
             <!-- Section 1: Main Countable / Measurable Ingredients (Summed) -->
             <div style="margin-bottom: 1.5rem;">
                 <div style="font-weight: 800; font-size: 0.95rem; color: #166534; display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.65rem; background: #f0fdf4; padding: 0.4rem 0.75rem; border-radius: 8px; border-left: 4px solid #16a34a;">
-                    <span>🥦 Thực phẩm & Nguyên liệu cần mua (Đã cộng dồn):</span>
+                    <span>Thực phẩm & Nguyên liệu cần mua (Đã cộng dồn):</span>
                 </div>
                 <div id="smartMainIngredientsList" style="display: flex; flex-direction: column; gap: 0.45rem;"></div>
             </div>
@@ -460,7 +444,7 @@ require __DIR__ . '/../includes/header.php';
             <!-- Section 2: Spices & Seasonings (Clean Names Without Spoons) -->
             <div>
                 <div style="font-weight: 800; font-size: 0.95rem; color: #92400e; display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.65rem; background: #fffbeb; padding: 0.4rem 0.75rem; border-radius: 8px; border-left: 4px solid #d97706;">
-                    <span>🧂 Gia vị & Nước sốt (Kiểm tra lại tủ bếp):</span>
+                    <span>Gia vị & Nước sốt (Kiểm tra lại tủ bếp):</span>
                 </div>
                 <div id="smartSpicesList" style="display: flex; flex-wrap: wrap; gap: 0.45rem;"></div>
             </div>
@@ -469,15 +453,12 @@ require __DIR__ . '/../includes/header.php';
         <!-- Modal Footer -->
         <div style="padding: 1rem 1.5rem; border-top: 1.5px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; flex-wrap: wrap; gap: 0.65rem;">
             <div style="display: flex; gap: 0.5rem;">
-                <button type="button" onclick="copySmartGroceryList()" class="button button-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 700; border-radius: 9999px;">
-                    📋 Sao chép danh sách
+                <button type="button" onclick="copySmartGroceryList()" class="button button-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 700; border-radius: 9999px;">Sao chép danh sách
                 </button>
-                <button type="button" onclick="window.print()" class="button button-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 700; border-radius: 9999px;">
-                    🖨️ In
+                <button type="button" onclick="window.print()" class="button button-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 700; border-radius: 9999px;">In
                 </button>
             </div>
-            <button type="button" onclick="closeSmartGroceryModal()" class="button button-create" style="padding: 0.55rem 1.5rem; font-size: 0.9rem; font-weight: 800; border-radius: 9999px;">
-                Xong
+            <button type="button" onclick="closeSmartGroceryModal()" class="button button-create" style="padding: 0.55rem 1.5rem; font-size: 0.9rem; font-weight: 800; border-radius: 9999px;">Xong
             </button>
         </div>
     </div>
@@ -544,7 +525,7 @@ function closeConfirmActionModal() {
    ========================================================================== */
 function updateGroceryBatchBar() {
     const checks = document.querySelectorAll('.dish-grocery-checkbox');
-    const checkedBoxes = Array.from(checks).filter(c => c.checked);
+    const checkedBoxes = Array.from(checks).filter(c =>c.checked);
     const count = checkedBoxes.length;
 
     const countText = document.getElementById('selectedDishCountText');
@@ -553,12 +534,12 @@ function updateGroceryBatchBar() {
 
     if (countText) countText.textContent = count;
     if (btnCount) btnCount.textContent = count;
-    if (selectAllCheck) selectAllCheck.checked = (count === checks.length && count > 0);
+    if (selectAllCheck) selectAllCheck.checked = (count === checks.length && count >0);
 }
 
 function toggleSelectAllGrocery(checked) {
     const checks = document.querySelectorAll('.dish-grocery-checkbox');
-    checks.forEach(c => c.checked = checked);
+    checks.forEach(c =>c.checked = checked);
     updateGroceryBatchBar();
 }
 
@@ -655,7 +636,7 @@ function openConsolidatedGroceryModal() {
         return;
     }
 
-    const dishTitles = checkedBoxes.map(c => c.dataset.title);
+    const dishTitles = checkedBoxes.map(c =>c.dataset.title);
     const subtitleEl = document.getElementById('smartGroceryDishesSubtitle');
     if (subtitleEl) {
         subtitleEl.textContent = `Áp dụng cho ${checkedBoxes.length} món: ` + dishTitles.join(' • ');
@@ -667,7 +648,7 @@ function openConsolidatedGroceryModal() {
 
     checkedBoxes.forEach(c => {
         const ingText = c.dataset.ingredients || '';
-        const lines = ingText.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+        const lines = ingText.split(/\r?\n/).map(l =>l.trim()).filter(l =>l.length >0);
         lines.forEach(line => {
             const parsed = parseVietnameseIngredient(line);
             if (!parsed) return;
@@ -745,10 +726,10 @@ function copySmartGroceryList() {
     const mainItems = document.querySelectorAll('#smartMainIngredientsList label span');
     const spiceItems = document.querySelectorAll('#smartSpicesList label span');
 
-    let text = '🛒 DANH SÁCH ĐI CHỢ COOKIO:\n\n🥦 THỰC PHẨM CẦN MUA:\n';
-    mainItems.forEach(el => text += '- ' + el.textContent.trim() + '\n');
-    text += '\n🧂 GIA VỊ KIỂM TRA LẠI:\n';
-    spiceItems.forEach(el => text += '- ' + el.textContent.trim() + '\n');
+    let text = ' DANH SÁCH ĐI CHỢ COOKIO:\n\n THỰC PHẨM CẦN MUA:\n';
+    mainItems.forEach(el =>text += '- ' + el.textContent.trim() + '\n');
+    text += '\n GIA VỊ KIỂM TRA LẠI:\n';
+    spiceItems.forEach(el =>text += '- ' + el.textContent.trim() + '\n');
 
     navigator.clipboard.writeText(text).then(() => {
         alert('Đã sao chép toàn bộ danh sách đi chợ vào bộ nhớ tạm!');

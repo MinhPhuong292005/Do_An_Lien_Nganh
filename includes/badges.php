@@ -34,7 +34,7 @@ function check_and_get_user_badges(int $userId): array
         'chef' => [
             'key' => 'chef',
             'name' => 'Đầu bếp Cookio',
-            'icon' => '🍳',
+            'icon' => '',
             'desc' => 'Đăng thành công công thức nấu ăn đầu tiên',
             'eligible' => ($recipeCount >= 1),
             'badge_style' => 'background: #ffedd5; color: #c2410c; border: 1px solid #fed7aa;'
@@ -42,7 +42,7 @@ function check_and_get_user_badges(int $userId): array
         'gold_chef' => [
             'key' => 'gold_chef',
             'name' => 'Bếp Trưởng Vàng',
-            'icon' => '🏅',
+            'icon' => '',
             'desc' => 'Đăng từ 10 công thức nấu ăn được duyệt trở lên',
             'eligible' => ($recipeCount >= 10),
             'badge_style' => 'background: #fef9c3; color: #854d0e; border: 1px solid #fef08a;'
@@ -50,7 +50,7 @@ function check_and_get_user_badges(int $userId): array
         'fav' => [
             'key' => 'fav',
             'name' => 'Được Yêu Thích',
-            'icon' => '🔥',
+            'icon' => '',
             'desc' => 'Đạt từ 100 lượt thả tim thực tế từ cộng đồng',
             'eligible' => ($likesCount >= 100),
             'badge_style' => 'background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca;'
@@ -60,7 +60,7 @@ function check_and_get_user_badges(int $userId): array
     // Fetch existing records from user_badges
     $stmtB = $pdo->prepare("SELECT badge_key, is_displayed FROM user_badges WHERE user_id = ?");
     $stmtB->execute([$userId]);
-    $existing = $stmtB->fetchAll(PDO::FETCH_KEY_PAIR); // [badge_key => is_displayed]
+    $existing = $stmtB->fetchAll(PDO::FETCH_KEY_PAIR); // [badge_key =>is_displayed]
 
     $result = [];
     $pendingConfirm = [];
@@ -87,7 +87,7 @@ function check_and_get_user_badges(int $userId): array
 
     return [
         'all' => $result,
-        'displayed' => array_filter($result, fn($b) => (int)$b['is_displayed'] === 1),
+        'displayed' =>array_filter($result, fn($b) => (int)$b['is_displayed'] === 1),
         'pending' => $pendingConfirm,
         'recipe_count' => $recipeCount,
         'likes_count' => $likesCount

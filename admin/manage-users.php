@@ -217,23 +217,23 @@ $pageTitle = 'Quản lý tài khoản - Cookio Admin';
     <form method="get" action="<?= BASE_URL ?>/admin/manage-users.php" class="filter-form-bar">
         <!-- TÌM KIẾM THEO USERNAME / SĐT -->
         <div class="filter-group" style="flex: 1; min-width: 220px;">
-            <label for="q">🔍 Tìm tài khoản (ID, Tên, SĐT):</label>
+            <label for="q">Tìm tài khoản (ID, Tên, SĐT):</label>
             <input type="text" name="q" id="q" class="filter-input" placeholder="Tìm theo ID (VD: 1, #10), tên đăng nhập hoặc số điện thoại..." value="<?= e($search) ?>" style="width: 100%;">
         </div>
 
         <!-- Ô CHỌN LỰA BẢNG: LỌC THEO VAI TRÒ -->
         <div class="filter-group">
-            <label for="role">👑 Vai trò:</label>
+            <label for="role">Vai trò:</label>
             <select name="role" id="role" class="filter-select">
                 <option value="all" <?= $roleFilter === 'all' ? 'selected' : '' ?>>-- Tất cả tài khoản --</option>
                 <option value="admin" <?= $roleFilter === 'admin' ? 'selected' : '' ?>>⭐ Quản trị viên (Admin)</option>
-                <option value="user" <?= $roleFilter === 'user' ? 'selected' : '' ?>>👤 Thành viên thông thường</option>
+                <option value="user" <?= $roleFilter === 'user' ? 'selected' : '' ?>>Thành viên thông thường</option>
             </select>
         </div>
 
         <!-- Ô CHỌN SỐ TÀI KHOẢN HIỂN THỊ TRÊN 1 TRANG -->
         <div class="filter-group">
-            <label for="per_page">📄 Hiển thị:</label>
+            <label for="per_page">Hiển thị:</label>
             <select name="per_page" id="per_page" class="filter-select" onchange="this.form.submit()">
                 <option value="25" <?= $perPage === 25 ? 'selected' : '' ?>>25 tài khoản / trang</option>
                 <option value="30" <?= $perPage === 30 ? 'selected' : '' ?>>30 tài khoản / trang</option>
@@ -244,7 +244,7 @@ $pageTitle = 'Quản lý tài khoản - Cookio Admin';
 
         <button type="submit" class="btn-filter">Lọc tài khoản</button>
         <?php if ($search !== '' || $roleFilter !== 'all' || $perPage !== 25): ?>
-            <a href="<?= BASE_URL ?>/admin/manage-users.php" class="btn-reset">✕ Bỏ lọc</a>
+            <a href="<?= BASE_URL ?>/admin/manage-users.php" class="btn-reset">Bỏ lọc</a>
         <?php endif; ?>
     </form>
 
@@ -279,16 +279,14 @@ $pageTitle = 'Quản lý tài khoản - Cookio Admin';
                         <td><?= e($user['phone'] ?? '-') ?></td>
                         <td>
                             <?php if ($isAdminRow): ?>
-                                <span class="admin-crown-badge">
-                                    👑 Quản trị viên
+                                <span class="admin-crown-badge">Quản trị viên
                                 </span>
                             <?php else: ?>
-                                <span class="user-regular-badge">
-                                    👤 Thành viên
+                                <span class="user-regular-badge">Thành viên
                                 </span>
                             <?php endif; ?>
                         </td>
-                        <td><strong><?= (int) $user['recipe_count'] ?></strong> món</td>
+                        <td><strong><?= (int) $user['recipe_count'] ?></strong>món</td>
                         <td><?= date('d/m/Y', strtotime((string) $user['created_at'])) ?></td>
                         <td>
                             <?php if ($isAdminRow): ?>
@@ -298,8 +296,7 @@ $pageTitle = 'Quản lý tài khoản - Cookio Admin';
                                     <span style="font-size: 0.85rem; color: #94a3b8; font-style: italic;">-</span>
                                 <?php endif; ?>
                             <?php else: ?>
-                                <button type="button" class="button-sm danger" onclick="openDeleteUserModal(<?= (int)$user['id'] ?>, '<?= e(addslashes($user['username'])) ?>', <?= (int)$user['recipe_count'] ?>)">
-                                    Xóa
+                                <button type="button" class="button-sm danger" onclick="openDeleteUserModal(<?= (int)$user['id'] ?>, '<?= e(addslashes($user['username'])) ?>', <?= (int)$user['recipe_count'] ?>)">Xóa
                                 </button>
                             <?php endif; ?>
                         </td>
@@ -307,8 +304,7 @@ $pageTitle = 'Quản lý tài khoản - Cookio Admin';
                 <?php endforeach; ?>
                 <?php if (empty($users)): ?>
                     <tr>
-                        <td colspan="7" style="text-align: center; padding: 2.5rem; color: #64748b;">
-                            Không tìm thấy tài khoản nào phù hợp với bộ lọc hiện tại.
+                        <td colspan="7" style="text-align: center; padding: 2.5rem; color: #64748b;">Không tìm thấy tài khoản nào phù hợp với bộ lọc hiện tại.
                         </td>
                     </tr>
                 <?php endif; ?>
@@ -317,7 +313,7 @@ $pageTitle = 'Quản lý tài khoản - Cookio Admin';
         </div>
 
         <!-- PHÂN TRANG -->
-        <?php if ($totalUsers > 0): ?>
+        <?php if ($totalUsers >0): ?>
             <?php
             $paginationParams = [
                 'q' => $search,
@@ -337,24 +333,23 @@ $pageTitle = 'Quản lý tài khoản - Cookio Admin';
             ?>
             <div class="pagination-bar">
                 <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-                    <div style="font-size: 0.85rem; color: #64748b;">
-                        Đang hiển thị trang <strong><?= $page ?></strong> trên tổng số <strong><?= $totalPages ?></strong> trang (<?= number_format($totalUsers) ?> tài khoản)
+                    <div style="font-size: 0.85rem; color: #64748b;">Đang hiển thị trang <strong><?= $page ?></strong>trên tổng số <strong><?= $totalPages ?></strong>trang (<?= number_format($totalUsers) ?>tài khoản)
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; color: #475569;">
                         <label for="bottom_per_page" style="font-weight: 600;">Hiển thị:</label>
                         <select id="bottom_per_page" class="filter-select" style="padding: 0.2rem 0.5rem; font-size: 0.82rem; height: auto;" onchange="window.location.href = this.value;">
                             <?php foreach ($allowedPerPage as $opt): ?>
                                 <option value="<?= $buildPageUrl(1, $opt) ?>" <?= $perPage === $opt ? 'selected' : '' ?>>
-                                    <?= $opt ?> tài khoản / trang
+                                    <?= $opt ?>tài khoản / trang
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                 </div>
 
-                <?php if ($totalPages > 1): ?>
+                <?php if ($totalPages >1): ?>
                 <div class="pagination-links">
-                    <?php if ($page > 1): ?>
+                    <?php if ($page >1): ?>
                         <a href="<?= $buildPageUrl(1) ?>" class="page-link" title="Trang đầu">&laquo; Đầu</a>
                         <a href="<?= $buildPageUrl($page - 1) ?>" class="page-link" title="Trang trước">&lsaquo; Trước</a>
                     <?php endif; ?>
@@ -383,7 +378,7 @@ $pageTitle = 'Quản lý tài khoản - Cookio Admin';
     <div style="background: #ffffff; border-radius: 16px; max-width: 480px; width: 100%; padding: 1.75rem; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border: 1px solid #e2e8f0;">
         <div style="display: flex; align-items: center; gap: 0.65rem; margin-bottom: 1rem;">
             <div style="width: 40px; height: 40px; border-radius: 50%; background: #fee2e2; color: #dc2626; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-                ⚠️
+                
             </div>
             <div>
                 <h3 style="margin: 0; font-size: 1.2rem; font-weight: 800; color: #1e293b;">Xác nhận xóa tài khoản</h3>
@@ -391,15 +386,13 @@ $pageTitle = 'Quản lý tài khoản - Cookio Admin';
             </div>
         </div>
 
-        <p style="color: #334155; font-size: 0.95rem; line-height: 1.5; margin: 0 0 1rem;">
-            Bạn có chắc chắn muốn xóa tài khoản <strong id="modalUserName" style="color: #ea580c;"></strong> không?
+        <p style="color: #334155; font-size: 0.95rem; line-height: 1.5; margin: 0 0 1rem;">Bạn có chắc chắn muốn xóa tài khoản <strong id="modalUserName" style="color: #ea580c;"></strong>không?
         </p>
 
         <div style="background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 10px; padding: 1rem; margin-bottom: 1.5rem; color: #991b1b; font-size: 0.88rem; line-height: 1.5;">
             <div style="font-weight: 800; display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.35rem; color: #b91c1c;">
-                <span>🚨 CẢNH BÁO:</span>
-            </div>
-            Toàn bộ công thức nấu ăn (<strong id="modalUserRecipeCount">0</strong> món) cùng các bình luận và dữ liệu liên quan của người dùng này sẽ bị <strong>xóa hoàn toàn</strong> khỏi hệ thống!
+                <span>CẢNH BÁO:</span>
+            </div>Toàn bộ công thức nấu ăn (<strong id="modalUserRecipeCount">0</strong>món) cùng các bình luận và dữ liệu liên quan của người dùng này sẽ bị <strong>xóa hoàn toàn</strong>khỏi hệ thống!
         </div>
 
         <form id="deleteUserForm" method="post" action="<?= BASE_URL ?>/actions/admin_action.php" style="display: flex; justify-content: flex-end; gap: 0.75rem;">
@@ -408,18 +401,15 @@ $pageTitle = 'Quản lý tài khoản - Cookio Admin';
             <input type="hidden" name="user_id" id="modalUserId" value="">
             <input type="hidden" name="return_url" value="admin/manage-users.php<?= !empty($_SERVER['QUERY_STRING']) ? '?' . $_SERVER['QUERY_STRING'] : '' ?>">
 
-            <button type="button" onclick="closeDeleteUserModal()" style="padding: 0.55rem 1.15rem; background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 700; font-size: 0.88rem; color: #475569; cursor: pointer;">
-                Hủy bỏ
+            <button type="button" onclick="closeDeleteUserModal()" style="padding: 0.55rem 1.15rem; background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 700; font-size: 0.88rem; color: #475569; cursor: pointer;">Hủy bỏ
             </button>
-            <button type="submit" style="padding: 0.55rem 1.25rem; background: #dc2626; border: 1.5px solid #dc2626; border-radius: 8px; font-weight: 700; font-size: 0.88rem; color: #ffffff; cursor: pointer; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);">
-                Xác nhận xóa
+            <button type="submit" style="padding: 0.55rem 1.25rem; background: #dc2626; border: 1.5px solid #dc2626; border-radius: 8px; font-weight: 700; font-size: 0.88rem; color: #ffffff; cursor: pointer; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);">Xác nhận xóa
             </button>
         </form>
     </div>
 </div>
 
-<script>
-function openDeleteUserModal(userId, username, recipeCount) {
+<script>function openDeleteUserModal(userId, username, recipeCount) {
     document.getElementById('modalUserId').value = userId;
     document.getElementById('modalUserName').textContent = `"${username}"`;
     document.getElementById('modalUserRecipeCount').textContent = recipeCount;

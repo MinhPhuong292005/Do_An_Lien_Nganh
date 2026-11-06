@@ -47,12 +47,12 @@ $totalLikesReceived = (int) $stmtTotalLikes->fetchColumn();
 $stmtRating = db()->prepare("
     SELECT AVG(rating) AS avg_rating, COUNT(*) AS count_rating
     FROM comments 
-    WHERE recipe_id IN (SELECT id FROM recipes WHERE author_id = ?) AND rating > 0 AND (is_hidden = 0 OR is_hidden IS NULL)
+    WHERE recipe_id IN (SELECT id FROM recipes WHERE author_id = ?) AND rating >0 AND (is_hidden = 0 OR is_hidden IS NULL)
 ");
 $stmtRating->execute([$userId]);
 $ratingRow = $stmtRating->fetch();
 $totalRatingsCount = (int) ($ratingRow['count_rating'] ?? 0);
-if ($totalRatingsCount > 0 && $ratingRow['avg_rating'] !== null) {
+if ($totalRatingsCount >0 && $ratingRow['avg_rating'] !== null) {
     $avgRating = round((float) $ratingRow['avg_rating'], 1);
     $avgRatingText = $avgRating . '/5';
 } else {
@@ -129,11 +129,11 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
     <?php if (isset($_GET['success'])): ?>
         <div class="notice success" style="margin-bottom: 1.5rem;">
             <?= match ($_GET['success']) {
-                'info-updated'     => '✅ Cập nhật thông tin tài khoản thành công!',
-                'password-updated' => '✅ Đổi mật khẩu thành công! Mật khẩu mới đã có hiệu lực.',
-                'recipe-deleted'   => '✅ Đã xóa công thức nấu ăn thành công.',
-                'badge-updated'    => '✅ Đã cập nhật cài đặt hiển thị danh hiệu thành công!',
-                default            => '✅ Thao tác thành công!'
+                'info-updated'     => ' Cập nhật thông tin tài khoản thành công!',
+                'password-updated' => ' Đổi mật khẩu thành công! Mật khẩu mới đã có hiệu lực.',
+                'recipe-deleted'   => ' Đã xóa công thức nấu ăn thành công.',
+                'badge-updated'    => ' Đã cập nhật cài đặt hiển thị danh hiệu thành công!',
+                default            => ' Thao tác thành công!'
             } ?>
         </div>
     <?php endif; ?>
@@ -145,22 +145,18 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
                 <div style="display: flex; align-items: center; gap: 0.85rem;">
                     <span style="font-size: 2rem;"><?= $pBadge['icon'] ?></span>
                     <div>
-                        <div style="font-weight: 800; color: #92400e; font-size: 1rem; margin-bottom: 0.2rem;">
-                            🎉 Chúc mừng! Bạn đã nhận được danh hiệu «<?= e($pBadge['name']) ?>»
+                        <div style="font-weight: 800; color: #92400e; font-size: 1rem; margin-bottom: 0.2rem;">Chúc mừng! Bạn đã nhận được danh hiệu «<?= e($pBadge['name']) ?>»
                         </div>
-                        <div style="font-size: 0.86rem; color: #b45309;">
-                            Thành tích: <?= e($pBadge['desc']) ?>. Bạn có muốn hiển thị danh hiệu danh dự này trên hồ sơ bếp của mình không?
+                        <div style="font-size: 0.86rem; color: #b45309;">Thành tích: <?= e($pBadge['desc']) ?>. Bạn có muốn hiển thị danh hiệu danh dự này trên hồ sơ bếp của mình không?
                         </div>
                     </div>
                 </div>
                 <form method="post" action="<?= BASE_URL ?>/actions/badge_action.php" style="display: inline-flex; gap: 0.5rem; align-items: center;">
                     <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
                     <input type="hidden" name="badge_key" value="<?= e($pBadge['key']) ?>">
-                    <button type="submit" name="action" value="show" class="button button-create" style="padding: 0.45rem 1.15rem; font-size: 0.86rem; border-radius: 9999px; font-weight: 800;">
-                        ✓ Có, hiển thị danh hiệu
+                    <button type="submit" name="action" value="show" class="button button-create" style="padding: 0.45rem 1.15rem; font-size: 0.86rem; border-radius: 9999px; font-weight: 800;">Có, hiển thị danh hiệu
                     </button>
-                    <button type="submit" name="action" value="hide" class="button button-outline" style="padding: 0.45rem 1rem; font-size: 0.86rem; border-radius: 9999px;">
-                        ✕ Để sau
+                    <button type="submit" name="action" value="hide" class="button button-outline" style="padding: 0.45rem 1rem; font-size: 0.86rem; border-radius: 9999px;">Để sau
                     </button>
                 </form>
             </div>
@@ -170,15 +166,15 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
     <?php if (isset($_GET['error'])): ?>
         <div class="notice error" style="margin-bottom: 1.5rem;">
             <?= match ($_GET['error']) {
-                'csrf'                   => '⚠️ Yêu cầu không hợp lệ hoặc phiên làm việc đã hết hạn.',
-                'username-taken'         => '⚠️ Tên tài khoản này đã có người sử dụng. Vui lòng chọn tên khác.',
-                'username-invalid'       => '⚠️ Tên tài khoản không hợp lệ (tối thiểu 2 ký tự).',
-                'avatar-invalid'         => '⚠️ Tệp ảnh đại diện không hợp lệ (chỉ chấp nhận ảnh JPG, PNG, WEBP).',
-                'avatar-too-large'       => '⚠️ Dung lượng ảnh đại diện quá lớn (tối đa 5MB).',
-                'current-password-wrong' => '⚠️ Mật khẩu hiện tại không chính xác.',
-                'password-mismatch'      => '⚠️ Mật khẩu mới và mật khẩu xác nhận không trùng khớp.',
-                'password-short'         => '⚠️ Mật khẩu mới phải có độ dài từ 3 ký tự trở lên.',
-                default                  => '⚠️ Đã có lỗi xảy ra. Vui lòng thử lại.'
+                'csrf'                   => ' Yêu cầu không hợp lệ hoặc phiên làm việc đã hết hạn.',
+                'username-taken'         => ' Tên tài khoản này đã có người sử dụng. Vui lòng chọn tên khác.',
+                'username-invalid'       => ' Tên tài khoản không hợp lệ (tối thiểu 2 ký tự).',
+                'avatar-invalid'         => ' Tệp ảnh đại diện không hợp lệ (chỉ chấp nhận ảnh JPG, PNG, WEBP).',
+                'avatar-too-large'       => ' Dung lượng ảnh đại diện quá lớn (tối đa 5MB).',
+                'current-password-wrong' => ' Mật khẩu hiện tại không chính xác.',
+                'password-mismatch'      => ' Mật khẩu mới và mật khẩu xác nhận không trùng khớp.',
+                'password-short'         => ' Mật khẩu mới phải có độ dài từ 3 ký tự trở lên.',
+                default                  => ' Đã có lỗi xảy ra. Vui lòng thử lại.'
             } ?>
         </div>
     <?php endif; ?>
@@ -186,7 +182,7 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
     <!-- =====================================================================
          PROFILE VIEW CARD (DESIGNER MODERN LAYOUT)
          ===================================================================== -->
-    <div id="profileViewSection" class="cookio-profile-card" style="<?= $showEditByDefault ? 'display: none;' : '' ?> background: #ffffff; border-radius: 1.25rem; border: 1px solid #e2e8f0; padding: 2.25rem; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 2rem;">
+    <div id="profileViewSection" class="cookio-profile-card" style="<?= $showEditByDefault ? 'display: none;' : '' ?>background: #ffffff; border-radius: 1.25rem; border: 1px solid #e2e8f0; padding: 2.25rem; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 2rem;">
         
         <!-- Top Profile Row: Cột Avatar với nút Chỉnh sửa nhỏ ngay phía dưới + Cột thông tin tài khoản -->
         <div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem;">
@@ -222,14 +218,13 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
                         <?= e($user['username']) ?>
                     </h1>
                     <?php if ($user['role'] === 'admin'): ?>
-                        <span style="background: #fee2e2; color: #b91c1c; font-size: 0.78rem; font-weight: 800; padding: 0.25rem 0.75rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.35rem; border: 1px solid #fecaca;">
-                            🛡️ Quản trị viên
+                        <span style="background: #fee2e2; color: #b91c1c; font-size: 0.78rem; font-weight: 800; padding: 0.25rem 0.75rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.35rem; border: 1px solid #fecaca;">Quản trị viên
                         </span>
                     <?php endif; ?>
 
                     <!-- Authentic Badges -->
                     <?php foreach ($displayedBadges as $b): ?>
-                        <span style="<?= $b['badge_style'] ?> font-size: 0.78rem; font-weight: 800; padding: 0.25rem 0.75rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.35rem;" title="<?= e($b['desc']) ?>">
+                        <span style="<?= $b['badge_style'] ?>font-size: 0.78rem; font-weight: 800; padding: 0.25rem 0.75rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.35rem;" title="<?= e($b['desc']) ?>">
                             <?= $b['icon'] ?> <?= e($b['name']) ?>
                         </span>
                     <?php endforeach; ?>
@@ -240,9 +235,9 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
                 </p>
 
                 <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 1.25rem; font-size: 0.85rem; color: #64748b;">
-                    <span>📅 Gia nhập: <strong><?= date('d/m/Y', strtotime((string)$user['created_at'])) ?></strong></span>
+                    <span>Gia nhập: <strong><?= date('d/m/Y', strtotime((string)$user['created_at'])) ?></strong></span>
                     <?php if (!empty($user['phone'])): ?>
-                        <span>📞 <strong><?= e($user['phone']) ?></strong></span>
+                        <span> <strong><?= e($user['phone']) ?></strong></span>
                     <?php endif; ?>
                 </div>
             </div>
@@ -258,7 +253,7 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
                 <div style="font-size: 0.85rem; font-weight: 400; color: #9a3412; text-transform: lowercase; line-height: 1.2;">công thức món</div>
             </button>
 
-            <!-- 2. Người theo dõi -> theo dõi -->
+            <!-- 2. Người theo dõi ->theo dõi -->
             <button type="button" class="profile-stat-box" id="statBtn-followers" onclick="switchProfileTab('followers')"
                     style="flex: 1; min-width: 125px; background: #faf5ff; border: 1.5px solid #e9d5ff; border-radius: 1rem; padding: 1rem 0.65rem; text-align: center; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem;">
                 <div style="font-size: 1.65rem; font-weight: 800; color: #7c3aed; line-height: 1; white-space: nowrap; flex-shrink: 0;"><?= $followersCount ?></div>
@@ -279,7 +274,7 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
                 <div style="font-size: 0.85rem; font-weight: 400; color: #991b1b; text-transform: lowercase; white-space: nowrap; flex-shrink: 0;">lượt thích</div>
             </button>
 
-            <!-- 5. Điểm đánh giá -> đánh giá (hiển thị 4/5 ⭐ gọn gàng trên 1 dòng) -->
+            <!-- 5. Điểm đánh giá ->đánh giá (hiển thị 4/5 ⭐ gọn gàng trên 1 dòng) -->
             <button type="button" class="profile-stat-box" id="statBtn-reviews" onclick="switchProfileTab('reviews')"
                     style="flex: 1; min-width: 130px; background: #fefce8; border: 1.5px solid #fef08a; border-radius: 1rem; padding: 1rem 0.65rem; text-align: center; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem;">
                 <div style="font-size: 1.45rem; font-weight: 800; color: #ca8a04; line-height: 1; display: inline-flex; align-items: center; gap: 0.25rem; white-space: nowrap; flex-shrink: 0;">
@@ -294,10 +289,9 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
     <!-- =====================================================================
          PROFILE EDIT FORM (Clean & Accessible)
          ===================================================================== -->
-    <div id="profileEditSection" class="cookio-profile-card" style="<?= $showEditByDefault ? '' : 'display: none;' ?> background: #ffffff; border-radius: 1.25rem; border: 1.5px solid #ea580c; padding: 2.25rem; box-shadow: 0 6px 25px rgba(234, 88, 12, 0.08); margin-bottom: 2rem;">
+    <div id="profileEditSection" class="cookio-profile-card" style="<?= $showEditByDefault ? '' : 'display: none;' ?>background: #ffffff; border-radius: 1.25rem; border: 1.5px solid #ea580c; padding: 2.25rem; box-shadow: 0 6px 25px rgba(234, 88, 12, 0.08); margin-bottom: 2rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.75rem; padding-bottom: 0.85rem; border-bottom: 1.5px solid #f1f5f9;">
-            <h2 style="font-size: 1.35rem; font-weight: 800; color: #ea580c; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
-                ✏️ Chỉnh sửa thông tin hồ sơ
+            <h2 style="font-size: 1.35rem; font-weight: 800; color: #ea580c; margin: 0; display: flex; align-items: center; gap: 0.5rem;">Chỉnh sửa thông tin hồ sơ
             </h2>
             <button type="button" onclick="toggleEditProfile(false)" style="background: #f1f5f9; border: none; padding: 0.45rem 1rem; border-radius: 9999px; color: #475569; font-size: 0.88rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.35rem;">
                 &larr; Quay lại hồ sơ
@@ -318,13 +312,11 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
                     <?php endif; ?>
                 </div>
                 <div style="flex: 1; min-width: 220px;">
-                    <label style="font-weight: 700; font-size: 0.92rem; color: #9a3412; display: block; margin-bottom: 0.35rem;">
-                        🖼️ Thay đổi ảnh đại diện (Avatar)
+                    <label style="font-weight: 700; font-size: 0.92rem; color: #9a3412; display: block; margin-bottom: 0.35rem;">Thay đổi ảnh đại diện (Avatar)
                     </label>
                     <input type="file" name="avatar" id="avatarInput" accept="image/png, image/jpeg, image/jpg, image/webp" onchange="previewAvatarImage(this)"
                            style="font-size: 0.88rem; color: #475569; display: block; margin-bottom: 0.25rem;">
-                    <div style="font-size: 0.78rem; color: #c2410c;">
-                        Chấp nhận ảnh JPG, PNG, WEBP (Dung lượng tối đa 5MB)
+                    <div style="font-size: 0.78rem; color: #c2410c;">Chấp nhận ảnh JPG, PNG, WEBP (Dung lượng tối đa 5MB)
                     </div>
                 </div>
             </div>
@@ -332,8 +324,7 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 1.25rem;">
                 <!-- 2. Thay đổi Tên tài khoản (Username) -->
                 <label style="display: block;">
-                    <span style="font-weight: 700; font-size: 0.88rem; color: #334155; display: block; margin-bottom: 0.4rem;">
-                        👤 Tên tài khoản <span style="color: #ea580c;">*</span>
+                    <span style="font-weight: 700; font-size: 0.88rem; color: #334155; display: block; margin-bottom: 0.4rem;">Tên tài khoản <span style="color: #ea580c;">*</span>
                     </span>
                     <input type="text" name="username" value="<?= e($user['username']) ?>" required minlength="2" maxlength="50" placeholder="Nhập tên tài khoản"
                            style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 0.65rem; font-size: 0.95rem; background: #ffffff; color: #1e293b; box-sizing: border-box; font-family: inherit;">
@@ -354,16 +345,14 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
                           style="width: 100%; padding: 0.85rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 0.65rem; font-size: 0.95rem; box-sizing: border-box; font-family: inherit; resize: vertical;"><?= e($user['bio'] ?? '') ?></textarea>
             </label>
 
-            <button type="submit" class="button button-create" style="padding: 0.75rem 2rem; font-size: 0.95rem; font-weight: 800; border-radius: 0.65rem; cursor: pointer;">
-                Lưu thông tin hồ sơ
+            <button type="submit" class="button button-create" style="padding: 0.75rem 2rem; font-size: 0.95rem; font-weight: 800; border-radius: 0.65rem; cursor: pointer;">Lưu thông tin hồ sơ
             </button>
         </form>
 
         <!-- Đổi mật khẩu -->
         <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px dashed #cbd5e1;">
             <details>
-                <summary style="font-weight: 700; color: #ea580c; font-size: 0.95rem; cursor: pointer; outline: none;">
-                    🔐 Đổi mật khẩu tài khoản
+                <summary style="font-weight: 700; color: #ea580c; font-size: 0.95rem; cursor: pointer; outline: none;">Đổi mật khẩu tài khoản
                 </summary>
                 <form method="post" action="<?= BASE_URL ?>/actions/profile_action.php" style="margin-top: 1.25rem; max-width: 420px;">
                     <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
@@ -387,8 +376,7 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
                                style="width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 0.5rem; font-size: 0.9rem; box-sizing: border-box;">
                     </label>
 
-                    <button type="submit" style="background: #334155; color: #ffffff; border: none; padding: 0.65rem 1.5rem; border-radius: 0.5rem; font-weight: 700; font-size: 0.88rem; cursor: pointer;">
-                        Cập nhật mật khẩu mới
+                    <button type="submit" style="background: #334155; color: #ffffff; border: none; padding: 0.65rem 1.5rem; border-radius: 0.5rem; font-weight: 700; font-size: 0.88rem; cursor: pointer;">Cập nhật mật khẩu mới
                     </button>
                 </form>
             </details>
@@ -408,19 +396,19 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
         <div class="profile-tabs-nav" style="display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 0.5rem; border-bottom: 2px solid #e2e8f0; margin-bottom: 1.75rem; padding-bottom: 0.4rem; scrollbar-width: none; -ms-overflow-style: none;">
             <button type="button" class="profile-nav-tab is-active" id="tabNav-recipes" onclick="switchProfileTab('recipes')"
                     style="padding: 0.65rem 0.95rem; font-weight: 700; font-size: 0.92rem; border: none; background: none; border-bottom: 3px solid #ea580c; color: #ea580c; cursor: pointer; display: inline-flex; align-items: center; gap: 0.45rem; white-space: nowrap; flex-shrink: 0;">
-                <span>🍳 Công thức đã đăng</span>
+                <span>Công thức đã đăng</span>
                 <span style="background: #ffedd5; color: #c2410c; padding: 0.15rem 0.55rem; border-radius: 9999px; font-size: 0.8rem;"><?= count($myRecipes) ?></span>
             </button>
 
             <button type="button" class="profile-nav-tab" id="tabNav-followers" onclick="switchProfileTab('followers')"
                     style="padding: 0.65rem 0.95rem; font-weight: 700; font-size: 0.92rem; border: none; background: none; border-bottom: 3px solid transparent; color: #64748b; cursor: pointer; display: inline-flex; align-items: center; gap: 0.45rem; white-space: nowrap; flex-shrink: 0;">
-                <span>👥 Theo dõi</span>
+                <span>Theo dõi</span>
                 <span style="background: #f1f5f9; color: #475569; padding: 0.15rem 0.55rem; border-radius: 9999px; font-size: 0.8rem;"><?= count($followersList) ?></span>
             </button>
 
             <button type="button" class="profile-nav-tab" id="tabNav-following" onclick="switchProfileTab('following')"
                     style="padding: 0.65rem 0.95rem; font-weight: 700; font-size: 0.92rem; border: none; background: none; border-bottom: 3px solid transparent; color: #64748b; cursor: pointer; display: inline-flex; align-items: center; gap: 0.45rem; white-space: nowrap; flex-shrink: 0;">
-                <span>✨ Đang theo dõi</span>
+                <span>Đang theo dõi</span>
                 <span style="background: #f1f5f9; color: #475569; padding: 0.15rem 0.55rem; border-radius: 9999px; font-size: 0.8rem;"><?= count($followingList) ?></span>
             </button>
 
@@ -436,8 +424,7 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
              ------------------------------------------------------------- -->
         <div id="panel-recipes" class="profile-tab-panel">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-                <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #1e293b;">
-                    Danh sách công thức của bạn (<?= count($myRecipes) ?> món)
+                <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #1e293b;">Danh sách công thức của bạn (<?= count($myRecipes) ?>món)
                 </h3>
                 <a href="<?= BASE_URL ?>/views/create-recipe.php" class="button button-create" style="padding: 0.45rem 1.15rem; font-size: 0.86rem; border-radius: 9999px; text-decoration: none;">
                     + Đăng món mới
@@ -446,11 +433,10 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
 
             <?php if (empty($myRecipes)): ?>
                 <div style="text-align: center; padding: 3.5rem 1.5rem; background: #ffffff; border-radius: 1.25rem; border: 2px dashed #cbd5e1;">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">🍳</div>
+                    <div style="font-size: 3rem; margin-bottom: 1rem;"></div>
                     <h4 style="margin: 0 0 0.5rem; font-size: 1.2rem; color: #1e293b; font-weight: 800;">Bạn chưa đăng công thức nấu ăn nào</h4>
                     <p style="color: #64748b; margin: 0 0 1.5rem; font-size: 0.95rem;">Hãy chia sẻ công thức món tủ của bạn để lưu giữ và cùng cộng đồng yêu bếp trổ tài!</p>
-                    <a href="<?= BASE_URL ?>/views/create-recipe.php" class="button button-create" style="padding: 0.75rem 2rem; text-decoration: none; font-weight: 700;">
-                        Bắt đầu viết món đầu tiên
+                    <a href="<?= BASE_URL ?>/views/create-recipe.php" class="button button-create" style="padding: 0.75rem 2rem; text-decoration: none; font-weight: 700;">Bắt đầu viết món đầu tiên
                     </a>
                 </div>
             <?php else: ?>
@@ -475,7 +461,7 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
                                     <?php endif; ?>
 
                                     <span style="position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.25rem 0.65rem; border-radius: 9999px; font-size: 0.76rem; font-weight: 800; <?= $isApproved ? 'background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0;' : 'background: #fef3c7; color: #b45309; border: 1px solid #fde68a;' ?>">
-                                        <?= $isApproved ? '✓ Đã duyệt' : '⏳ Chờ duyệt' ?>
+                                        <?= $isApproved ? ' Đã duyệt' : '⏳ Chờ duyệt' ?>
                                     </span>
                                 </div>
 
@@ -489,12 +475,12 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
 
                                     <div style="display: flex; gap: 0.75rem; align-items: center; font-size: 0.8rem; color: #64748b; margin-top: 0.5rem;">
                                         <?php if (!empty($r['cooking_time'])): ?>
-                                            <span>⏱️ <?= e($r['cooking_time']) ?></span>
+                                            <span>⏱ <?= e($r['cooking_time']) ?></span>
                                         <?php endif; ?>
-                                        <span>❤️ <?= (int)($r['likes_count'] ?? 0) ?></span>
-                                        <span>💬 <?= (int)($r['comments_count'] ?? 0) ?></span>
+                                        <span> <?= (int)($r['likes_count'] ?? 0) ?></span>
+                                        <span> <?= (int)($r['comments_count'] ?? 0) ?></span>
                                         <?php if (!empty($r['calories'])): ?>
-                                            <span>🔥 <?= (int)$r['calories'] ?> kcal</span>
+                                            <span> <?= (int)$r['calories'] ?>kcal</span>
                                         <?php endif; ?>
                                     </div>
                                 </div>
@@ -502,11 +488,9 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
 
                             <!-- Actions -->
                             <div style="padding: 0 1.1rem 1.1rem; display: flex; gap: 0.5rem; border-top: 1px solid #f8fafc; padding-top: 0.85rem;">
-                                <a href="<?= BASE_URL ?>/views/recipe-detail.php?id=<?= (int) $r['id'] ?>" class="button button-outline" style="flex: 1; font-size: 0.82rem; padding: 0.5rem; text-decoration: none; text-align: center; font-weight: 700; border-radius: 9999px;">
-                                    Xem chi tiết
+                                <a href="<?= BASE_URL ?>/views/recipe-detail.php?id=<?= (int) $r['id'] ?>" class="button button-outline" style="flex: 1; font-size: 0.82rem; padding: 0.5rem; text-decoration: none; text-align: center; font-weight: 700; border-radius: 9999px;">Xem chi tiết
                                 </a>
-                                <a href="<?= BASE_URL ?>/views/edit-recipe.php?id=<?= (int) $r['id'] ?>" class="button button-primary" style="flex: 1; font-size: 0.82rem; padding: 0.5rem; text-decoration: none; text-align: center; font-weight: 700; border-radius: 9999px;">
-                                    ✏️ Chỉnh sửa
+                                <a href="<?= BASE_URL ?>/views/edit-recipe.php?id=<?= (int) $r['id'] ?>" class="button button-primary" style="flex: 1; font-size: 0.82rem; padding: 0.5rem; text-decoration: none; text-align: center; font-weight: 700; border-radius: 9999px;">Chỉnh sửa
                                 </a>
                             </div>
                         </article>
@@ -520,17 +504,15 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
              ------------------------------------------------------------- -->
         <div id="panel-followers" class="profile-tab-panel" style="display: none;">
             <div style="margin-bottom: 1.25rem;">
-                <h3 style="margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 800; color: #1e293b;">
-                    Người đang theo dõi gian bếp của bạn (<?= count($followersList) ?> người)
+                <h3 style="margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 800; color: #1e293b;">Người đang theo dõi gian bếp của bạn (<?= count($followersList) ?>người)
                 </h3>
-                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">
-                    Những thành viên quan tâm và thường xuyên theo dõi các bài viết, công thức mới từ bạn.
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Những thành viên quan tâm và thường xuyên theo dõi các bài viết, công thức mới từ bạn.
                 </p>
             </div>
 
             <?php if (empty($followersList)): ?>
                 <div style="text-align: center; padding: 3.5rem 1.5rem; background: #ffffff; border-radius: 1.25rem; border: 2px dashed #cbd5e1;">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">👥</div>
+                    <div style="font-size: 3rem; margin-bottom: 1rem;"></div>
                     <h4 style="margin: 0 0 0.5rem; font-size: 1.2rem; color: #1e293b; font-weight: 800;">Chưa có người theo dõi</h4>
                     <p style="color: #64748b; margin: 0; font-size: 0.95rem;">Hãy đăng thêm nhiều công thức hấp dẫn và tương tác với cộng đồng để có thêm người theo dõi nhé!</p>
                 </div>
@@ -547,12 +529,11 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
                                         <?= e($follower['username']) ?>
                                     </h4>
                                     <div style="font-size: 0.78rem; color: #64748b;">
-                                        🍳 <?= (int)$follower['recipe_count'] ?> công thức
+                                         <?= (int)$follower['recipe_count'] ?>công thức
                                     </div>
                                 </div>
                             </div>
-                            <a href="<?= BASE_URL ?>/views/author.php?id=<?= (int)$follower['id'] ?>" class="button button-outline" style="padding: 0.4rem 0.9rem; font-size: 0.8rem; border-radius: 9999px; text-decoration: none; white-space: nowrap;">
-                                Xem bếp
+                            <a href="<?= BASE_URL ?>/views/author.php?id=<?= (int)$follower['id'] ?>" class="button button-outline" style="padding: 0.4rem 0.9rem; font-size: 0.8rem; border-radius: 9999px; text-decoration: none; white-space: nowrap;">Xem bếp
                             </a>
                         </div>
                     <?php endforeach; ?>
@@ -565,21 +546,18 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
              ------------------------------------------------------------- -->
         <div id="panel-following" class="profile-tab-panel" style="display: none;">
             <div style="margin-bottom: 1.25rem;">
-                <h3 style="margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 800; color: #1e293b;">
-                    Đầu bếp bạn đang theo dõi (<?= count($followingList) ?> người)
+                <h3 style="margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 800; color: #1e293b;">Đầu bếp bạn đang theo dõi (<?= count($followingList) ?>người)
                 </h3>
-                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">
-                    Danh sách các đầu bếp bạn quan tâm để luôn cập nhật những món ngon mới nhất.
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Danh sách các đầu bếp bạn quan tâm để luôn cập nhật những món ngon mới nhất.
                 </p>
             </div>
 
             <?php if (empty($followingList)): ?>
                 <div style="text-align: center; padding: 3.5rem 1.5rem; background: #ffffff; border-radius: 1.25rem; border: 2px dashed #cbd5e1;">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">✨</div>
+                    <div style="font-size: 3rem; margin-bottom: 1rem;"></div>
                     <h4 style="margin: 0 0 0.5rem; font-size: 1.2rem; color: #1e293b; font-weight: 800;">Bạn chưa theo dõi đầu bếp nào</h4>
                     <p style="color: #64748b; margin: 0 0 1.25rem; font-size: 0.95rem;">Khám phá các món ăn ngon và nhấn "Theo dõi" để cập nhật bài đăng từ các bếp trưởng!</p>
-                    <a href="<?= BASE_URL ?>/index.php" class="button button-create" style="padding: 0.65rem 1.75rem; text-decoration: none; font-weight: 700;">
-                        Khám phá đầu bếp Cookio
+                    <a href="<?= BASE_URL ?>/index.php" class="button button-create" style="padding: 0.65rem 1.75rem; text-decoration: none; font-weight: 700;">Khám phá đầu bếp Cookio
                     </a>
                 </div>
             <?php else: ?>
@@ -595,12 +573,11 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
                                         <?= e($chef['username']) ?>
                                     </h4>
                                     <div style="font-size: 0.78rem; color: #64748b;">
-                                        🍳 <?= (int)$chef['recipe_count'] ?> công thức
+                                         <?= (int)$chef['recipe_count'] ?>công thức
                                     </div>
                                 </div>
                             </div>
-                            <a href="<?= BASE_URL ?>/views/author.php?id=<?= (int)$chef['id'] ?>" class="button button-outline" style="padding: 0.4rem 0.9rem; font-size: 0.8rem; border-radius: 9999px; text-decoration: none; white-space: nowrap;">
-                                Xem bếp
+                            <a href="<?= BASE_URL ?>/views/author.php?id=<?= (int)$chef['id'] ?>" class="button button-outline" style="padding: 0.4rem 0.9rem; font-size: 0.8rem; border-radius: 9999px; text-decoration: none; white-space: nowrap;">Xem bếp
                             </a>
                         </div>
                     <?php endforeach; ?>
@@ -613,11 +590,9 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
              ------------------------------------------------------------- -->
         <div id="panel-reviews" class="profile-tab-panel" style="display: none;">
             <div style="margin-bottom: 1.25rem;">
-                <h3 style="margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 800; color: #1e293b;">
-                    Đánh giá & Nhận xét từ cộng đồng (<?= count($reviewsList) ?> nhận xét)
+                <h3 style="margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 800; color: #1e293b;">Đánh giá & Nhận xét từ cộng đồng (<?= count($reviewsList) ?>nhận xét)
                 </h3>
-                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">
-                    Điểm đánh giá trung bình: <strong style="color: #ca8a04;"><?= $avgRatingText ?> ⭐</strong> <?= $totalRatingsCount > 0 ? "dựa trên $totalRatingsCount đánh giá thực tế từ cộng đồng." : "(Hiện chưa có đánh giá nào)." ?>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Điểm đánh giá trung bình: <strong style="color: #ca8a04;"><?= $avgRatingText ?> ⭐</strong> <?= $totalRatingsCount >0 ? "dựa trên $totalRatingsCount đánh giá thực tế từ cộng đồng." : "(Hiện chưa có đánh giá nào)." ?>
                 </p>
             </div>
 
@@ -668,8 +643,7 @@ $showEditByDefault = isset($_GET['edit']) && $_GET['edit'] === '1';
 
 </div>
 
-<script>
-function toggleEditProfile(showEdit) {
+<script>function toggleEditProfile(showEdit) {
     const viewSection = document.getElementById('profileViewSection');
     const editSection = document.getElementById('profileEditSection');
     if (showEdit) {
@@ -695,7 +669,7 @@ function previewAvatarImage(input) {
             input.value = '';
             return;
         }
-        if (file.size > 5 * 1024 * 1024) {
+        if (file.size >5 * 1024 * 1024) {
             alert('Dung lượng ảnh tối đa 5MB!');
             input.value = '';
             return;
@@ -714,7 +688,7 @@ function previewAvatarImage(input) {
 function switchProfileTab(tabName) {
     // 1. Hide all panels
     const panels = document.querySelectorAll('.profile-tab-panel');
-    panels.forEach(p => p.style.display = 'none');
+    panels.forEach(p =>p.style.display = 'none');
 
     // 2. Show target panel
     const targetPanel = document.getElementById('panel-' + tabName);

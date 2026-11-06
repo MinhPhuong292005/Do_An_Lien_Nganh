@@ -25,8 +25,8 @@ if (!$author) {
 // Fetch approved recipes by this author
 $stmtRecipes = db()->prepare(
     "SELECT r.*, u.username AS author_name,
-     COALESCE((SELECT ROUND(AVG(c.rating), 1) FROM comments c WHERE c.recipe_id = r.id AND c.rating > 0 AND (c.is_hidden = 0 OR c.is_hidden IS NULL)), 0.0) AS avg_rating,
-     (SELECT COUNT(*) FROM comments c WHERE c.recipe_id = r.id AND c.rating > 0 AND (c.is_hidden = 0 OR c.is_hidden IS NULL)) AS review_count
+     COALESCE((SELECT ROUND(AVG(c.rating), 1) FROM comments c WHERE c.recipe_id = r.id AND c.rating >0 AND (c.is_hidden = 0 OR c.is_hidden IS NULL)), 0.0) AS avg_rating,
+     (SELECT COUNT(*) FROM comments c WHERE c.recipe_id = r.id AND c.rating >0 AND (c.is_hidden = 0 OR c.is_hidden IS NULL)) AS review_count
      FROM recipes r
      INNER JOIN users u ON u.id = r.author_id
      WHERE r.author_id = ? AND r.status = 'approved'
@@ -43,12 +43,12 @@ $totalViews = (int) array_sum(array_column($authorRecipes, 'views_count'));
 $stmtAuthorRating = db()->prepare("
     SELECT AVG(rating) AS avg_val, COUNT(*) AS cnt 
     FROM comments 
-    WHERE recipe_id IN (SELECT id FROM recipes WHERE author_id = ?) AND rating > 0 AND (is_hidden = 0 OR is_hidden IS NULL)
+    WHERE recipe_id IN (SELECT id FROM recipes WHERE author_id = ?) AND rating >0 AND (is_hidden = 0 OR is_hidden IS NULL)
 ");
 $stmtAuthorRating->execute([$authorId]);
 $authorRatingData = $stmtAuthorRating->fetch();
 $authorRatingCount = (int) ($authorRatingData['cnt'] ?? 0);
-if ($authorRatingCount > 0 && $authorRatingData['avg_val'] !== null) {
+if ($authorRatingCount >0 && $authorRatingData['avg_val'] !== null) {
     $avgRating = round((float) $authorRatingData['avg_val'], 1);
     $avgRatingText = $avgRating . '/5';
 } else {
@@ -89,7 +89,7 @@ require __DIR__ . '/../includes/header.php';
 
     <?php if (isset($_GET['follow'])): ?>
         <p class="notice success" style="margin-bottom: 1.5rem;">
-            <?= $_GET['follow'] === 'followed' ? '✅ Bạn đã bắt đầu theo dõi đầu bếp ' . e($author['username']) . '!' : 'Đã hủy theo dõi đầu bếp.' ?>
+            <?= $_GET['follow'] === 'followed' ? ' Bạn đã bắt đầu theo dõi đầu bếp ' . e($author['username']) . '!' : 'Đã hủy theo dõi đầu bếp.' ?>
         </p>
     <?php endif; ?>
 
@@ -106,8 +106,7 @@ require __DIR__ . '/../includes/header.php';
                 <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
                     <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text-main); margin: 0;"><?= e($author['username']) ?></h1>
                     <?php if ($author['role'] === 'admin'): ?>
-                        <span style="display: inline-block; font-size: 0.8rem; font-weight: 700; padding: 0.2rem 0.75rem; border-radius: 99px; background:#fee2e2; color:#b91c1c; border: 1px solid #fecaca;">
-                            🛡️ Quản trị viên
+                        <span style="display: inline-block; font-size: 0.8rem; font-weight: 700; padding: 0.2rem 0.75rem; border-radius: 99px; background:#fee2e2; color:#b91c1c; border: 1px solid #fecaca;">Quản trị viên
                         </span>
                     <?php endif; ?>
 
@@ -117,7 +116,7 @@ require __DIR__ . '/../includes/header.php';
                             <input type="hidden" name="author_id" value="<?= $authorId ?>">
                             <input type="hidden" name="return_url" value="views/author.php?id=<?= $authorId ?>">
                             <button type="submit" class="button <?= $isFollowing ? 'button-saved' : 'button-outline' ?>" style="padding: 0.35rem 0.9rem; font-size: 0.85rem; border-radius: 99px; font-weight: 700;">
-                                <?= $isFollowing ? '✓ Đang theo dõi' : '+ Theo dõi đầu bếp' ?>
+                                <?= $isFollowing ? ' Đang theo dõi' : '+ Theo dõi đầu bếp' ?>
                             </button>
                         </form>
                     <?php elseif (!is_logged_in()): ?>
@@ -133,7 +132,7 @@ require __DIR__ . '/../includes/header.php';
                 ?>
                     <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.65rem;">
                         <?php foreach ($chefBadges as $cb): ?>
-                            <span style="<?= $cb['style'] ?> font-size: 0.8rem; font-weight: 700; padding: 0.2rem 0.75rem; border-radius: 99px; display: inline-flex; align-items: center; gap: 0.35rem;">
+                            <span style="<?= $cb['style'] ?>font-size: 0.8rem; font-weight: 700; padding: 0.2rem 0.75rem; border-radius: 99px; display: inline-flex; align-items: center; gap: 0.35rem;">
                                 <?= $cb['icon'] ?> <?= e($cb['label']) ?>
                             </span>
                         <?php endforeach; ?>
@@ -144,8 +143,7 @@ require __DIR__ . '/../includes/header.php';
                     <?= !empty($author['bio']) ? nl2br(e($author['bio'])) : 'Thành viên đam mê nấu nướng và chia sẻ công thức tại cộng đồng Cookio.' ?>
                 </p>
 
-                <span style="font-size: 0.85rem; color: var(--text-muted);">
-                    📅 Gia nhập từ ngày <?= date('d/m/Y', strtotime((string) $author['created_at'])) ?>
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Gia nhập từ ngày <?= date('d/m/Y', strtotime((string) $author['created_at'])) ?>
                 </span>
             </div>
         </div>
@@ -169,21 +167,20 @@ require __DIR__ . '/../includes/header.php';
                     <span><?= $avgRatingText ?></span>
                     <span style="font-size: 1.15rem; line-height: 1;">⭐</span>
                 </strong>
-                <span style="display: block; font-size: 0.82rem; font-weight: 400; color: var(--text-muted); white-space: nowrap;">đánh giá <?= $authorRatingCount > 0 ? "($authorRatingCount)" : "(Chưa có)" ?></span>
+                <span style="display: block; font-size: 0.82rem; font-weight: 400; color: var(--text-muted); white-space: nowrap;">đánh giá <?= $authorRatingCount >0 ? "($authorRatingCount)" : "(Chưa có)" ?></span>
             </div>
         </div>
     </div>
 
     <!-- Author's Recipe Collection Heading -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-        <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin: 0;">
-            🍲 Công thức đã chia sẻ (<?= $totalRecipes ?> món)
+        <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin: 0;">Công thức đã chia sẻ (<?= $totalRecipes ?>món)
         </h2>
     </div>
 
     <?php if (empty($authorRecipes)): ?>
         <div style="text-align: center; padding: 3rem 1rem; background: #fff; border-radius: 1rem; border: 2px dashed var(--border);">
-            <div style="font-size: 3.5rem; margin-bottom: 1rem;">🍳</div>
+            <div style="font-size: 3.5rem; margin-bottom: 1rem;"></div>
             <h3 style="margin: 0 0 0.5rem; font-size: 1.25rem; color: var(--text-main);">Chưa có công thức công khai nào</h3>
             <p style="color: var(--text-muted); margin: 0 0 1.5rem;">Đầu bếp này chưa xuất bản công thức món ăn nào.</p>
             <a href="<?= BASE_URL ?>/index.php" class="button button-create">Khám phá các món ăn khác</a>
@@ -209,21 +206,21 @@ require __DIR__ . '/../includes/header.php';
                                 <input type="hidden" name="recipe_id" value="<?= (int) $recipe['id'] ?>">
                                 <input type="hidden" name="return_url" value="views/author.php?id=<?= (int) $author['id'] ?>">
                                 <button type="submit" class="card-save-btn" title="<?= $isSaved ? 'Bỏ lưu' : 'Lưu vào yêu thích' ?>">
-                                    <?= $isSaved ? '❤️' : '🤍' ?>
+                                    <?= $isSaved ? '' : '' ?>
                                 </button>
                             </form>
                         <?php else: ?>
                             <button type="button" class="card-save-btn" data-open-login title="Đăng nhập để lưu món">
-                                🤍
+                                
                             </button>
                         <?php endif; ?>
                     </div>
 
                     <div class="recipe-card-body">
                         <div class="card-meta-row">
-                            <span>⏱️ <?= e($recipe['cooking_time'] ?? '30 phút') ?></span>
+                            <span>⏱ <?= e($recipe['cooking_time'] ?? '30 phút') ?></span>
                             <span>⭐ <?= e((string) $recipe['avg_rating']) ?> (<?= (int) $recipe['review_count'] ?>)</span>
-                            <span>👁️ <?= number_format((int) ($recipe['views_count'] ?? 0)) ?></span>
+                            <span> <?= number_format((int) ($recipe['views_count'] ?? 0)) ?></span>
                         </div>
 
                         <h3>

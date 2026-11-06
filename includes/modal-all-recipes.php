@@ -28,14 +28,12 @@ $menuCategories = ['Tất cả', 'Món xào', 'Món canh', 'Món kho', 'Món h�
         <div style="padding: 1.25rem 1.75rem; border-bottom: 1.5px solid #fed7aa; background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
             <div style="display: flex; align-items: center; gap: 0.75rem;">
                 <div style="width: 44px; height: 44px; border-radius: 12px; background: #ea580c; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 10px rgba(234, 88, 12, 0.25);">
-                    🍳
+                    
                 </div>
                 <div>
-                    <h2 style="font-size: 1.35rem; font-weight: 800; color: #7c2d12; margin: 0; line-height: 1.2;">
-                        Bảng Thực Đơn Toàn Bộ Món Ăn Cookio
+                    <h2 style="font-size: 1.35rem; font-weight: 800; color: #7c2d12; margin: 0; line-height: 1.2;">Bảng Thực Đơn Toàn Bộ Món Ăn Cookio
                     </h2>
-                    <p style="font-size: 0.85rem; color: #9a3412; margin: 0.2rem 0 0; font-weight: 600;">
-                        Tổng hợp <?= count($allMenuRecipes) ?> công thức chuẩn vị &bull; Chọn món để xem hướng dẫn chi tiết
+                    <p style="font-size: 0.85rem; color: #9a3412; margin: 0.2rem 0 0; font-weight: 600;">Tổng hợp <?= count($allMenuRecipes) ?>công thức chuẩn vị &bull; Chọn món để xem hướng dẫn chi tiết
                     </p>
                 </div>
             </div>
@@ -49,7 +47,7 @@ $menuCategories = ['Tất cả', 'Món xào', 'Món canh', 'Món kho', 'Món h�
         <div style="padding: 1rem 1.75rem; background: #fafaf9; border-bottom: 1px solid #e7e5e4; display: flex; flex-direction: column; gap: 0.85rem;">
             <!-- Live Search Bar -->
             <div style="position: relative; width: 100%;">
-                <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); font-size: 1.1rem; color: #9a3412;">🔍</span>
+                <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); font-size: 1.1rem; color: #9a3412;"></span>
                 <input type="text" id="menuModalSearchInput" oninput="filterMenuRecipes()" placeholder="Tìm nhanh theo tên món (VD: bò xào, cá kho, súp gà, nem rán, canh cà chua...)" style="width: 100%; padding: 0.75rem 1rem 0.75rem 2.75rem; border-radius: 9999px; border: 1.5px solid #fed7aa; background: #ffffff; font-size: 0.92rem; outline: none; font-family: inherit; color: #1e293b; box-shadow: 0 2px 6px rgba(0,0,0,0.02); transition: border-color 0.2s;">
             </div>
 
@@ -82,14 +80,14 @@ $menuCategories = ['Tất cả', 'Món xào', 'Món canh', 'Món kho', 'Món h�
                         <div style="padding: 0.85rem; display: flex; flex-direction: column; flex: 1; justify-content: space-between;">
                             <div>
                                 <div style="font-size: 0.76rem; color: #ea580c; font-weight: 700; margin-bottom: 0.25rem;">
-                                    👨‍🍳 Bếp: <?= e($rItem['author_name']) ?>
+                                    ‍ Bếp: <?= e($rItem['author_name']) ?>
                                 </div>
                                 <h4 style="margin: 0 0 0.5rem; font-size: 0.92rem; font-weight: 800; color: #1e293b; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                                     <?= e($rItem['title']) ?>
                                 </h4>
                             </div>
                             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: #94a3b8; font-weight: 600; padding-top: 0.5rem; border-top: 1px solid #f8fafc;">
-                                <span>⏱ <?= e($rItem['cooking_time']) ?> &bull; 👁️ <?= number_format((int)($rItem['views_count'] ?? 0)) ?></span>
+                                <span>⏱ <?= e($rItem['cooking_time']) ?> &bull;  <?= number_format((int)($rItem['views_count'] ?? 0)) ?></span>
                                 <span style="color: #ea580c; font-weight: 700;">Xem chi tiết &rarr;</span>
                             </div>
                         </div>
@@ -99,7 +97,7 @@ $menuCategories = ['Tất cả', 'Món xào', 'Món canh', 'Món kho', 'Món h�
 
             <!-- Empty Search State inside Modal -->
             <div id="menuModalEmptyState" style="display: none; text-align: center; padding: 3rem 1rem;">
-                <div style="font-size: 3rem; margin-bottom: 0.5rem;">🔍</div>
+                <div style="font-size: 3rem; margin-bottom: 0.5rem;"></div>
                 <h3 style="margin: 0 0 0.5rem; font-size: 1.15rem; color: #1e293b; font-weight: 800;">Không tìm thấy món ăn phù hợp</h3>
                 <p style="margin: 0; color: #64748b; font-size: 0.88rem;">Hãy thử gõ từ khóa khác như "gà", "bò", "chiên", "xào", "nướng"...</p>
             </div>
@@ -107,22 +105,20 @@ $menuCategories = ['Tất cả', 'Món xào', 'Món canh', 'Món kho', 'Món h�
 
         <!-- Modal Footer -->
         <div style="padding: 0.85rem 1.75rem; background: #ffffff; border-top: 1px solid #e7e5e4; display: flex; justify-content: space-between; align-items: center; font-size: 0.84rem; color: #6b7280; flex-wrap: wrap; gap: 0.75rem;">
-            <span>💡 Nhấn vào bất kỳ món nào để mở trang công thức và nguyên liệu</span>
+            <span>Nhấn vào bất kỳ món nào để mở trang công thức và nguyên liệu</span>
             <div style="display: flex; gap: 0.65rem; align-items: center;">
                 <a href="<?= BASE_URL ?>/index.php?cat=all&view=vertical" style="padding: 0.45rem 1.15rem; font-size: 0.84rem; border-radius: 9999px; background: #ea580c; color: #ffffff; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 0.35rem;">
                     <span>Xem theo hàng dọc</span>
                     <span>&rarr;</span>
                 </a>
-                <button type="button" onclick="closeAllRecipesMenuModal()" class="button button-outline" style="padding: 0.4rem 1rem; font-size: 0.84rem; border-radius: 9999px;">
-                    Đóng bảng thực đơn
+                <button type="button" onclick="closeAllRecipesMenuModal()" class="button button-outline" style="padding: 0.4rem 1rem; font-size: 0.84rem; border-radius: 9999px;">Đóng bảng thực đơn
                 </button>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-let currentSelectedCategory = 'Tất cả';
+<script>let currentSelectedCategory = 'Tất cả';
 
 function openAllRecipesMenuModal() {
     const modal = document.getElementById('allRecipesMenuModal');
