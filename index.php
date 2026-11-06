@@ -224,13 +224,13 @@ $latestDishes = $stmtLatestList ? $stmtLatestList->fetchAll() : [];
 // 4. Ingredients for "Khám phá theo sở thích" (Image 3)
 $ingredientsList = [
     ['name' => 'Bắp cải', 'q' => 'bắp cải', 'img' => 'assets/images/ingredients/bap-cai.jpg'],
-    ['name' => 'Bò', 'q' => 'bò', 'img' => 'assets/images/ingredients/thit-bo.jpg'],
+    ['name' => 'Bò', 'q' => 'bò', 'img' => 'assets/images/real_dishes/bap-bo-hap-sa-gung.jpg'],
     ['name' => 'Bông cải', 'q' => 'bông cải', 'img' => 'assets/images/ingredients/bong-cai.jpg'],
     ['name' => 'Cá', 'q' => 'cá', 'img' => 'assets/images/ingredients/ca-hoi.jpg'],
     ['name' => 'Cà chua', 'q' => 'cà chua', 'img' => 'assets/images/ingredients/ca-chua.jpg'],
-    ['name' => 'Các loại ốc', 'q' => 'ốc', 'img' => 'assets/images/ingredients/oc.jpg'],
-    ['name' => 'Cua', 'q' => 'cua', 'img' => 'assets/images/ingredients/cua.jpg'],
-    ['name' => 'Đậu hũ', 'q' => 'đậu', 'img' => 'assets/images/ingredients/dau-hu.jpg'],
+    ['name' => 'Các loại ốc', 'q' => 'ốc', 'img' => 'assets/images/real_dishes/oc-huong-xao-bo-toi.jpg'],
+    ['name' => 'Cua', 'q' => 'cua', 'img' => 'assets/images/real_dishes/cua-bien.jpg'],
+    ['name' => 'Đậu hũ', 'q' => 'đậu', 'img' => 'assets/images/real_dishes/dau-phu-chien-gion.jpg'],
     ['name' => 'Dứa', 'q' => 'dứa', 'img' => 'assets/images/ingredients/dua.jpg'],
     ['name' => 'Dưa chua', 'q' => 'dưa', 'img' => 'assets/images/ingredients/dua-chua.jpg'],
     ['name' => 'Tôm', 'q' => 'tôm', 'img' => 'assets/images/ingredients/tom.jpg'],
