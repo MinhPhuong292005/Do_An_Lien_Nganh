@@ -1,19 +1,19 @@
-# 🍳 Cookio - Mạng Xã Hội Ẩm Thực & Nền Tảng Chia Sẻ Công Thức Bếp Gia Đình
+#  Cookio - Mạng Xã Hội Ẩm Thực & Nền Tảng Chia Sẻ Công Thức Bếp Gia Đình
 
 > **Cookio** là nền tảng ẩm thực gia đình hiện đại, ấm cúng và thông minh theo chuẩn **Cookpad**, **Tasty** và **Yummly**, được xây dựng bằng **PHP thuần**, **MySQL/MariaDB**, **JavaScript (ES6+)** và **CSS hiện đại**.
 > Hệ thống mang đến trải nghiệm nấu ăn thông minh, kết nối cộng đồng yêu bếp, quản lý thực đơn, đi chợ tiện lợi và tích hợp cổng quản trị nội dung toàn diện.
 
 ---
 
-## 🌟 Tính Năng Nổi Bật
+##  Tính Năng Nổi Bật
 
-### 1. 🥘 Kho Dữ Liệu Lớn & Ảnh Thực Phẩm Đẹp Mắt
+### 1.  Kho Dữ Liệu Lớn & Ảnh Thực Phẩm Đẹp Mắt
 - **Gần 2,000 công thức nấu ăn phong phú**: Đa dạng các món ăn truyền thống 3 miền Bắc - Trung - Nam, món Á - Âu, món chay thanh tịnh, món ăn kiêng Healthy & Eat Clean.
 - **Bộ sưu tập hình ảnh thực phẩm chất lượng cao**: Toàn bộ món ăn hiển thị ảnh chụp thật chân thực, sắc nét (thay thế hoàn toàn ảnh SVG/placeholder minh họa).
 - **Quy chuẩn đăng bài nghiêm ngặt**: Yêu cầu bắt buộc tải lên ảnh thành phẩm thực tế của món ăn (`required`), kiểm tra định dạng và kích thước an toàn.
 - **51 bài viết Kinh Nghiệm Hay & Mẹo Vặt Nhà Bếp**: Kho tàng bí quyết nấu nướng, sơ chế, khử mùi tanh, bảo quản thực phẩm tươi lâu và nêm nếm gia vị chuẩn vị.
 
-### 2. 🏠 Giao Diện Bếp Nhà & Banner Tự Trượt Hiện Đại (Hero Carousel)
+### 2.  Giao Diện Bếp Nhà & Banner Tự Trượt Hiện Đại (Hero Carousel)
 - **Banner trượt mượt mà (3 slide chuyên đề)**: Tự động chuyển đổi sau mỗi 5 giây, tạm dừng khi rê chuột, có nút điều hướng mũi tên và chấm tròn phân trang:
   - *Bếp Nhà Sum Vầy*: Tìm kiếm thông minh, thẻ tag thịnh hành & tính năng quay ngẫu nhiên *"Hôm nay ăn gì?"*.
   - *Tủ Lạnh Thông Minh 2.0*: Gợi ý món ngon từ nguyên liệu sẵn có trong tủ lạnh.
@@ -21,12 +21,12 @@
 - **Chế độ Bếp Ban Đêm (High-Contrast Dark Mode)**: Chuyển đổi giao diện sáng/tối chỉ với 1 cú click, bảo vệ thị lực khi nấu ăn vào buổi tối.
 - **Tìm kiếm trực tiếp (Live Search / Quick Search API)**: Gợi ý công thức tức thì ngay khi gõ tên món, tác giả hoặc nguyên liệu.
 
-### 3. 🧊 Tủ Lạnh Thông Minh 2.0 (Smart Fridge Recipe Matcher)
+### 3.  Tủ Lạnh Thông Minh 2.0 (Smart Fridge Recipe Matcher)
 - **Nấu ngon từ nguyên liệu sẵn có**: Người dùng chọn các nguyên liệu đang có trong bếp (thịt bò, thịt heo, cá, tôm, trứng, rau củ,...).
 - **Thuật toán gợi ý thông minh**: Đếm số nguyên liệu trùng khớp, tính toán phần trăm độ phù hợp và sắp xếp ưu tiên các món có thể nấu ngay nhằm chống lãng phí thực phẩm.
 - **Gợi ý mua bổ sung**: Liệt kê rõ những gia vị hoặc nguyên liệu phụ còn thiếu để hoàn thiện món ăn.
 
-### 4. 🛒 Món Đã Lưu & Đi Chợ Thông Minh (Smart Grocery Checklist)
+### 4.  Món Đã Lưu & Đi Chợ Thông Minh (Smart Grocery Checklist)
 - **Quản lý món yêu thích & thả tim**:
   - Lưu món ăn để xem lại (`Bookmark`) và Thả tim (`Like`).
   - Thao tác thả tim / bỏ thích nhanh chóng chỉ với 1-Click trực tiếp.
@@ -36,13 +36,13 @@
   - Tự động bóc tách và tổng hợp danh sách nguyên liệu cần mua thành bảng kiểm (checklist) thông minh.
   - Hỗ trợ đánh dấu đã mua và nút **"Sao chép danh sách đi chợ"** 1-Click để gửi qua tin nhắn/Zalo.
 
-### 5. 👨‍🍳 Trải Nghiệm Nấu Nướng Thực Tế Đỉnh Cao
+### 5.  Trải Nghiệm Nấu Nướng Thực Tế Đỉnh Cao
 - **Chế độ nấu rảnh tay (Hands-Free Cooking Mode)**: Giao diện toàn màn hình với cỡ chữ lớn, tối ưu thao tác khi tay dính nước hoặc dầu mỡ trong bếp.
 - **Đồng hồ bấm giờ nhà bếp (Kitchen Timer)**: Tích hợp bộ đếm giờ thông minh có âm thanh chuông báo Web Audio API khi đến giờ tắt bếp.
 - **Bộ điều chỉnh khẩu phần động (Servings Scaler)**: Tự động nhân/chia định lượng nguyên liệu tương ứng theo số người ăn (1 người, 2 người, 4 người, mâm cỗ 8 người,...).
 - **In công thức chuẩn khổ giấy (Print Recipe)**: Tự động loại bỏ các thành phần web thừa, tối ưu bản in sạch đẹp để mang vào gian bếp.
 
-### 6. 💬 Tương Tác Cộng Đồng & Trung Tâm Thông Báo Thời Gian Thực
+### 6.  Tương Tác Cộng Đồng & Trung Tâm Thông Báo Thời Gian Thực
 - **Hệ thống Thông báo thông minh (Phân quyền riêng biệt)**:
   - Nhận thông báo khi có người thả tim, bình luận, gửi ảnh Cooksnap hoặc có người theo dõi mới.
   - **Thông báo kiểm duyệt nội dung**: Khi Admin duyệt bài, nhấp vào thông báo sẽ mở ngay công thức tương ứng. Khi Admin từ chối duyệt bài, hệ thống hiển thị popup modal giải thích lịch sự, ngắn gọn và trang nhã ở chính giữa màn hình: *"Rất tiếc, bài đăng không được duyệt"*.
@@ -51,12 +51,12 @@
 - **Đăng ảnh thực hành Cooksnap**: Tải ảnh chụp món ăn tự tay hoàn thành để chia sẻ và nhận xét cho chủ công thức.
 - **Đánh giá & Xếp hạng 1 - 5 sao**: Chấm điểm chất lượng công thức nấu ăn minh bạch.
 
-### 7. 👤 Trang Cá Nhân & Hồ Sơ Gian Bếp (Profile & Author Studio)
+### 7.  Trang Cá Nhân & Hồ Sơ Gian Bếp (Profile & Author Studio)
 - **Thanh danh mục nằm gọn trên 1 dòng**: Cuộn mượt các mục *Công thức đã đăng*, *Theo dõi*, *Đang theo dõi*, *Đánh giá & Nhận xét*.
 - **Bảng chỉ số hoạt động tinh tế**: Thống kê chính xác số *công thức món*, *theo dõi*, *đang theo dõi*, *lượt thích* và *điểm đánh giá*.
 - **Cập nhật hồ sơ & đổi ảnh đại diện (Avatar)**: Tùy chỉnh họ tên, giới thiệu tiểu sử (bio), số điện thoại và ảnh đại diện nhanh chóng.
 
-### 8. 📚 Sổ Tay Thực Đơn Tuyển Chọn (Curated Cookbooks)
+### 8.  Sổ Tay Thực Đơn Tuyển Chọn (Curated Cookbooks)
 - Các bộ sưu tập thực đơn đa dạng:
   - *Thực đơn cơm gia đình 7 ngày sum vầy*.
   - *Thực đơn Eat Clean & Giảm cân thanh lọc cơ thể*.
@@ -64,7 +64,7 @@
   - *Bữa sáng cấp tốc tràn đầy năng lượng dưới 15 phút*.
 - Thống kê tổng quan: Tổng số món, tổng thời gian nấu ước tính và lượng calo của toàn bộ menu.
 
-### 9. 🛡️ Cổng Quản Trị Hệ Thống Toàn Diện (Admin Portal - `/admin/`)
+### 9.  Cổng Quản Trị Hệ Thống Toàn Diện (Admin Portal - `/admin/`)
 - **Bảng điều khiển Tổng quan (Dashboard)**: Thống kê số lượng công thức, người dùng, bình luận, bài mẹo và các công thức đang chờ duyệt.
 - **Quản lý công thức (`manage-recipes.php`)**:
   - Xem chi tiết nhanh, phê duyệt hoặc từ chối bài viết kèm lý do.
@@ -78,7 +78,7 @@
 
 ---
 
-## 🏗️ Cấu Trúc Thư Mục Dự Án (Clean Architecture)
+##  Cấu Trúc Thư Mục Dự Án (Clean Architecture)
 
 Mã nguồn được tổ chức khoa học, tách bạch rõ ràng giữa xử lý logic, giao diện và cơ sở dữ liệu:
 
@@ -144,7 +144,7 @@ Cookio/
 
 ---
 
-## 🚀 Hướng Dẫn Cài Đặt & Khởi Chạy
+##  Hướng Dẫn Cài Đặt & Khởi Chạy
 
 Bạn có thể chạy dự án theo 1 trong 2 cách dưới đây:
 
@@ -178,7 +178,7 @@ Hệ thống đã được đóng gói hoàn chỉnh gồm **PHP 8.2 Apache** v�
 
 ---
 
-## 🔑 Tài Khoản Trải Nghiệm Mẫu
+##  Tài Khoản Trải Nghiệm Mẫu
 
 | Tài khoản | Mật khẩu | Vai trò | Mục đích trải nghiệm |
 | :--- | :---: | :---: | :--- |
@@ -190,7 +190,7 @@ Hệ thống đã được đóng gói hoàn chỉnh gồm **PHP 8.2 Apache** v�
 
 ---
 
-## 🔒 Tiêu Chuẩn Bảo Mật & Dữ Liệu Sạch
+##  Tiêu Chuẩn Bảo Mật & Dữ Liệu Sạch
 
 - **Không chứa mã Bot giả lập**: Toàn bộ dữ liệu tài khoản, bài viết, lượt thả tim và bình luận đều là tương tác thực tế từ người dùng, không chạy mã tự sinh ngẫu nhiên gây rác cơ sở dữ liệu.
 - **Bảo vệ CSRF 100%**: Tất cả các thao tác thêm, sửa, xóa, duyệt bài (POST request) đều được xác thực bằng mã Token ngẫu nhiên theo phiên làm việc (`csrf_token()`).
