@@ -1190,6 +1190,28 @@
     transform: translateY(-3px);
 }
 
+[data-theme="dark"] .hero-flat-arrow {
+    background: rgba(30, 41, 59, 0.94) !important;
+    border: 1.5px solid rgba(249, 115, 22, 0.45) !important;
+    color: #f97316 !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .hero-flat-arrow svg {
+    stroke: #f97316 !important;
+}
+
+[data-theme="dark"] .hero-flat-arrow:hover {
+    background: #ea580c !important;
+    border-color: #ea580c !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 25px rgba(234, 88, 12, 0.5) !important;
+}
+
+[data-theme="dark"] .hero-flat-arrow:hover svg {
+    stroke: #ffffff !important;
+}
+
 [data-theme="dark"] .tip-card-title {
     color: #ffffff !important;
 }

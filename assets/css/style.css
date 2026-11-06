@@ -3703,27 +3703,29 @@ input:focus, textarea:focus, select:focus {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    background: #ffffff;
-    color: #3e1f17;
-    border: 1.5px solid rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #ea580c;
+    border: 1.5px solid rgba(234, 88, 12, 0.35);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 50;
     transition: all 0.25s cubic-bezier(0.2, 0.9, 0.3, 1);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 4px 14px rgba(234, 88, 12, 0.18), 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 .hero-flat-arrow svg {
-    width: 24px;
-    height: 24px;
-    stroke: #3e1f17;
-    stroke-width: 3.2;
-    transition: stroke 0.2s, transform 0.2s;
+    width: 20px;
+    height: 20px;
+    stroke: #ea580c;
+    stroke-width: 2.8;
+    transition: all 0.2s ease;
 }
 
 .hero-flat-arrow.arrow-left {
@@ -3735,15 +3737,15 @@ input:focus, textarea:focus, select:focus {
 }
 
 .hero-flat-arrow:hover {
-    background: #ffffff;
-    border-color: #ea580c;
+    background: #ea580c;
+    color: #ffffff;
+    border-color: #c2410c;
     transform: translateY(-50%) scale(1.12);
-    color: #ea580c;
-    box-shadow: 0 6px 22px rgba(234, 88, 12, 0.28);
+    box-shadow: 0 8px 24px rgba(234, 88, 12, 0.45);
 }
 
 .hero-flat-arrow:hover svg {
-    stroke: #ea580c;
+    stroke: #ffffff;
 }
 
 .hero-flat-arrow.arrow-left:hover svg {

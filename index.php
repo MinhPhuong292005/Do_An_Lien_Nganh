@@ -164,9 +164,18 @@ $stmtBannerRecipes = db()->query("
     FROM recipes 
     WHERE status = 'approved' AND image_url IS NOT NULL AND image_url != ''
     ORDER BY id ASC
-    LIMIT 20
+    LIMIT 40
 ");
-$bannerRecipes = $stmtBannerRecipes ? $stmtBannerRecipes->fetchAll() : [];
+$bannerRecipesRaw = $stmtBannerRecipes ? $stmtBannerRecipes->fetchAll() : [];
+$bannerRecipes = [];
+$seenBannerImgs = [];
+foreach ($bannerRecipesRaw as $bCan) {
+    $imgClean = trim($bCan['image_url']);
+    if (!isset($seenBannerImgs[$imgClean])) {
+        $seenBannerImgs[$imgClean] = true;
+        $bannerRecipes[] = $bCan;
+    }
+}
 
 // 1. Curated Dishes for "Gợi ý thực đơn hôm nay" (Khớp Ảnh 1: Đủ 5 món chuẩn bữa cơm gia đình)
 $stmtMenuSuggest = db()->query("
