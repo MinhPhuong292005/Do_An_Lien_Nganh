@@ -1868,7 +1868,7 @@ window.handleHorizontalSearchInput = function(query) {
                 if (countEl) countEl.textContent = '(0 món)';
                 gridEl.innerHTML = `
                     <div style="grid-column: 1 / -1; padding: 2rem; text-align: center; color: #64748b;">
-                        🔍 Không tìm thấy món ăn nào với từ khóa "<strong>${escapeHtml(q)}</strong>".<br>
+                        Không tìm thấy món ăn nào với từ khóa "<strong>${escapeHtml(q)}</strong>".<br>
                         <a href="${baseUrl}/index.php" style="color: #ea580c; font-weight: 700; margin-top: 0.5rem; display: inline-block;">Khám phá tất cả công thức &rarr;</a>
                     </div>
                 `;
@@ -1877,16 +1877,16 @@ window.handleHorizontalSearchInput = function(query) {
                 gridEl.innerHTML = data.results.map(r => {
                     const thumb = r.image_url 
                         ? `<img src="${r.image_url}" alt="${escapeHtml(r.title)}" class="h-result-thumb">`
-                        : `<div class="h-result-thumb" style="display:flex;align-items:center;justify-content:center;background:#fed7aa;font-size:1.5rem;">🍲</div>`;
+                        : `<div class="h-result-thumb" style="display:flex;align-items:center;justify-content:center;background:#fed7aa;font-size:0.85rem;color:#ea580c;font-weight:700;">Cookio</div>`;
                     return `
                         <a href="${r.url}" class="h-result-card" onclick="saveRecentSearch('${escapeHtml(r.title)}')">
                             ${thumb}
                             <div class="h-result-info">
                                 <div class="h-result-title">${escapeHtml(r.title)}</div>
                                 <div class="h-result-meta">
-                                    <span>⏱️ ${escapeHtml(r.cooking_time || '30p')}</span>
-                                    <span>📂 ${escapeHtml(r.category || 'Món chính')}</span>
-                                    ${r.calories ? `<span>🔥 ${r.calories} kcal</span>` : ''}
+                                    <span>${escapeHtml(r.cooking_time || '30p')}</span>
+                                    <span>${escapeHtml(r.category || 'Món chính')}</span>
+                                    ${r.calories ? `<span>${r.calories} kcal</span>` : ''}
                                 </div>
                             </div>
                         </a>
@@ -1918,7 +1918,7 @@ function renderHorizontalRecentSearches() {
         const baseUrl = window.BASE_URL || '';
         tagsContainer.innerHTML = searches.map(term => `
             <a href="${baseUrl}/index.php?q=${encodeURIComponent(term)}" class="h-tag-pill" style="background:#f1f5f9; color:#334155; border-color:#cbd5e1;">
-                🕒 ${escapeHtml(term)}
+                ${escapeHtml(term)}
             </a>
         `).join('');
     } catch (e) {
