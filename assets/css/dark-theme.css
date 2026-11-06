@@ -1191,21 +1191,21 @@
 }
 
 [data-theme="dark"] .hero-flat-arrow {
-    background: rgba(30, 41, 59, 0.94) !important;
-    border: 1.5px solid rgba(249, 115, 22, 0.45) !important;
-    color: #f97316 !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+    background: rgba(15, 23, 42, 0.88) !important;
+    border: 2px solid rgba(249, 115, 22, 0.5) !important;
+    color: #fb923c !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(249, 115, 22, 0.2) !important;
 }
 
 [data-theme="dark"] .hero-flat-arrow svg {
-    stroke: #f97316 !important;
+    stroke: #fb923c !important;
 }
 
 [data-theme="dark"] .hero-flat-arrow:hover {
-    background: #ea580c !important;
-    border-color: #ea580c !important;
+    background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%) !important;
+    border-color: #f97316 !important;
     color: #ffffff !important;
-    box-shadow: 0 8px 25px rgba(234, 88, 12, 0.5) !important;
+    box-shadow: 0 14px 30px rgba(234, 88, 12, 0.6), 0 0 20px rgba(249, 115, 22, 0.7) !important;
 }
 
 [data-theme="dark"] .hero-flat-arrow:hover svg {
